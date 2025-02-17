@@ -1,0 +1,29 @@
+name = "odbc"
+version = "1.0.0"
+maintainer = "David Pfister"
+author = "David Pfister"
+description = "odbc"
+categories = ["odbc"]
+keywords = ["odbc", "swig"]
+homepage = "https://github.com/davidpfister/odbc.f"
+
+[build]
+auto-executables = true
+auto-tests = true
+auto-examples = true
+link = "odbc32"
+
+[preprocess]
+cpp.suffixes = ["F90", "f90"]
+cpp.macros = ["_FPM","SIZEOF_LONG_INT=8"]
+
+[library]
+source-dir = "src"
+include-dir = ["include"]
+
+[install]
+library = false
+
+[[test]]
+name = "test"
+source-dir = "tests"
