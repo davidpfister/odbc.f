@@ -203,7 +203,7 @@
 #define SWIG_as_voidptrptr(a) ((void)SWIG_as_voidptr(*a),(void**)(a)) 
 
                 // This adds the include to the generated wrapper.
-#include "../include/sql.h"
+#include <sql.h>
 
 SWIGEXPORT int _wrap_SQL_NULL_DATA_get() {
   int fresult ;

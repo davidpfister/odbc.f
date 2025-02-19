@@ -2,15 +2,15 @@ module odbc_connection
     use, intrinsic :: iso_c_binding
     use sql
     use odbc_constants
-    use odbc_result, only: resultset
+    use odbc_resultset, only: resultset
 
     implicit none; private
 
     enum, bind(c)
-        enumerator :: SQL_CURSOR_FORWARD_ONLY       = 0
-        enumerator :: SQL_CURSOR_KEYSET_DRIVEN      = 1
-        enumerator :: SQL_CURSOR_DYNAMIC            = 2
-        enumerator :: SQL_CURSOR_STATIC             = 3
+        enumerator :: SQL_CURSOR_FORWARD_ONLY = 0
+        enumerator :: SQL_CURSOR_KEYSET_DRIVEN = 1
+        enumerator :: SQL_CURSOR_DYNAMIC = 2
+        enumerator :: SQL_CURSOR_STATIC = 3
     end enum
 
     type, public :: connection
@@ -30,7 +30,10 @@ module odbc_connection
         procedure, pass(this), public   :: set_timeout => connection_set_timeout
         procedure, pass(this), public   :: get_timeout => connection_get_timeout
         procedure, pass(this), public   :: isopened => connection_isopened
-        procedure, pass(this), public   :: open => connection_open
+        procedure, pass(this), private  :: connection_open
+        procedure, pass(this), private  :: connection_open_with_pwd
+        generic, public                 :: open => connection_open, &
+                                                   connection_open_with_pwd
         procedure, pass(this), public   :: execute => connection_execute
         procedure, pass(this), private  :: connection_execute_query
         procedure, pass(this), private  :: connection_execute_query_with_cursor
@@ -42,11 +45,11 @@ module odbc_connection
         final :: connection_finalize
     end type
 
-    interface connection    
+    interface connection
         module procedure :: connection_new
     end interface
 
-    contains
+contains
 
     function connection_new() result(that)
         type(connection) :: that
@@ -59,11 +62,19 @@ module odbc_connection
         that%rec = 1_c_short
     end function
 
-    function connection_open(this, dsn, user, pwd) result(success)
+    function connection_open(this, dsn) result(success)
         class(connection), intent(inout)    :: this
-        character(*), intent(in), target            :: dsn
-        character(*), target                        :: user
-        character(*), target                        :: pwd
+        character(*), intent(in), target    :: dsn
+        logical :: success
+
+        success = connection_open_with_pwd(this, dsn, '', '')
+    end function
+
+    function connection_open_with_pwd(this, dsn, user, pwd) result(success)
+        class(connection), intent(inout)    :: this
+        character(*), intent(in), target    :: dsn
+        character(*), target                :: user
+        character(*), target                :: pwd
         logical :: success
         !private
         integer(SQLRETURN) :: ret
@@ -74,15 +85,15 @@ module odbc_connection
         if (ret == SQL_ERROR) call handle_error(this, 'ENV')
 
         ret = SQLAllocConnect(this%env, this%dbc)
-        if (ret == SQL_ERROR) then 
+        if (ret == SQL_ERROR) then
             call handle_error(this, 'ENV')
         else if (ret == SQL_INVALID_HANDLE .or. ret < SQL_SUCCESS) then
             call handle_error(this, 'ENV')
         end if
 
-        ret = SQLConnect(this%dbc, c_loc(dsn), len_trim(dsn, kind=c_short),     &
-                                   c_loc(user), len_trim(user, kind=c_short),   &
-                                   c_loc(pwd), len_trim(pwd, kind=c_short))
+        ret = SQLConnect(this%dbc, c_loc(dsn), len_trim(dsn, kind=c_short), &
+                         c_loc(user), len_trim(user, kind=c_short), &
+                         c_loc(pwd), len_trim(pwd, kind=c_short))
         if (ret == SQL_ERROR) call handle_error(this, 'DBC')
 
         ret = SQLAllocStmt(this%dbc, this%stmt)
@@ -102,14 +113,14 @@ module odbc_connection
     subroutine connection_set_timeout(this, n)
         class(connection), intent(inout)    :: this
         integer, intent(in)                 :: n
-        
+
         this%timeout = n
     end subroutine
 
-    function connection_isopened(this) result(res) 
+    function connection_isopened(this) result(res)
         class(connection), intent(in)       :: this
         logical :: res
-        
+
         res = this%is_opened
     end function
 
@@ -173,14 +184,16 @@ module odbc_connection
 
         if (.not. this%is_opened) call throw_exception('Connection not opened', SQL_ERROR)
 
-        if (cursor_type /= SQL_CURSOR_DYNAMIC .and. cursor_type /= SQL_CURSOR_FORWARD_ONLY .and. cursor_type /= SQL_CURSOR_KEYSET_DRIVEN .and. cursor_type /= SQL_CURSOR_STATIC) then
+        if (cursor_type /= SQL_CURSOR_DYNAMIC .and. cursor_type /= SQL_CURSOR_FORWARD_ONLY &
+            .and. cursor_type /= SQL_CURSOR_KEYSET_DRIVEN &
+            .and. cursor_type /= SQL_CURSOR_STATIC) then
             call throw_exception('Invalid cursor type', SQL_ERROR)
         end if
 
         ret = SQLFreeStmt(this%stmt, SQL_CLOSE)
         ret = SQLAllocStmt(this%dbc, this%stmt)
         if (ret == SQL_ERROR .or. ret == SQL_INVALID_HANDLE .or. ret < SQL_SUCCESS) call handle_error(this, 'DBC')
-  
+
         ret = SQLSetStmtAttr(this%stmt, SQL_ATTR_CURSOR_TYPE, c_loc(cursor_type), SQL_IS_INTEGER)
         if (ret < SQL_SUCCESS) call handle_error(this, 'STMT')
 
@@ -223,7 +236,7 @@ module odbc_connection
         class(connection), intent(inout)    :: this
         !private
         integer(SQLRETURN) :: ret
-        if(this%is_opened) then
+        if (this%is_opened) then
             ret = SQLFreeStmt(this%stmt, SQL_CLOSE)
             ret = SQLDisconnect(this%dbc)
             ret = SQLFreeConnect(this%dbc)
@@ -247,17 +260,17 @@ module odbc_connection
         ! Error handling
         if (trim(type) == 'STMT') then
             status = SQLGetDiagRec(SQL_HANDLE_STMT, this%stmt, this%rec, &
-                                    c_loc(this%state), c_loc(this%ierr), c_loc(this%msg), &
-                                    int(c_sizeof(this%msg), SQLSMALLINT), c_loc(this%imsg))
+                                   c_loc(this%state), c_loc(this%ierr), c_loc(this%msg), &
+                                   int(c_sizeof(this%msg), SQLSMALLINT), c_loc(this%imsg))
         else if (trim(type) == 'ENV') then
             status = SQLGetDiagRec(SQL_HANDLE_ENV, this%env, this%rec, &
-                                    c_loc(this%state), c_loc(this%ierr), c_loc(this%msg), &
-                                    int(c_sizeof(this%msg), SQLSMALLINT), c_loc(this%imsg))
+                                   c_loc(this%state), c_loc(this%ierr), c_loc(this%msg), &
+                                   int(c_sizeof(this%msg), SQLSMALLINT), c_loc(this%imsg))
         else if (trim(type) == 'DBC') then
             status = SQLGetDiagRec(SQL_HANDLE_DBC, this%dbc, this%rec, &
-                                    c_loc(this%state), c_loc(this%ierr), c_loc(this%msg), &
-                                    int(c_sizeof(this%msg), SQLSMALLINT), c_loc(this%imsg))
-        else 
+                                   c_loc(this%state), c_loc(this%ierr), c_loc(this%msg), &
+                                   int(c_sizeof(this%msg), SQLSMALLINT), c_loc(this%imsg))
+        else
             call throw_exception(trim(this%msg), this%ierr)
         end if
 

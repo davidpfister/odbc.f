@@ -2,9 +2,9 @@ name = "odbc"
 version = "1.0.0"
 maintainer = "David Pfister"
 author = "David Pfister"
-description = "odbc"
+description = "odbc wrapper for modern Fortran"
 categories = ["odbc"]
-keywords = ["odbc", "swig"]
+keywords = ["odbc", "swig", "sql", "database"]
 homepage = "https://github.com/davidpfister/odbc.f"
 
 [build]
@@ -15,11 +15,10 @@ link = "odbc32"
 
 [preprocess]
 cpp.suffixes = ["F90", "f90"]
-cpp.macros = ["_FPM","SIZEOF_LONG_INT=8"]
+cpp.macros = ["_FPM", "_WIN32"]
 
 [library]
 source-dir = "src"
-include-dir = ["include"]
 
 [install]
 library = false

@@ -1,7 +1,7 @@
-module odbc_resultmetadata
+module odbc_resultsetmetadata
     use, intrinsic :: iso_c_binding
     use odbc_constants
-    
+
     implicit none; private
 
     type, public :: column
@@ -23,7 +23,7 @@ module odbc_resultmetadata
         procedure, pass(this), private  :: resultsetmetadata_get_column_from_id
         procedure, pass(this), private  :: resultsetmetadata_get_column_from_name
         generic, public                 :: get_column => resultsetmetadata_get_column_from_id, &
-                                                         resultsetmetadata_get_column_from_name
+            resultsetmetadata_get_column_from_name
         final :: resultmetadata_finalize
     end type
 
@@ -42,8 +42,8 @@ contains
         class(resultsetmetadata), intent(inout) :: this
         integer, intent(in) :: count
         this%ncols = count
-        if (allocated(this%columns)) deallocate(this%columns)
-        allocate(this%columns(count))
+        if (allocated(this%columns)) deallocate (this%columns)
+        allocate (this%columns(count))
     end subroutine
 
     function resultsetmetadata_get_columns_count(this) result(res)
@@ -95,7 +95,7 @@ contains
     subroutine resultmetadata_finalize(this)
         type(resultsetmetadata), intent(inout) :: this
 
-        if (allocated(this%columns)) deallocate(this%columns)
+        if (allocated(this%columns)) deallocate (this%columns)
     end subroutine
 
 end module

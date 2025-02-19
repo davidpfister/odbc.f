@@ -209,7 +209,7 @@ enum {
 #define SWIG_as_voidptrptr(a) ((void)SWIG_as_voidptr(*a),(void**)(a)) 
 
                 // This adds the include to the generated wrapper.
-#include "../include/sqlext.h"
+#include <sqlext.h>
 
 
 #include <stdlib.h>
