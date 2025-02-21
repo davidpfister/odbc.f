@@ -4,6491 +4,744 @@
 ! Do not make changes to this file unless you know what you are doing - modify
 ! the SWIG interface file instead.
 module sql
-    use, intrinsic :: iso_c_binding
-    implicit none
-    private
+ use, intrinsic :: ISO_C_BINDING
+ implicit none
+ private
 
-    ! DECLARATION CONSTRUCTS
-    public :: get_SQL_NULL_DATA
-    public :: get_SQL_DATA_AT_EXEC
-    public :: get_SQL_SUCCESS
-    public :: get_SQL_SUCCESS_WITH_INFO
-    public :: get_SQL_NO_DATA
-    public :: get_SQL_ERROR
-    public :: get_SQL_INVALID_HANDLE
-    public :: get_SQL_STILL_EXECUTING
-    public :: get_SQL_NEED_DATA
-    public :: get_SQL_PARAM_DATA_AVAILABLE
-    public :: get_SQL_NTS
-    public :: get_SQL_NTSL
-    public :: get_SQL_MAX_MESSAGE_LENGTH
-    public :: get_SQL_DATE_LEN
-    public :: get_SQL_TIME_LEN
-    public :: get_SQL_TIMESTAMP_LEN
-    integer(c_short), parameter, public :: SQL_HANDLE_ENV = 1_c_short
-    integer(c_short), parameter, public :: SQL_HANDLE_DBC = 2_c_short
-    integer(c_short), parameter, public :: SQL_HANDLE_STMT = 3_c_short
-    integer(c_short), parameter, public :: SQL_HANDLE_DESC = 4_c_short
-    public :: get_SQL_ATTR_OUTPUT_NTS
-    public :: get_SQL_ATTR_AUTO_IPD
-    public :: get_SQL_ATTR_METADATA_ID
-    public :: get_SQL_ATTR_APP_ROW_DESC
-    public :: get_SQL_ATTR_APP_PARAM_DESC
-    public :: get_SQL_ATTR_IMP_ROW_DESC
-    public :: get_SQL_ATTR_IMP_PARAM_DESC
-    public :: get_SQL_ATTR_CURSOR_SCROLLABLE
-    public :: get_SQL_ATTR_CURSOR_SENSITIVITY
-    public :: get_SQL_NONSCROLLABLE
-    public :: get_SQL_SCROLLABLE
-    public :: get_SQL_DESC_COUNT
-    public :: get_SQL_DESC_TYPE
-    public :: get_SQL_DESC_LENGTH
-    public :: get_SQL_DESC_OCTET_LENGTH_PTR
-    public :: get_SQL_DESC_PRECISION
-    public :: get_SQL_DESC_SCALE
-    public :: get_SQL_DESC_DATETIME_INTERVAL_CODE
-    public :: get_SQL_DESC_NULLABLE
-    public :: get_SQL_DESC_INDICATOR_PTR
-    public :: get_SQL_DESC_DATA_PTR
-    public :: get_SQL_DESC_NAME
-    public :: get_SQL_DESC_UNNAMED
-    public :: get_SQL_DESC_OCTET_LENGTH
-    public :: get_SQL_DESC_ALLOC_TYPE
-    public :: get_SQL_DIAG_RETURNCODE
-    public :: get_SQL_DIAG_NUMBER
-    public :: get_SQL_DIAG_ROW_COUNT
-    public :: get_SQL_DIAG_SQLSTATE
-    public :: get_SQL_DIAG_NATIVE
-    public :: get_SQL_DIAG_MESSAGE_TEXT
-    public :: get_SQL_DIAG_DYNAMIC_FUNCTION
-    public :: get_SQL_DIAG_CLASS_ORIGIN
-    public :: get_SQL_DIAG_SUBCLASS_ORIGIN
-    public :: get_SQL_DIAG_CONNECTION_NAME
-    public :: get_SQL_DIAG_SERVER_NAME
-    public :: get_SQL_DIAG_DYNAMIC_FUNCTION_CODE
-    public :: get_SQL_DIAG_ALTER_DOMAIN
-    public :: get_SQL_DIAG_ALTER_TABLE
-    public :: get_SQL_DIAG_CALL
-    public :: get_SQL_DIAG_CREATE_ASSERTION
-    public :: get_SQL_DIAG_CREATE_CHARACTER_SET
-    public :: get_SQL_DIAG_CREATE_COLLATION
-    public :: get_SQL_DIAG_CREATE_DOMAIN
-    public :: get_SQL_DIAG_CREATE_INDEX
-    public :: get_SQL_DIAG_CREATE_SCHEMA
-    public :: get_SQL_DIAG_CREATE_TABLE
-    public :: get_SQL_DIAG_CREATE_TRANSLATION
-    public :: get_SQL_DIAG_CREATE_VIEW
-    public :: get_SQL_DIAG_DELETE_WHERE
-    public :: get_SQL_DIAG_DROP_ASSERTION
-    public :: get_SQL_DIAG_DROP_CHARACTER_SET
-    public :: get_SQL_DIAG_DROP_COLLATION
-    public :: get_SQL_DIAG_DROP_DOMAIN
-    public :: get_SQL_DIAG_DROP_INDEX
-    public :: get_SQL_DIAG_DROP_SCHEMA
-    public :: get_SQL_DIAG_DROP_TABLE
-    public :: get_SQL_DIAG_DROP_TRANSLATION
-    public :: get_SQL_DIAG_DROP_VIEW
-    public :: get_SQL_DIAG_DYNAMIC_DELETE_CURSOR
-    public :: get_SQL_DIAG_DYNAMIC_UPDATE_CURSOR
-    public :: get_SQL_DIAG_GRANT
-    public :: get_SQL_DIAG_INSERT
-    public :: get_SQL_DIAG_REVOKE
-    public :: get_SQL_DIAG_SELECT_CURSOR
-    public :: get_SQL_DIAG_UNKNOWN_STATEMENT
-    public :: get_SQL_DIAG_UPDATE_WHERE
-    public :: get_SQL_UNKNOWN_TYPE
-    public :: get_SQL_CHAR
-    public :: get_SQL_NUMERIC
-    public :: get_SQL_DECIMAL
-    public :: get_SQL_INTEGER
-    public :: get_SQL_SMALLINT
-    public :: get_SQL_FLOAT
-    public :: get_SQL_REAL
-    public :: get_SQL_DOUBLE
-    public :: get_SQL_DATETIME
-    public :: get_SQL_VARCHAR
-    public :: get_SQL_TYPE_DATE
-    public :: get_SQL_TYPE_TIME
-    public :: get_SQL_TYPE_TIMESTAMP
-    public :: get_SQL_UNSPECIFIED
-    public :: get_SQL_INSENSITIVE
-    public :: get_SQL_SENSITIVE
-    public :: get_SQL_ALL_TYPES
-    public :: get_SQL_DEFAULT
-    public :: get_SQL_ARD_TYPE
-    public :: get_SQL_CODE_DATE
-    public :: get_SQL_CODE_TIME
-    public :: get_SQL_CODE_TIMESTAMP
-    public :: get_SQL_FALSE
-    public :: get_SQL_TRUE
-    public :: get_SQL_NO_NULLS
-    public :: get_SQL_NULLABLE
-    public :: get_SQL_NULLABLE_UNKNOWN
-    public :: get_SQL_PRED_NONE
-    public :: get_SQL_PRED_CHAR
-    public :: get_SQL_PRED_BASIC
-    public :: get_SQL_NAMED
-    public :: get_SQL_UNNAMED
-    public :: get_SQL_DESC_ALLOC_AUTO
-    public :: get_SQL_DESC_ALLOC_USER
-    public :: get_SQL_CLOSE
-    public :: get_SQL_DROP
-    public :: get_SQL_UNBIND
-    public :: get_SQL_RESET_PARAMS
-    public :: get_SQL_FETCH_NEXT
-    public :: get_SQL_FETCH_FIRST
-    public :: get_SQL_FETCH_LAST
-    public :: get_SQL_FETCH_PRIOR
-    public :: get_SQL_FETCH_ABSOLUTE
-    public :: get_SQL_FETCH_RELATIVE
-    public :: get_SQL_COMMIT
-    public :: get_SQL_ROLLBACK
-    public :: get_SQL_NULL_HENV
-    public :: get_SQL_NULL_HDBC
-    public :: get_SQL_NULL_HSTMT
-    public :: get_SQL_NULL_HDESC
-    public :: get_SQL_NULL_DESC
-    public :: get_SQL_NULL_HANDLE
-    public :: get_SQL_SCOPE_CURROW
-    public :: get_SQL_SCOPE_TRANSACTION
-    public :: get_SQL_SCOPE_SESSION
-    public :: get_SQL_PC_UNKNOWN
-    public :: get_SQL_PC_NON_PSEUDO
-    public :: get_SQL_PC_PSEUDO
-    public :: get_SQL_ROW_IDENTIFIER
-    public :: get_SQL_INDEX_UNIQUE
-    public :: get_SQL_INDEX_ALL
-    public :: get_SQL_INDEX_CLUSTERED
-    public :: get_SQL_INDEX_HASHED
-    public :: get_SQL_INDEX_OTHER
-    public :: get_SQL_API_SQLALLOCCONNECT
-    public :: get_SQL_API_SQLALLOCENV
-    public :: get_SQL_API_SQLALLOCHANDLE
-    public :: get_SQL_API_SQLALLOCSTMT
-    public :: get_SQL_API_SQLBINDCOL
-    public :: get_SQL_API_SQLBINDPARAM
-    public :: get_SQL_API_SQLCANCEL
-    public :: get_SQL_API_SQLCLOSECURSOR
-    public :: get_SQL_API_SQLCOLATTRIBUTE
-    public :: get_SQL_API_SQLCOLUMNS
-    public :: get_SQL_API_SQLCONNECT
-    public :: get_SQL_API_SQLCOPYDESC
-    public :: get_SQL_API_SQLDATASOURCES
-    public :: get_SQL_API_SQLDESCRIBECOL
-    public :: get_SQL_API_SQLDISCONNECT
-    public :: get_SQL_API_SQLENDTRAN
-    public :: get_SQL_API_SQLERROR
-    public :: get_SQL_API_SQLEXECDIRECT
-    public :: get_SQL_API_SQLEXECUTE
-    public :: get_SQL_API_SQLFETCH
-    public :: get_SQL_API_SQLFETCHSCROLL
-    public :: get_SQL_API_SQLFREECONNECT
-    public :: get_SQL_API_SQLFREEENV
-    public :: get_SQL_API_SQLFREEHANDLE
-    public :: get_SQL_API_SQLFREESTMT
-    public :: get_SQL_API_SQLGETCONNECTATTR
-    public :: get_SQL_API_SQLGETCONNECTOPTION
-    public :: get_SQL_API_SQLGETCURSORNAME
-    public :: get_SQL_API_SQLGETDATA
-    public :: get_SQL_API_SQLGETDESCFIELD
-    public :: get_SQL_API_SQLGETDESCREC
-    public :: get_SQL_API_SQLGETDIAGFIELD
-    public :: get_SQL_API_SQLGETDIAGREC
-    public :: get_SQL_API_SQLGETENVATTR
-    public :: get_SQL_API_SQLGETFUNCTIONS
-    public :: get_SQL_API_SQLGETINFO
-    public :: get_SQL_API_SQLGETSTMTATTR
-    public :: get_SQL_API_SQLGETSTMTOPTION
-    public :: get_SQL_API_SQLGETTYPEINFO
-    public :: get_SQL_API_SQLNUMRESULTCOLS
-    public :: get_SQL_API_SQLPARAMDATA
-    public :: get_SQL_API_SQLPREPARE
-    public :: get_SQL_API_SQLPUTDATA
-    public :: get_SQL_API_SQLROWCOUNT
-    public :: get_SQL_API_SQLSETCONNECTATTR
-    public :: get_SQL_API_SQLSETCONNECTOPTION
-    public :: get_SQL_API_SQLSETCURSORNAME
-    public :: get_SQL_API_SQLSETDESCFIELD
-    public :: get_SQL_API_SQLSETDESCREC
-    public :: get_SQL_API_SQLSETENVATTR
-    public :: get_SQL_API_SQLSETPARAM
-    public :: get_SQL_API_SQLSETSTMTATTR
-    public :: get_SQL_API_SQLSETSTMTOPTION
-    public :: get_SQL_API_SQLSPECIALCOLUMNS
-    public :: get_SQL_API_SQLSTATISTICS
-    public :: get_SQL_API_SQLTABLES
-    public :: get_SQL_API_SQLTRANSACT
-    public :: get_SQL_API_SQLCANCELHANDLE
-    public :: get_SQL_MAX_DRIVER_CONNECTIONS
-    public :: get_SQL_MAXIMUM_DRIVER_CONNECTIONS
-    public :: get_SQL_MAX_CONCURRENT_ACTIVITIES
-    public :: get_SQL_MAXIMUM_CONCURRENT_ACTIVITIES
-    public :: get_SQL_DATA_SOURCE_NAME
-    public :: get_SQL_FETCH_DIRECTION
-    public :: get_SQL_SERVER_NAME
-    public :: get_SQL_SEARCH_PATTERN_ESCAPE
-    public :: get_SQL_DBMS_NAME
-    public :: get_SQL_DBMS_VER
-    public :: get_SQL_ACCESSIBLE_TABLES
-    public :: get_SQL_ACCESSIBLE_PROCEDURES
-    public :: get_SQL_CURSOR_COMMIT_BEHAVIOR
-    public :: get_SQL_DATA_SOURCE_READ_ONLY
-    public :: get_SQL_DEFAULT_TXN_ISOLATION
-    public :: get_SQL_IDENTIFIER_CASE
-    public :: get_SQL_IDENTIFIER_QUOTE_CHAR
-    public :: get_SQL_MAX_COLUMN_NAME_LEN
-    public :: get_SQL_MAXIMUM_COLUMN_NAME_LENGTH
-    public :: get_SQL_MAX_CURSOR_NAME_LEN
-    public :: get_SQL_MAXIMUM_CURSOR_NAME_LENGTH
-    public :: get_SQL_MAX_SCHEMA_NAME_LEN
-    public :: get_SQL_MAXIMUM_SCHEMA_NAME_LENGTH
-    public :: get_SQL_MAX_CATALOG_NAME_LEN
-    public :: get_SQL_MAXIMUM_CATALOG_NAME_LENGTH
-    public :: get_SQL_MAX_TABLE_NAME_LEN
-    public :: get_SQL_SCROLL_CONCURRENCY
-    public :: get_SQL_TXN_CAPABLE
-    public :: get_SQL_TRANSACTION_CAPABLE
-    public :: get_SQL_USER_NAME
-    public :: get_SQL_TXN_ISOLATION_OPTION
-    public :: get_SQL_TRANSACTION_ISOLATION_OPTION
-    public :: get_SQL_INTEGRITY
-    public :: get_SQL_GETDATA_EXTENSIONS
-    public :: get_SQL_NULL_COLLATION
-    public :: get_SQL_ALTER_TABLE
-    public :: get_SQL_ORDER_BY_COLUMNS_IN_SELECT
-    public :: get_SQL_SPECIAL_CHARACTERS
-    public :: get_SQL_MAX_COLUMNS_IN_GROUP_BY
-    public :: get_SQL_MAXIMUM_COLUMNS_IN_GROUP_BY
-    public :: get_SQL_MAX_COLUMNS_IN_INDEX
-    public :: get_SQL_MAXIMUM_COLUMNS_IN_INDEX
-    public :: get_SQL_MAX_COLUMNS_IN_ORDER_BY
-    public :: get_SQL_MAXIMUM_COLUMNS_IN_ORDER_BY
-    public :: get_SQL_MAX_COLUMNS_IN_SELECT
-    public :: get_SQL_MAXIMUM_COLUMNS_IN_SELECT
-    public :: get_SQL_MAX_COLUMNS_IN_TABLE
-    public :: get_SQL_MAX_INDEX_SIZE
-    public :: get_SQL_MAXIMUM_INDEX_SIZE
-    public :: get_SQL_MAX_ROW_SIZE
-    public :: get_SQL_MAXIMUM_ROW_SIZE
-    public :: get_SQL_MAX_STATEMENT_LEN
-    public :: get_SQL_MAXIMUM_STATEMENT_LENGTH
-    public :: get_SQL_MAX_TABLES_IN_SELECT
-    public :: get_SQL_MAXIMUM_TABLES_IN_SELECT
-    public :: get_SQL_MAX_USER_NAME_LEN
-    public :: get_SQL_MAXIMUM_USER_NAME_LENGTH
-    public :: get_SQL_OJ_CAPABILITIES
-    public :: get_SQL_OUTER_JOIN_CAPABILITIES
-    public :: get_SQL_XOPEN_CLI_YEAR
-    public :: get_SQL_CURSOR_SENSITIVITY
-    public :: get_SQL_DESCRIBE_PARAMETER
-    public :: get_SQL_CATALOG_NAME
-    public :: get_SQL_COLLATION_SEQ
-    public :: get_SQL_MAX_IDENTIFIER_LEN
-    public :: get_SQL_MAXIMUM_IDENTIFIER_LENGTH
-    public :: get_SQL_AT_ADD_COLUMN
-    public :: get_SQL_AT_DROP_COLUMN
-    public :: get_SQL_AT_ADD_CONSTRAINT
-    public :: get_SQL_AM_NONE
-    public :: get_SQL_AM_CONNECTION
-    public :: get_SQL_AM_STATEMENT
-    public :: get_SQL_CB_DELETE
-    public :: get_SQL_CB_CLOSE
-    public :: get_SQL_CB_PRESERVE
-    public :: get_SQL_FD_FETCH_NEXT
-    public :: get_SQL_FD_FETCH_FIRST
-    public :: get_SQL_FD_FETCH_LAST
-    public :: get_SQL_FD_FETCH_PRIOR
-    public :: get_SQL_FD_FETCH_ABSOLUTE
-    public :: get_SQL_FD_FETCH_RELATIVE
-    public :: get_SQL_GD_ANY_COLUMN
-    public :: get_SQL_GD_ANY_ORDER
-    public :: get_SQL_IC_UPPER
-    public :: get_SQL_IC_LOWER
-    public :: get_SQL_IC_SENSITIVE
-    public :: get_SQL_IC_MIXED
-    public :: get_SQL_OJ_LEFT
-    public :: get_SQL_OJ_RIGHT
-    public :: get_SQL_OJ_FULL
-    public :: get_SQL_OJ_NESTED
-    public :: get_SQL_OJ_NOT_ORDERED
-    public :: get_SQL_OJ_INNER
-    public :: get_SQL_OJ_ALL_COMPARISON_OPS
-    public :: get_SQL_SCCO_READ_ONLY
-    public :: get_SQL_SCCO_LOCK
-    public :: get_SQL_SCCO_OPT_ROWVER
-    public :: get_SQL_SCCO_OPT_VALUES
-    public :: get_SQL_TC_NONE
-    public :: get_SQL_TC_DML
-    public :: get_SQL_TC_ALL
-    public :: get_SQL_TC_DDL_COMMIT
-    public :: get_SQL_TC_DDL_IGNORE
-    public :: get_SQL_TXN_READ_UNCOMMITTED
-    public :: get_SQL_TRANSACTION_READ_UNCOMMITTED
-    public :: get_SQL_TXN_READ_COMMITTED
-    public :: get_SQL_TRANSACTION_READ_COMMITTED
-    public :: get_SQL_TXN_REPEATABLE_READ
-    public :: get_SQL_TRANSACTION_REPEATABLE_READ
-    public :: get_SQL_TXN_SERIALIZABLE
-    public :: get_SQL_TRANSACTION_SERIALIZABLE
-    public :: get_SQL_NC_HIGH
-    public :: get_SQL_NC_LOW
-    public :: SQLAllocConnect
-    public :: SQLAllocEnv
-    public :: SQLAllocHandle
-    public :: SQLAllocStmt
-    public :: SQLBindCol
-    public :: SQLBindParam
-    public :: SQLCancel
-    public :: SQLCancelHandle
-    public :: SQLCloseCursor
-    public :: SQLColAttribute
-    public :: SQLColumns
-    public :: SQLConnect
-    public :: SQLCopyDesc
-    public :: SQLDataSources
-    public :: SQLDescribeCol
-    public :: SQLDisconnect
-    public :: SQLEndTran
-    public :: SQLError
-    public :: SQLExecDirect
-    public :: SQLExecute
-    public :: SQLFetch
-    public :: SQLFetchScroll
-    public :: SQLFreeConnect
-    public :: SQLFreeEnv
-    public :: SQLFreeHandle
-    public :: SQLFreeStmt
-    public :: SQLGetConnectAttr
-    public :: SQLGetConnectOption
-    public :: SQLGetCursorName
-    public :: SQLGetData
-    public :: SQLGetDescField
-    public :: SQLGetDescRec
-    public :: SQLGetDiagField
-    public :: SQLGetDiagRec
-    public :: SQLGetEnvAttr
-    public :: SQLGetFunctions
-    public :: SQLGetInfo
-    public :: SQLGetStmtAttr
-    public :: SQLGetStmtOption
-    public :: SQLGetTypeInfo
-    public :: SQLNumResultCols
-    public :: SQLParamData
-    public :: SQLPrepare
-    public :: SQLPutData
-    public :: SQLRowCount
-    public :: SQLSetConnectAttr
-    public :: SQLSetConnectOption
-    public :: SQLSetCursorName
-    public :: SQLSetDescField
-    public :: SQLSetDescRec
-    public :: SQLSetEnvAttr
-    public :: SQLSetParam
-    public :: SQLSetStmtAttr
-    public :: SQLSetStmtOption
-    public :: SQLSpecialColumns
-    public :: SQLStatistics
-    public :: SQLTables
-    public :: SQLTransact
+ ! DECLARATION CONSTRUCTS
+ public :: SQLAllocConnect
+ public :: SQLAllocEnv
+ public :: SQLAllocHandle
+ public :: SQLAllocStmt
+ public :: SQLBindCol
+ public :: SQLBindParam
+ public :: SQLCancel
+ public :: SQLCancelHandle
+ public :: SQLCloseCursor
+ public :: SQLColAttribute
+ public :: SQLColumns
+ public :: SQLConnect
+ public :: SQLCopyDesc
+ public :: SQLDataSources
+ public :: SQLDescribeCol
+ public :: SQLDisconnect
+ public :: SQLEndTran
+ public :: SQLError
+ public :: SQLExecDirect
+ public :: SQLExecute
+ public :: SQLFetch
+ public :: SQLFetchScroll
+ public :: SQLFreeConnect
+ public :: SQLFreeEnv
+ public :: SQLFreeHandle
+ public :: SQLFreeStmt
+ public :: SQLGetConnectAttr
+ public :: SQLGetConnectOption
+ public :: SQLGetCursorName
+ public :: SQLGetData
+ public :: SQLGetDescField
+ public :: SQLGetDescRec
+ public :: SQLGetDiagField
+ public :: SQLGetDiagRec
+ public :: SQLGetEnvAttr
+ public :: SQLGetFunctions
+ public :: SQLGetInfo
+ public :: SQLGetStmtAttr
+ public :: SQLGetStmtOption
+ public :: SQLGetTypeInfo
+ public :: SQLNumResultCols
+ public :: SQLParamData
+ public :: SQLPrepare
+ public :: SQLPutData
+ public :: SQLRowCount
+ public :: SQLSetConnectAttr
+ public :: SQLSetConnectOption
+ public :: SQLSetCursorName
+ public :: SQLSetDescField
+ public :: SQLSetDescRec
+ public :: SQLSetEnvAttr
+ public :: SQLSetParam
+ public :: SQLSetStmtAttr
+ public :: SQLSetStmtOption
+ public :: SQLSpecialColumns
+ public :: SQLStatistics
+ public :: SQLTables
+ public :: SQLTransact
 
 ! WRAPPER DECLARATIONS
-    interface
-        function swigc_SQL_NULL_DATA_get() &
-            bind(C, name="_wrap_SQL_NULL_DATA_get") &
-            result(fresult)
-            use, intrinsic :: iso_c_binding
-            integer(c_int) :: fresult
-        end function
+interface
+function SQLAllocConnect(environmenthandle, connectionhandle) &
+bind(C, name="SQLAllocConnect") &
+result(fresult)
+use, intrinsic :: ISO_C_BINDING
+type(c_ptr), intent(in), value :: environmenthandle
+type(c_ptr), intent(out) :: connectionhandle
+integer(c_short) :: fresult
+end function
+
+function SQLAllocEnv(environmenthandle) &
+bind(C, name="SQLAllocEnv") &
+result(fresult)
+use, intrinsic :: ISO_C_BINDING
+type(c_ptr), intent(out) :: environmenthandle
+integer(c_short) :: fresult
+end function
+
+function SQLAllocHandle(handletype, inputhandle, outputhandle) &
+bind(C, name="SQLAllocHandle") &
+result(fresult)
+use, intrinsic :: ISO_C_BINDING
+integer(c_short), intent(in), value :: handletype
+type(c_ptr), intent(in), value :: inputhandle
+type(c_ptr), intent(out) :: outputhandle
+integer(c_short) :: fresult
+end function
+
+function SQLAllocStmt(connectionhandle, statementhandle) &
+bind(C, name="SQLAllocStmt") &
+result(fresult)
+use, intrinsic :: ISO_C_BINDING
+type(c_ptr), intent(in), value :: connectionhandle
+type(c_ptr), intent(out) :: statementhandle
+integer(c_short) :: fresult
+end function
+
+function SQLBindCol(statementhandle, columnnumber, targettype, targetvalue, bufferlength, strlen_or_ind) &
+bind(C, name="SQLBindCol") &
+result(fresult)
+use, intrinsic :: ISO_C_BINDING
+type(c_ptr), intent(in), value :: statementhandle
+integer(c_short), intent(in), value :: columnnumber
+integer(c_short), intent(in), value :: targettype
+type(c_ptr), intent(in), value :: targetvalue
+integer(c_long), intent(in), value :: bufferlength
+integer(c_long), intent(out) :: strlen_or_ind
+integer(c_short) :: fresult
+end function
+
+function SQLBindParam(statementhandle, parameternumber, valuetype, parametertype, lengthprecision, parameterscale, &
+  parametervalue, strlen_or_ind) &
+bind(C, name="SQLBindParam") &
+result(fresult)
+use, intrinsic :: ISO_C_BINDING
+type(c_ptr), intent(in), value :: statementhandle
+integer(c_short), intent(in), value :: parameternumber
+integer(c_short), intent(in), value :: valuetype
+integer(c_short), intent(in), value :: parametertype
+integer(c_long), intent(in), value :: lengthprecision
+integer(c_short), intent(in), value :: parameterscale
+type(c_ptr), intent(in), value :: parametervalue
+integer(c_long), intent(out) :: strlen_or_ind
+integer(c_short) :: fresult
+end function
+
+function SQLCancel(statementhandle) &
+bind(C, name="SQLCancel") &
+result(fresult)
+use, intrinsic :: ISO_C_BINDING
+type(c_ptr), intent(in), value :: statementhandle
+integer(c_short) :: fresult
+end function
+
+function SQLCancelHandle(handletype, inputhandle) &
+bind(C, name="SQLCancelHandle") &
+result(fresult)
+use, intrinsic :: ISO_C_BINDING
+integer(c_short), intent(in), value :: handletype
+type(c_ptr), intent(in), value :: inputhandle
+integer(c_short) :: fresult
+end function
+
+function SQLCloseCursor(statementhandle) &
+bind(C, name="SQLCloseCursor") &
+result(fresult)
+use, intrinsic :: ISO_C_BINDING
+type(c_ptr), intent(in), value :: statementhandle
+integer(c_short) :: fresult
+end function
+
+function SQLColAttribute(statementhandle, columnnumber, fieldidentifier, characterattribute, bufferlength, stringlength, &
+  numericattribute) &
+bind(C, name="SQLColAttribute") &
+result(fresult)
+use, intrinsic :: ISO_C_BINDING
+type(c_ptr), intent(in), value :: statementhandle
+integer(c_short), intent(in), value :: columnnumber
+integer(c_short), intent(in), value :: fieldidentifier
+type(c_ptr), intent(in), value :: characterattribute
+integer(c_short), intent(in), value :: bufferlength
+integer(c_short), intent(out) :: stringlength
+integer(c_long), intent(out) :: numericattribute
+integer(c_short) :: fresult
+end function
+
+function SQLColumns(statementhandle, catalogname, namelength1, schemaname, namelength2, tablename, namelength3, columnname, &
+  namelength4) &
+bind(C, name="SQLColumns") &
+result(fresult)
+use, intrinsic :: ISO_C_BINDING
+type(c_ptr), intent(in), value :: statementhandle
+character(kind=c_char) :: catalogname
+integer(c_short), intent(in), value :: namelength1
+character(kind=c_char) :: schemaname
+integer(c_short), intent(in), value :: namelength2
+character(kind=c_char) :: tablename
+integer(c_short), intent(in), value :: namelength3
+character(kind=c_char) :: columnname
+integer(c_short), intent(in), value :: namelength4
+integer(c_short) :: fresult
+end function
+
+function SQLConnect(connectionhandle, servername, namelength1, username, namelength2, authentication, namelength3) &
+bind(C, name="SQLConnect") &
+result(fresult)
+use, intrinsic :: ISO_C_BINDING
+type(c_ptr), intent(in), value :: connectionhandle
+character(kind=c_char) :: servername
+integer(c_short), intent(in), value :: namelength1
+character(kind=c_char) :: username
+integer(c_short), intent(in), value :: namelength2
+character(kind=c_char) :: authentication
+integer(c_short), intent(in), value :: namelength3
+integer(c_short) :: fresult
+end function
+
+function SQLCopyDesc(sourcedeschandle, targetdeschandle) &
+bind(C, name="SQLCopyDesc") &
+result(fresult)
+use, intrinsic :: ISO_C_BINDING
+type(c_ptr), intent(in), value :: sourcedeschandle
+type(c_ptr), intent(in), value :: targetdeschandle
+integer(c_short) :: fresult
+end function
+
+function SQLDataSources(environmenthandle, direction, servername, bufferlength1, namelength1, description, bufferlength2, &
+  namelength2) &
+bind(C, name="SQLDataSources") &
+result(fresult)
+use, intrinsic :: ISO_C_BINDING
+type(c_ptr), intent(in), value :: environmenthandle
+integer(c_short), intent(in), value :: direction
+character(kind=c_char) :: servername
+integer(c_short), intent(in), value :: bufferlength1
+integer(c_short), intent(out) :: namelength1
+character(kind=c_char) :: description
+integer(c_short), intent(in), value :: bufferlength2
+integer(c_short), intent(out) :: namelength2
+integer(c_short) :: fresult
+end function
+
+function SQLDescribeCol(statementhandle, columnnumber, columnname, bufferlength, namelength, datatype, columnsize, &
+  decimaldigits, nullable) &
+bind(C, name="SQLDescribeCol") &
+result(fresult)
+use, intrinsic :: ISO_C_BINDING
+type(c_ptr), intent(in), value :: statementhandle
+integer(c_short), intent(in), value :: columnnumber
+character(kind=c_char) :: columnname
+integer(c_short), intent(in), value :: bufferlength
+integer(c_short), intent(out) :: namelength
+integer(c_short), intent(out) :: datatype
+integer(c_long), intent(out) :: columnsize
+integer(c_short), intent(out) :: decimaldigits
+integer(c_short), intent(out) :: nullable
+integer(c_short) :: fresult
+end function
+
+function SQLDisconnect(connectionhandle) &
+bind(C, name="SQLDisconnect") &
+result(fresult)
+use, intrinsic :: ISO_C_BINDING
+type(c_ptr), intent(in), value :: connectionhandle
+integer(c_short) :: fresult
+end function
+
+function SQLEndTran(handletype, handle, completiontype) &
+bind(C, name="SQLEndTran") &
+result(fresult)
+use, intrinsic :: ISO_C_BINDING
+integer(c_short), intent(in), value :: handletype
+type(c_ptr), intent(in), value :: handle
+integer(c_short), intent(in), value :: completiontype
+integer(c_short) :: fresult
+end function
+
+function SQLError(environmenthandle, connectionhandle, statementhandle, sqlstate, nativeerror, messagetext, bufferlength, &
+  textlength) &
+bind(C, name="SQLError") &
+result(fresult)
+use, intrinsic :: ISO_C_BINDING
+type(c_ptr), intent(in), value :: environmenthandle
+type(c_ptr), intent(in), value :: connectionhandle
+type(c_ptr), intent(in), value :: statementhandle
+character(kind=c_char) :: sqlstate
+integer(c_int), intent(out) :: nativeerror
+character(kind=c_char) :: messagetext
+integer(c_short), intent(in), value :: bufferlength
+integer(c_short), intent(out) :: textlength
+integer(c_short) :: fresult
+end function
+
+function SQLExecDirect(statementhandle, statementtext, textlength) &
+bind(C, name="SQLExecDirect") &
+result(fresult)
+use, intrinsic :: ISO_C_BINDING
+type(c_ptr), intent(in), value :: statementhandle
+character(kind=c_char) :: statementtext
+integer(c_int), intent(in), value :: textlength
+integer(c_short) :: fresult
+end function
+
+function SQLExecute(statementhandle) &
+bind(C, name="SQLExecute") &
+result(fresult)
+use, intrinsic :: ISO_C_BINDING
+type(c_ptr), intent(in), value :: statementhandle
+integer(c_short) :: fresult
+end function
+
+function SQLFetch(statementhandle) &
+bind(C, name="SQLFetch") &
+result(fresult)
+use, intrinsic :: ISO_C_BINDING
+type(c_ptr), intent(in), value :: statementhandle
+integer(c_short) :: fresult
+end function
+
+function SQLFetchScroll(statementhandle, fetchorientation, fetchoffset) &
+bind(C, name="SQLFetchScroll") &
+result(fresult)
+use, intrinsic :: ISO_C_BINDING
+type(c_ptr), intent(in), value :: statementhandle
+integer(c_short), intent(in), value :: fetchorientation
+integer(c_long), intent(in), value :: fetchoffset
+integer(c_short) :: fresult
+end function
+
+function SQLFreeConnect(connectionhandle) &
+bind(C, name="SQLFreeConnect") &
+result(fresult)
+use, intrinsic :: ISO_C_BINDING
+type(c_ptr), intent(in), value :: connectionhandle
+integer(c_short) :: fresult
+end function
+
+function SQLFreeEnv(environmenthandle) &
+bind(C, name="SQLFreeEnv") &
+result(fresult)
+use, intrinsic :: ISO_C_BINDING
+type(c_ptr), intent(in), value :: environmenthandle
+integer(c_short) :: fresult
+end function
+
+function SQLFreeHandle(handletype, handle) &
+bind(C, name="SQLFreeHandle") &
+result(fresult)
+use, intrinsic :: ISO_C_BINDING
+integer(c_short), intent(in), value :: handletype
+type(c_ptr), intent(in), value :: handle
+integer(c_short) :: fresult
+end function
+
+function SQLFreeStmt(statementhandle, option) &
+bind(C, name="SQLFreeStmt") &
+result(fresult)
+use, intrinsic :: ISO_C_BINDING
+type(c_ptr), intent(in), value :: statementhandle
+integer(c_short), intent(in), value :: option
+integer(c_short) :: fresult
+end function
+
+function SQLGetConnectAttr(connectionhandle, attribute, value, bufferlength, stringlength) &
+bind(C, name="SQLGetConnectAttr") &
+result(fresult)
+use, intrinsic :: ISO_C_BINDING
+type(c_ptr), intent(in), value :: connectionhandle
+integer(c_int), intent(in), value :: attribute
+type(c_ptr), intent(in), value :: value
+integer(c_int), intent(in), value :: bufferlength
+integer(c_int), intent(out) :: stringlength
+integer(c_short) :: fresult
+end function
+
+function SQLGetConnectOption(connectionhandle, option, value) &
+bind(C, name="SQLGetConnectOption") &
+result(fresult)
+use, intrinsic :: ISO_C_BINDING
+type(c_ptr), intent(in), value :: connectionhandle
+integer(c_short), intent(in), value :: option
+type(c_ptr), intent(in), value :: value
+integer(c_short) :: fresult
+end function
+
+function SQLGetCursorName(statementhandle, cursorname, bufferlength, namelength) &
+bind(C, name="SQLGetCursorName") &
+result(fresult)
+use, intrinsic :: ISO_C_BINDING
+type(c_ptr), intent(in), value :: statementhandle
+character(kind=c_char) :: cursorname
+integer(c_short), intent(in), value :: bufferlength
+integer(c_short), intent(out) :: namelength
+integer(c_short) :: fresult
+end function
+
+function SQLGetData(statementhandle, columnnumber, targettype, targetvalue, bufferlength, strlen_or_ind) &
+bind(C, name="SQLGetData") &
+result(fresult)
+use, intrinsic :: ISO_C_BINDING
+type(c_ptr), intent(in), value :: statementhandle
+integer(c_short), intent(in), value :: columnnumber
+integer(c_short), intent(in), value :: targettype
+type(c_ptr), intent(in), value :: targetvalue
+integer(c_long), intent(in), value :: bufferlength
+integer(c_long), intent(out) :: strlen_or_ind
+integer(c_short) :: fresult
+end function
+
+function SQLGetDescField(descriptorhandle, recnumber, fieldidentifier, value, bufferlength, stringlength) &
+bind(C, name="SQLGetDescField") &
+result(fresult)
+use, intrinsic :: ISO_C_BINDING
+type(c_ptr), intent(in), value :: descriptorhandle
+integer(c_short), intent(in), value :: recnumber
+integer(c_short), intent(in), value :: fieldidentifier
+type(c_ptr), intent(in), value :: value
+integer(c_int), intent(in), value :: bufferlength
+integer(c_int), intent(out) :: stringlength
+integer(c_short) :: fresult
+end function
+
+function SQLGetDescRec(descriptorhandle, recnumber, name, bufferlength, stringlength, type, subtype, length, precision, scale, &
+  nullable) &
+bind(C, name="SQLGetDescRec") &
+result(fresult)
+use, intrinsic :: ISO_C_BINDING
+type(c_ptr), intent(in), value :: descriptorhandle
+integer(c_short), intent(in), value :: recnumber
+character(kind=c_char) :: name
+integer(c_short), intent(in), value :: bufferlength
+integer(c_short), intent(out) :: stringlength
+integer(c_short), intent(out) :: type
+integer(c_short), intent(out) :: subtype
+integer(c_long), intent(out) :: length
+integer(c_short), intent(out) :: precision
+integer(c_short), intent(out) :: scale
+integer(c_short), intent(out) :: nullable
+integer(c_short) :: fresult
+end function
+
+function SQLGetDiagField(handletype, handle, recnumber, diagidentifier, diaginfo, bufferlength, stringlength) &
+bind(C, name="SQLGetDiagField") &
+result(fresult)
+use, intrinsic :: ISO_C_BINDING
+integer(c_short), intent(in), value :: handletype
+type(c_ptr), intent(in), value :: handle
+integer(c_short), intent(in), value :: recnumber
+integer(c_short), intent(in), value :: diagidentifier
+type(c_ptr), intent(in), value :: diaginfo
+integer(c_short), intent(in), value :: bufferlength
+integer(c_short), intent(out) :: stringlength
+integer(c_short) :: fresult
+end function
+
+function SQLGetDiagRec(handletype, handle, recnumber, sqlstate, nativeerror, messagetext, bufferlength, textlength) &
+bind(C, name="SQLGetDiagRec") &
+result(fresult)
+use, intrinsic :: ISO_C_BINDING
+integer(c_short), intent(in), value :: handletype
+type(c_ptr), intent(in), value :: handle
+integer(c_short), intent(in), value :: recnumber
+character(kind=c_char) :: sqlstate
+integer(c_int), intent(out) :: nativeerror
+character(kind=c_char) :: messagetext
+integer(c_short), intent(in), value :: bufferlength
+integer(c_short), intent(out) :: textlength
+integer(c_short) :: fresult
+end function
+
+function SQLGetEnvAttr(environmenthandle, attribute, value, bufferlength, stringlength) &
+bind(C, name="SQLGetEnvAttr") &
+result(fresult)
+use, intrinsic :: ISO_C_BINDING
+type(c_ptr), intent(in), value :: environmenthandle
+integer(c_int), intent(in), value :: attribute
+type(c_ptr), intent(in), value :: value
+integer(c_int), intent(in), value :: bufferlength
+integer(c_int), intent(out) :: stringlength
+integer(c_short) :: fresult
+end function
+
+function SQLGetFunctions(connectionhandle, functionid, supported) &
+bind(C, name="SQLGetFunctions") &
+result(fresult)
+use, intrinsic :: ISO_C_BINDING
+type(c_ptr), intent(in), value :: connectionhandle
+integer(c_short), intent(in), value :: functionid
+integer(c_short), intent(out) :: supported
+integer(c_short) :: fresult
+end function
+
+function SQLGetInfo(connectionhandle, infotype, infovalue, bufferlength, stringlength) &
+bind(C, name="SQLGetInfo") &
+result(fresult)
+use, intrinsic :: ISO_C_BINDING
+type(c_ptr), intent(in), value :: connectionhandle
+integer(c_short), intent(in), value :: infotype
+type(c_ptr), intent(in), value :: infovalue
+integer(c_short), intent(in), value :: bufferlength
+integer(c_short), intent(out) :: stringlength
+integer(c_short) :: fresult
+end function
+
+function SQLGetStmtAttr(statementhandle, attribute, value, bufferlength, stringlength) &
+bind(C, name="SQLGetStmtAttr") &
+result(fresult)
+use, intrinsic :: ISO_C_BINDING
+type(c_ptr), intent(in), value :: statementhandle
+integer(c_int), intent(in), value :: attribute
+type(c_ptr), intent(in), value :: value
+integer(c_int), intent(in), value :: bufferlength
+integer(c_int), intent(out) :: stringlength
+integer(c_short) :: fresult
+end function
+
+function SQLGetStmtOption(statementhandle, option, value) &
+bind(C, name="SQLGetStmtOption") &
+result(fresult)
+use, intrinsic :: ISO_C_BINDING
+type(c_ptr), intent(in), value :: statementhandle
+integer(c_short), intent(in), value :: option
+type(c_ptr), intent(in), value :: value
+integer(c_short) :: fresult
+end function
+
+function SQLGetTypeInfo(statementhandle, datatype) &
+bind(C, name="SQLGetTypeInfo") &
+result(fresult)
+use, intrinsic :: ISO_C_BINDING
+type(c_ptr), intent(in), value :: statementhandle
+integer(c_short), intent(in), value :: datatype
+integer(c_short) :: fresult
+end function
+
+function SQLNumResultCols(statementhandle, columncount) &
+bind(C, name="SQLNumResultCols") &
+result(fresult)
+use, intrinsic :: ISO_C_BINDING
+type(c_ptr), intent(in), value :: statementhandle
+integer(c_short), intent(out) :: columncount
+integer(c_short) :: fresult
+end function
+
+function SQLParamData(statementhandle, value) &
+bind(C, name="SQLParamData") &
+result(fresult)
+use, intrinsic :: ISO_C_BINDING
+type(c_ptr), intent(in), value :: statementhandle
+type(c_ptr), intent(out) :: value
+integer(c_short) :: fresult
+end function
+
+function SQLPrepare(statementhandle, statementtext, textlength) &
+bind(C, name="SQLPrepare") &
+result(fresult)
+use, intrinsic :: ISO_C_BINDING
+type(c_ptr), intent(in), value :: statementhandle
+character(kind=c_char) :: statementtext
+integer(c_int), intent(in), value :: textlength
+integer(c_short) :: fresult
+end function
+
+function SQLPutData(statementhandle, data, strlen_or_ind) &
+bind(C, name="SQLPutData") &
+result(fresult)
+use, intrinsic :: ISO_C_BINDING
+type(c_ptr), intent(in), value :: statementhandle
+type(c_ptr), intent(in), value :: data
+integer(c_long), intent(in), value :: strlen_or_ind
+integer(c_short) :: fresult
+end function
+
+function SQLRowCount(statementhandle, rowcount) &
+bind(C, name="SQLRowCount") &
+result(fresult)
+use, intrinsic :: ISO_C_BINDING
+type(c_ptr), intent(in), value :: statementhandle
+integer(c_long), intent(out) :: rowcount
+integer(c_short) :: fresult
+end function
+
+function SQLSetConnectAttr(connectionhandle, attribute, value, stringlength) &
+bind(C, name="SQLSetConnectAttr") &
+result(fresult)
+use, intrinsic :: ISO_C_BINDING
+type(c_ptr), intent(in), value :: connectionhandle
+integer(c_int), intent(in), value :: attribute
+type(c_ptr), intent(in), value :: value
+integer(c_int), intent(in), value :: stringlength
+integer(c_short) :: fresult
+end function
+
+function SQLSetConnectOption(connectionhandle, option, value) &
+bind(C, name="SQLSetConnectOption") &
+result(fresult)
+use, intrinsic :: ISO_C_BINDING
+type(c_ptr), intent(in), value :: connectionhandle
+integer(c_short), intent(in), value :: option
+integer(c_long), intent(in), value :: value
+integer(c_short) :: fresult
+end function
+
+function SQLSetCursorName(statementhandle, cursorname, namelength) &
+bind(C, name="SQLSetCursorName") &
+result(fresult)
+use, intrinsic :: ISO_C_BINDING
+type(c_ptr), intent(in), value :: statementhandle
+character(kind=c_char) :: cursorname
+integer(c_short), intent(in), value :: namelength
+integer(c_short) :: fresult
+end function
+
+function SQLSetDescField(descriptorhandle, recnumber, fieldidentifier, value, bufferlength) &
+bind(C, name="SQLSetDescField") &
+result(fresult)
+use, intrinsic :: ISO_C_BINDING
+type(c_ptr), intent(in), value :: descriptorhandle
+integer(c_short), intent(in), value :: recnumber
+integer(c_short), intent(in), value :: fieldidentifier
+type(c_ptr), intent(in), value :: value
+integer(c_int), intent(in), value :: bufferlength
+integer(c_short) :: fresult
+end function
+
+function SQLSetDescRec(descriptorhandle, recnumber, type, subtype, length, precision, scale, data, stringlength, indicator) &
+bind(C, name="SQLSetDescRec") &
+result(fresult)
+use, intrinsic :: ISO_C_BINDING
+type(c_ptr), intent(in), value :: descriptorhandle
+integer(c_short), intent(in), value :: recnumber
+integer(c_short), intent(in), value :: type
+integer(c_short), intent(in), value :: subtype
+integer(c_long), intent(in), value :: length
+integer(c_short), intent(in), value :: precision
+integer(c_short), intent(in), value :: scale
+type(c_ptr), intent(in), value :: data
+integer(c_long), intent(out) :: stringlength
+integer(c_long), intent(out) :: indicator
+integer(c_short) :: fresult
+end function
+
+function SQLSetEnvAttr(environmenthandle, attribute, value, stringlength) &
+bind(C, name="SQLSetEnvAttr") &
+result(fresult)
+use, intrinsic :: ISO_C_BINDING
+type(c_ptr), intent(in), value :: environmenthandle
+integer(c_int), intent(in), value :: attribute
+type(c_ptr), intent(in), value :: value
+integer(c_int), intent(in), value :: stringlength
+integer(c_short) :: fresult
+end function
+
+function SQLSetParam(statementhandle, parameternumber, valuetype, parametertype, lengthprecision, parameterscale, &
+  parametervalue, strlen_or_ind) &
+bind(C, name="SQLSetParam") &
+result(fresult)
+use, intrinsic :: ISO_C_BINDING
+type(c_ptr), intent(in), value :: statementhandle
+integer(c_short), intent(in), value :: parameternumber
+integer(c_short), intent(in), value :: valuetype
+integer(c_short), intent(in), value :: parametertype
+integer(c_long), intent(in), value :: lengthprecision
+integer(c_short), intent(in), value :: parameterscale
+type(c_ptr), intent(in), value :: parametervalue
+integer(c_long), intent(out) :: strlen_or_ind
+integer(c_short) :: fresult
+end function
+
+function SQLSetStmtAttr(statementhandle, attribute, value, stringlength) &
+bind(C, name="SQLSetStmtAttr") &
+result(fresult)
+use, intrinsic :: ISO_C_BINDING
+type(c_ptr), intent(in), value :: statementhandle
+integer(c_int), intent(in), value :: attribute
+type(c_ptr), intent(in), value :: value
+integer(c_int), intent(in), value :: stringlength
+integer(c_short) :: fresult
+end function
+
+function SQLSetStmtOption(statementhandle, option, value) &
+bind(C, name="SQLSetStmtOption") &
+result(fresult)
+use, intrinsic :: ISO_C_BINDING
+type(c_ptr), intent(in), value :: statementhandle
+integer(c_short), intent(in), value :: option
+integer(c_long), intent(in), value :: value
+integer(c_short) :: fresult
+end function
+
+function SQLSpecialColumns(statementhandle, identifiertype, catalogname, namelength1, schemaname, namelength2, tablename, &
+  namelength3, scope, nullable) &
+bind(C, name="SQLSpecialColumns") &
+result(fresult)
+use, intrinsic :: ISO_C_BINDING
+type(c_ptr), intent(in), value :: statementhandle
+integer(c_short), intent(in), value :: identifiertype
+character(kind=c_char) :: catalogname
+integer(c_short), intent(in), value :: namelength1
+character(kind=c_char) :: schemaname
+integer(c_short), intent(in), value :: namelength2
+character(kind=c_char) :: tablename
+integer(c_short), intent(in), value :: namelength3
+integer(c_short), intent(in), value :: scope
+integer(c_short), intent(in), value :: nullable
+integer(c_short) :: fresult
+end function
+
+function SQLStatistics(statementhandle, catalogname, namelength1, schemaname, namelength2, tablename, namelength3, unique, &
+  reserved) &
+bind(C, name="SQLStatistics") &
+result(fresult)
+use, intrinsic :: ISO_C_BINDING
+type(c_ptr), intent(in), value :: statementhandle
+character(kind=c_char) :: catalogname
+integer(c_short), intent(in), value :: namelength1
+character(kind=c_char) :: schemaname
+integer(c_short), intent(in), value :: namelength2
+character(kind=c_char) :: tablename
+integer(c_short), intent(in), value :: namelength3
+integer(c_short), intent(in), value :: unique
+integer(c_short), intent(in), value :: reserved
+integer(c_short) :: fresult
+end function
+
+function SQLTables(statementhandle, catalogname, namelength1, schemaname, namelength2, tablename, namelength3, tabletype, &
+  namelength4) &
+bind(C, name="SQLTables") &
+result(fresult)
+use, intrinsic :: ISO_C_BINDING
+type(c_ptr), intent(in), value :: statementhandle
+character(kind=c_char) :: catalogname
+integer(c_short), intent(in), value :: namelength1
+character(kind=c_char) :: schemaname
+integer(c_short), intent(in), value :: namelength2
+character(kind=c_char) :: tablename
+integer(c_short), intent(in), value :: namelength3
+character(kind=c_char) :: tabletype
+integer(c_short), intent(in), value :: namelength4
+integer(c_short) :: fresult
+end function
+
+function SQLTransact(environmenthandle, connectionhandle, completiontype) &
+bind(C, name="SQLTransact") &
+result(fresult)
+use, intrinsic :: ISO_C_BINDING
+type(c_ptr), intent(in), value :: environmenthandle
+type(c_ptr), intent(in), value :: connectionhandle
+integer(c_short), intent(in), value :: completiontype
+integer(c_short) :: fresult
+end function
+
+end interface
 
-        function swigc_SQL_DATA_AT_EXEC_get() &
-            bind(C, name="_wrap_SQL_DATA_AT_EXEC_get") &
-            result(fresult)
-            use, intrinsic :: iso_c_binding
-            integer(c_int) :: fresult
-        end function
-
-        function swigc_SQL_SUCCESS_get() &
-            bind(C, name="_wrap_SQL_SUCCESS_get") &
-            result(fresult)
-            use, intrinsic :: iso_c_binding
-            integer(c_int) :: fresult
-        end function
-
-        function swigc_SQL_SUCCESS_WITH_INFO_get() &
-            bind(C, name="_wrap_SQL_SUCCESS_WITH_INFO_get") &
-            result(fresult)
-            use, intrinsic :: iso_c_binding
-            integer(c_int) :: fresult
-        end function
-
-        function swigc_SQL_NO_DATA_get() &
-            bind(C, name="_wrap_SQL_NO_DATA_get") &
-            result(fresult)
-            use, intrinsic :: iso_c_binding
-            integer(c_int) :: fresult
-        end function
-
-        function swigc_SQL_ERROR_get() &
-            bind(C, name="_wrap_SQL_ERROR_get") &
-            result(fresult)
-            use, intrinsic :: iso_c_binding
-            integer(c_int) :: fresult
-        end function
-
-        function swigc_SQL_INVALID_HANDLE_get() &
-            bind(C, name="_wrap_SQL_INVALID_HANDLE_get") &
-            result(fresult)
-            use, intrinsic :: iso_c_binding
-            integer(c_int) :: fresult
-        end function
-
-        function swigc_SQL_STILL_EXECUTING_get() &
-            bind(C, name="_wrap_SQL_STILL_EXECUTING_get") &
-            result(fresult)
-            use, intrinsic :: iso_c_binding
-            integer(c_int) :: fresult
-        end function
-
-        function swigc_SQL_NEED_DATA_get() &
-            bind(C, name="_wrap_SQL_NEED_DATA_get") &
-            result(fresult)
-            use, intrinsic :: iso_c_binding
-            integer(c_int) :: fresult
-        end function
-
-        function swigc_SQL_PARAM_DATA_AVAILABLE_get() &
-            bind(C, name="_wrap_SQL_PARAM_DATA_AVAILABLE_get") &
-            result(fresult)
-            use, intrinsic :: iso_c_binding
-            integer(c_int) :: fresult
-        end function
-
-        function swigc_SQL_NTS_get() &
-            bind(C, name="_wrap_SQL_NTS_get") &
-            result(fresult)
-            use, intrinsic :: iso_c_binding
-            integer(c_int) :: fresult
-        end function
-
-        function swigc_SQL_NTSL_get() &
-            bind(C, name="_wrap_SQL_NTSL_get") &
-            result(fresult)
-            use, intrinsic :: iso_c_binding
-            integer(c_long) :: fresult
-        end function
-
-        function swigc_SQL_MAX_MESSAGE_LENGTH_get() &
-            bind(C, name="_wrap_SQL_MAX_MESSAGE_LENGTH_get") &
-            result(fresult)
-            use, intrinsic :: iso_c_binding
-            integer(c_int) :: fresult
-        end function
-
-        function swigc_SQL_DATE_LEN_get() &
-            bind(C, name="_wrap_SQL_DATE_LEN_get") &
-            result(fresult)
-            use, intrinsic :: iso_c_binding
-            integer(c_int) :: fresult
-        end function
-
-        function swigc_SQL_TIME_LEN_get() &
-            bind(C, name="_wrap_SQL_TIME_LEN_get") &
-            result(fresult)
-            use, intrinsic :: iso_c_binding
-            integer(c_int) :: fresult
-        end function
-
-        function swigc_SQL_TIMESTAMP_LEN_get() &
-            bind(C, name="_wrap_SQL_TIMESTAMP_LEN_get") &
-            result(fresult)
-            use, intrinsic :: iso_c_binding
-            integer(c_int) :: fresult
-        end function
-
-        function swigc_SQL_ATTR_OUTPUT_NTS_get() &
-            bind(C, name="_wrap_SQL_ATTR_OUTPUT_NTS_get") &
-            result(fresult)
-            use, intrinsic :: iso_c_binding
-            integer(c_int) :: fresult
-        end function
-
-        function swigc_SQL_ATTR_AUTO_IPD_get() &
-            bind(C, name="_wrap_SQL_ATTR_AUTO_IPD_get") &
-            result(fresult)
-            use, intrinsic :: iso_c_binding
-            integer(c_int) :: fresult
-        end function
-
-        function swigc_SQL_ATTR_METADATA_ID_get() &
-            bind(C, name="_wrap_SQL_ATTR_METADATA_ID_get") &
-            result(fresult)
-            use, intrinsic :: iso_c_binding
-            integer(c_int) :: fresult
-        end function
-
-        function swigc_SQL_ATTR_APP_ROW_DESC_get() &
-            bind(C, name="_wrap_SQL_ATTR_APP_ROW_DESC_get") &
-            result(fresult)
-            use, intrinsic :: iso_c_binding
-            integer(c_int) :: fresult
-        end function
-
-        function swigc_SQL_ATTR_APP_PARAM_DESC_get() &
-            bind(C, name="_wrap_SQL_ATTR_APP_PARAM_DESC_get") &
-            result(fresult)
-            use, intrinsic :: iso_c_binding
-            integer(c_int) :: fresult
-        end function
-
-        function swigc_SQL_ATTR_IMP_ROW_DESC_get() &
-            bind(C, name="_wrap_SQL_ATTR_IMP_ROW_DESC_get") &
-            result(fresult)
-            use, intrinsic :: iso_c_binding
-            integer(c_int) :: fresult
-        end function
-
-        function swigc_SQL_ATTR_IMP_PARAM_DESC_get() &
-            bind(C, name="_wrap_SQL_ATTR_IMP_PARAM_DESC_get") &
-            result(fresult)
-            use, intrinsic :: iso_c_binding
-            integer(c_int) :: fresult
-        end function
-
-        function swigc_SQL_ATTR_CURSOR_SCROLLABLE_get() &
-            bind(C, name="_wrap_SQL_ATTR_CURSOR_SCROLLABLE_get") &
-            result(fresult)
-            use, intrinsic :: iso_c_binding
-            integer(c_int) :: fresult
-        end function
-
-        function swigc_SQL_ATTR_CURSOR_SENSITIVITY_get() &
-            bind(C, name="_wrap_SQL_ATTR_CURSOR_SENSITIVITY_get") &
-            result(fresult)
-            use, intrinsic :: iso_c_binding
-            integer(c_int) :: fresult
-        end function
-
-        function swigc_SQL_NONSCROLLABLE_get() &
-            bind(C, name="_wrap_SQL_NONSCROLLABLE_get") &
-            result(fresult)
-            use, intrinsic :: iso_c_binding
-            integer(c_int) :: fresult
-        end function
-
-        function swigc_SQL_SCROLLABLE_get() &
-            bind(C, name="_wrap_SQL_SCROLLABLE_get") &
-            result(fresult)
-            use, intrinsic :: iso_c_binding
-            integer(c_int) :: fresult
-        end function
-
-        function swigc_SQL_DESC_COUNT_get() &
-            bind(C, name="_wrap_SQL_DESC_COUNT_get") &
-            result(fresult)
-            use, intrinsic :: iso_c_binding
-            integer(c_int) :: fresult
-        end function
-
-        function swigc_SQL_DESC_TYPE_get() &
-            bind(C, name="_wrap_SQL_DESC_TYPE_get") &
-            result(fresult)
-            use, intrinsic :: iso_c_binding
-            integer(c_int) :: fresult
-        end function
-
-        function swigc_SQL_DESC_LENGTH_get() &
-            bind(C, name="_wrap_SQL_DESC_LENGTH_get") &
-            result(fresult)
-            use, intrinsic :: iso_c_binding
-            integer(c_int) :: fresult
-        end function
-
-        function swigc_SQL_DESC_OCTET_LENGTH_PTR_get() &
-            bind(C, name="_wrap_SQL_DESC_OCTET_LENGTH_PTR_get") &
-            result(fresult)
-            use, intrinsic :: iso_c_binding
-            integer(c_int) :: fresult
-        end function
-
-        function swigc_SQL_DESC_PRECISION_get() &
-            bind(C, name="_wrap_SQL_DESC_PRECISION_get") &
-            result(fresult)
-            use, intrinsic :: iso_c_binding
-            integer(c_int) :: fresult
-        end function
-
-        function swigc_SQL_DESC_SCALE_get() &
-            bind(C, name="_wrap_SQL_DESC_SCALE_get") &
-            result(fresult)
-            use, intrinsic :: iso_c_binding
-            integer(c_int) :: fresult
-        end function
-
-        function swigc_SQL_DESC_DATETIME_INTERVAL_CODE_get() &
-            bind(C, name="_wrap_SQL_DESC_DATETIME_INTERVAL_CODE_get") &
-            result(fresult)
-            use, intrinsic :: iso_c_binding
-            integer(c_int) :: fresult
-        end function
-
-        function swigc_SQL_DESC_NULLABLE_get() &
-            bind(C, name="_wrap_SQL_DESC_NULLABLE_get") &
-            result(fresult)
-            use, intrinsic :: iso_c_binding
-            integer(c_int) :: fresult
-        end function
-
-        function swigc_SQL_DESC_INDICATOR_PTR_get() &
-            bind(C, name="_wrap_SQL_DESC_INDICATOR_PTR_get") &
-            result(fresult)
-            use, intrinsic :: iso_c_binding
-            integer(c_int) :: fresult
-        end function
-
-        function swigc_SQL_DESC_DATA_PTR_get() &
-            bind(C, name="_wrap_SQL_DESC_DATA_PTR_get") &
-            result(fresult)
-            use, intrinsic :: iso_c_binding
-            integer(c_int) :: fresult
-        end function
-
-        function swigc_SQL_DESC_NAME_get() &
-            bind(C, name="_wrap_SQL_DESC_NAME_get") &
-            result(fresult)
-            use, intrinsic :: iso_c_binding
-            integer(c_int) :: fresult
-        end function
-
-        function swigc_SQL_DESC_UNNAMED_get() &
-            bind(C, name="_wrap_SQL_DESC_UNNAMED_get") &
-            result(fresult)
-            use, intrinsic :: iso_c_binding
-            integer(c_int) :: fresult
-        end function
-
-        function swigc_SQL_DESC_OCTET_LENGTH_get() &
-            bind(C, name="_wrap_SQL_DESC_OCTET_LENGTH_get") &
-            result(fresult)
-            use, intrinsic :: iso_c_binding
-            integer(c_int) :: fresult
-        end function
-
-        function swigc_SQL_DESC_ALLOC_TYPE_get() &
-            bind(C, name="_wrap_SQL_DESC_ALLOC_TYPE_get") &
-            result(fresult)
-            use, intrinsic :: iso_c_binding
-            integer(c_int) :: fresult
-        end function
-
-        function swigc_SQL_DIAG_RETURNCODE_get() &
-            bind(C, name="_wrap_SQL_DIAG_RETURNCODE_get") &
-            result(fresult)
-            use, intrinsic :: iso_c_binding
-            integer(c_int) :: fresult
-        end function
-
-        function swigc_SQL_DIAG_NUMBER_get() &
-            bind(C, name="_wrap_SQL_DIAG_NUMBER_get") &
-            result(fresult)
-            use, intrinsic :: iso_c_binding
-            integer(c_int) :: fresult
-        end function
-
-        function swigc_SQL_DIAG_ROW_COUNT_get() &
-            bind(C, name="_wrap_SQL_DIAG_ROW_COUNT_get") &
-            result(fresult)
-            use, intrinsic :: iso_c_binding
-            integer(c_int) :: fresult
-        end function
-
-        function swigc_SQL_DIAG_SQLSTATE_get() &
-            bind(C, name="_wrap_SQL_DIAG_SQLSTATE_get") &
-            result(fresult)
-            use, intrinsic :: iso_c_binding
-            integer(c_int) :: fresult
-        end function
-
-        function swigc_SQL_DIAG_NATIVE_get() &
-            bind(C, name="_wrap_SQL_DIAG_NATIVE_get") &
-            result(fresult)
-            use, intrinsic :: iso_c_binding
-            integer(c_int) :: fresult
-        end function
-
-        function swigc_SQL_DIAG_MESSAGE_TEXT_get() &
-            bind(C, name="_wrap_SQL_DIAG_MESSAGE_TEXT_get") &
-            result(fresult)
-            use, intrinsic :: iso_c_binding
-            integer(c_int) :: fresult
-        end function
-
-        function swigc_SQL_DIAG_DYNAMIC_FUNCTION_get() &
-            bind(C, name="_wrap_SQL_DIAG_DYNAMIC_FUNCTION_get") &
-            result(fresult)
-            use, intrinsic :: iso_c_binding
-            integer(c_int) :: fresult
-        end function
-
-        function swigc_SQL_DIAG_CLASS_ORIGIN_get() &
-            bind(C, name="_wrap_SQL_DIAG_CLASS_ORIGIN_get") &
-            result(fresult)
-            use, intrinsic :: iso_c_binding
-            integer(c_int) :: fresult
-        end function
-
-        function swigc_SQL_DIAG_SUBCLASS_ORIGIN_get() &
-            bind(C, name="_wrap_SQL_DIAG_SUBCLASS_ORIGIN_get") &
-            result(fresult)
-            use, intrinsic :: iso_c_binding
-            integer(c_int) :: fresult
-        end function
-
-        function swigc_SQL_DIAG_CONNECTION_NAME_get() &
-            bind(C, name="_wrap_SQL_DIAG_CONNECTION_NAME_get") &
-            result(fresult)
-            use, intrinsic :: iso_c_binding
-            integer(c_int) :: fresult
-        end function
-
-        function swigc_SQL_DIAG_SERVER_NAME_get() &
-            bind(C, name="_wrap_SQL_DIAG_SERVER_NAME_get") &
-            result(fresult)
-            use, intrinsic :: iso_c_binding
-            integer(c_int) :: fresult
-        end function
-
-        function swigc_SQL_DIAG_DYNAMIC_FUNCTION_CODE_get() &
-            bind(C, name="_wrap_SQL_DIAG_DYNAMIC_FUNCTION_CODE_get") &
-            result(fresult)
-            use, intrinsic :: iso_c_binding
-            integer(c_int) :: fresult
-        end function
-
-        function swigc_SQL_DIAG_ALTER_DOMAIN_get() &
-            bind(C, name="_wrap_SQL_DIAG_ALTER_DOMAIN_get") &
-            result(fresult)
-            use, intrinsic :: iso_c_binding
-            integer(c_int) :: fresult
-        end function
-
-        function swigc_SQL_DIAG_ALTER_TABLE_get() &
-            bind(C, name="_wrap_SQL_DIAG_ALTER_TABLE_get") &
-            result(fresult)
-            use, intrinsic :: iso_c_binding
-            integer(c_int) :: fresult
-        end function
-
-        function swigc_SQL_DIAG_CALL_get() &
-            bind(C, name="_wrap_SQL_DIAG_CALL_get") &
-            result(fresult)
-            use, intrinsic :: iso_c_binding
-            integer(c_int) :: fresult
-        end function
-
-        function swigc_SQL_DIAG_CREATE_ASSERTION_get() &
-            bind(C, name="_wrap_SQL_DIAG_CREATE_ASSERTION_get") &
-            result(fresult)
-            use, intrinsic :: iso_c_binding
-            integer(c_int) :: fresult
-        end function
-
-        function swigc_SQL_DIAG_CREATE_CHARACTER_SET_get() &
-            bind(C, name="_wrap_SQL_DIAG_CREATE_CHARACTER_SET_get") &
-            result(fresult)
-            use, intrinsic :: iso_c_binding
-            integer(c_int) :: fresult
-        end function
-
-        function swigc_SQL_DIAG_CREATE_COLLATION_get() &
-            bind(C, name="_wrap_SQL_DIAG_CREATE_COLLATION_get") &
-            result(fresult)
-            use, intrinsic :: iso_c_binding
-            integer(c_int) :: fresult
-        end function
-
-        function swigc_SQL_DIAG_CREATE_DOMAIN_get() &
-            bind(C, name="_wrap_SQL_DIAG_CREATE_DOMAIN_get") &
-            result(fresult)
-            use, intrinsic :: iso_c_binding
-            integer(c_int) :: fresult
-        end function
-
-        function swigc_SQL_DIAG_CREATE_INDEX_get() &
-            bind(C, name="_wrap_SQL_DIAG_CREATE_INDEX_get") &
-            result(fresult)
-            use, intrinsic :: iso_c_binding
-            integer(c_int) :: fresult
-        end function
-
-        function swigc_SQL_DIAG_CREATE_SCHEMA_get() &
-            bind(C, name="_wrap_SQL_DIAG_CREATE_SCHEMA_get") &
-            result(fresult)
-            use, intrinsic :: iso_c_binding
-            integer(c_int) :: fresult
-        end function
-
-        function swigc_SQL_DIAG_CREATE_TABLE_get() &
-            bind(C, name="_wrap_SQL_DIAG_CREATE_TABLE_get") &
-            result(fresult)
-            use, intrinsic :: iso_c_binding
-            integer(c_int) :: fresult
-        end function
-
-        function swigc_SQL_DIAG_CREATE_TRANSLATION_get() &
-            bind(C, name="_wrap_SQL_DIAG_CREATE_TRANSLATION_get") &
-            result(fresult)
-            use, intrinsic :: iso_c_binding
-            integer(c_int) :: fresult
-        end function
-
-        function swigc_SQL_DIAG_CREATE_VIEW_get() &
-            bind(C, name="_wrap_SQL_DIAG_CREATE_VIEW_get") &
-            result(fresult)
-            use, intrinsic :: iso_c_binding
-            integer(c_int) :: fresult
-        end function
-
-        function swigc_SQL_DIAG_DELETE_WHERE_get() &
-            bind(C, name="_wrap_SQL_DIAG_DELETE_WHERE_get") &
-            result(fresult)
-            use, intrinsic :: iso_c_binding
-            integer(c_int) :: fresult
-        end function
-
-        function swigc_SQL_DIAG_DROP_ASSERTION_get() &
-            bind(C, name="_wrap_SQL_DIAG_DROP_ASSERTION_get") &
-            result(fresult)
-            use, intrinsic :: iso_c_binding
-            integer(c_int) :: fresult
-        end function
-
-        function swigc_SQL_DIAG_DROP_CHARACTER_SET_get() &
-            bind(C, name="_wrap_SQL_DIAG_DROP_CHARACTER_SET_get") &
-            result(fresult)
-            use, intrinsic :: iso_c_binding
-            integer(c_int) :: fresult
-        end function
-
-        function swigc_SQL_DIAG_DROP_COLLATION_get() &
-            bind(C, name="_wrap_SQL_DIAG_DROP_COLLATION_get") &
-            result(fresult)
-            use, intrinsic :: iso_c_binding
-            integer(c_int) :: fresult
-        end function
-
-        function swigc_SQL_DIAG_DROP_DOMAIN_get() &
-            bind(C, name="_wrap_SQL_DIAG_DROP_DOMAIN_get") &
-            result(fresult)
-            use, intrinsic :: iso_c_binding
-            integer(c_int) :: fresult
-        end function
-
-        function swigc_SQL_DIAG_DROP_INDEX_get() &
-            bind(C, name="_wrap_SQL_DIAG_DROP_INDEX_get") &
-            result(fresult)
-            use, intrinsic :: iso_c_binding
-            integer(c_int) :: fresult
-        end function
-
-        function swigc_SQL_DIAG_DROP_SCHEMA_get() &
-            bind(C, name="_wrap_SQL_DIAG_DROP_SCHEMA_get") &
-            result(fresult)
-            use, intrinsic :: iso_c_binding
-            integer(c_int) :: fresult
-        end function
-
-        function swigc_SQL_DIAG_DROP_TABLE_get() &
-            bind(C, name="_wrap_SQL_DIAG_DROP_TABLE_get") &
-            result(fresult)
-            use, intrinsic :: iso_c_binding
-            integer(c_int) :: fresult
-        end function
-
-        function swigc_SQL_DIAG_DROP_TRANSLATION_get() &
-            bind(C, name="_wrap_SQL_DIAG_DROP_TRANSLATION_get") &
-            result(fresult)
-            use, intrinsic :: iso_c_binding
-            integer(c_int) :: fresult
-        end function
-
-        function swigc_SQL_DIAG_DROP_VIEW_get() &
-            bind(C, name="_wrap_SQL_DIAG_DROP_VIEW_get") &
-            result(fresult)
-            use, intrinsic :: iso_c_binding
-            integer(c_int) :: fresult
-        end function
-
-        function swigc_SQL_DIAG_DYNAMIC_DELETE_CURSOR_get() &
-            bind(C, name="_wrap_SQL_DIAG_DYNAMIC_DELETE_CURSOR_get") &
-            result(fresult)
-            use, intrinsic :: iso_c_binding
-            integer(c_int) :: fresult
-        end function
-
-        function swigc_SQL_DIAG_DYNAMIC_UPDATE_CURSOR_get() &
-            bind(C, name="_wrap_SQL_DIAG_DYNAMIC_UPDATE_CURSOR_get") &
-            result(fresult)
-            use, intrinsic :: iso_c_binding
-            integer(c_int) :: fresult
-        end function
-
-        function swigc_SQL_DIAG_GRANT_get() &
-            bind(C, name="_wrap_SQL_DIAG_GRANT_get") &
-            result(fresult)
-            use, intrinsic :: iso_c_binding
-            integer(c_int) :: fresult
-        end function
-
-        function swigc_SQL_DIAG_INSERT_get() &
-            bind(C, name="_wrap_SQL_DIAG_INSERT_get") &
-            result(fresult)
-            use, intrinsic :: iso_c_binding
-            integer(c_int) :: fresult
-        end function
-
-        function swigc_SQL_DIAG_REVOKE_get() &
-            bind(C, name="_wrap_SQL_DIAG_REVOKE_get") &
-            result(fresult)
-            use, intrinsic :: iso_c_binding
-            integer(c_int) :: fresult
-        end function
-
-        function swigc_SQL_DIAG_SELECT_CURSOR_get() &
-            bind(C, name="_wrap_SQL_DIAG_SELECT_CURSOR_get") &
-            result(fresult)
-            use, intrinsic :: iso_c_binding
-            integer(c_int) :: fresult
-        end function
-
-        function swigc_SQL_DIAG_UNKNOWN_STATEMENT_get() &
-            bind(C, name="_wrap_SQL_DIAG_UNKNOWN_STATEMENT_get") &
-            result(fresult)
-            use, intrinsic :: iso_c_binding
-            integer(c_int) :: fresult
-        end function
-
-        function swigc_SQL_DIAG_UPDATE_WHERE_get() &
-            bind(C, name="_wrap_SQL_DIAG_UPDATE_WHERE_get") &
-            result(fresult)
-            use, intrinsic :: iso_c_binding
-            integer(c_int) :: fresult
-        end function
-
-        function swigc_SQL_UNKNOWN_TYPE_get() &
-            bind(C, name="_wrap_SQL_UNKNOWN_TYPE_get") &
-            result(fresult)
-            use, intrinsic :: iso_c_binding
-            integer(c_int) :: fresult
-        end function
-
-        function swigc_SQL_CHAR_get() &
-            bind(C, name="_wrap_SQL_CHAR_get") &
-            result(fresult)
-            use, intrinsic :: iso_c_binding
-            integer(c_int) :: fresult
-        end function
-
-        function swigc_SQL_NUMERIC_get() &
-            bind(C, name="_wrap_SQL_NUMERIC_get") &
-            result(fresult)
-            use, intrinsic :: iso_c_binding
-            integer(c_int) :: fresult
-        end function
-
-        function swigc_SQL_DECIMAL_get() &
-            bind(C, name="_wrap_SQL_DECIMAL_get") &
-            result(fresult)
-            use, intrinsic :: iso_c_binding
-            integer(c_int) :: fresult
-        end function
-
-        function swigc_SQL_INTEGER_get() &
-            bind(C, name="_wrap_SQL_INTEGER_get") &
-            result(fresult)
-            use, intrinsic :: iso_c_binding
-            integer(c_int) :: fresult
-        end function
-
-        function swigc_SQL_SMALLINT_get() &
-            bind(C, name="_wrap_SQL_SMALLINT_get") &
-            result(fresult)
-            use, intrinsic :: iso_c_binding
-            integer(c_int) :: fresult
-        end function
-
-        function swigc_SQL_FLOAT_get() &
-            bind(C, name="_wrap_SQL_FLOAT_get") &
-            result(fresult)
-            use, intrinsic :: iso_c_binding
-            integer(c_int) :: fresult
-        end function
-
-        function swigc_SQL_REAL_get() &
-            bind(C, name="_wrap_SQL_REAL_get") &
-            result(fresult)
-            use, intrinsic :: iso_c_binding
-            integer(c_int) :: fresult
-        end function
-
-        function swigc_SQL_DOUBLE_get() &
-            bind(C, name="_wrap_SQL_DOUBLE_get") &
-            result(fresult)
-            use, intrinsic :: iso_c_binding
-            integer(c_int) :: fresult
-        end function
-
-        function swigc_SQL_DATETIME_get() &
-            bind(C, name="_wrap_SQL_DATETIME_get") &
-            result(fresult)
-            use, intrinsic :: iso_c_binding
-            integer(c_int) :: fresult
-        end function
-
-        function swigc_SQL_VARCHAR_get() &
-            bind(C, name="_wrap_SQL_VARCHAR_get") &
-            result(fresult)
-            use, intrinsic :: iso_c_binding
-            integer(c_int) :: fresult
-        end function
-
-        function swigc_SQL_TYPE_DATE_get() &
-            bind(C, name="_wrap_SQL_TYPE_DATE_get") &
-            result(fresult)
-            use, intrinsic :: iso_c_binding
-            integer(c_int) :: fresult
-        end function
-
-        function swigc_SQL_TYPE_TIME_get() &
-            bind(C, name="_wrap_SQL_TYPE_TIME_get") &
-            result(fresult)
-            use, intrinsic :: iso_c_binding
-            integer(c_int) :: fresult
-        end function
-
-        function swigc_SQL_TYPE_TIMESTAMP_get() &
-            bind(C, name="_wrap_SQL_TYPE_TIMESTAMP_get") &
-            result(fresult)
-            use, intrinsic :: iso_c_binding
-            integer(c_int) :: fresult
-        end function
-
-        function swigc_SQL_UNSPECIFIED_get() &
-            bind(C, name="_wrap_SQL_UNSPECIFIED_get") &
-            result(fresult)
-            use, intrinsic :: iso_c_binding
-            integer(c_int) :: fresult
-        end function
-
-        function swigc_SQL_INSENSITIVE_get() &
-            bind(C, name="_wrap_SQL_INSENSITIVE_get") &
-            result(fresult)
-            use, intrinsic :: iso_c_binding
-            integer(c_int) :: fresult
-        end function
-
-        function swigc_SQL_SENSITIVE_get() &
-            bind(C, name="_wrap_SQL_SENSITIVE_get") &
-            result(fresult)
-            use, intrinsic :: iso_c_binding
-            integer(c_int) :: fresult
-        end function
-
-        function swigc_SQL_ALL_TYPES_get() &
-            bind(C, name="_wrap_SQL_ALL_TYPES_get") &
-            result(fresult)
-            use, intrinsic :: iso_c_binding
-            integer(c_int) :: fresult
-        end function
-
-        function swigc_SQL_DEFAULT_get() &
-            bind(C, name="_wrap_SQL_DEFAULT_get") &
-            result(fresult)
-            use, intrinsic :: iso_c_binding
-            integer(c_int) :: fresult
-        end function
-
-        function swigc_SQL_ARD_TYPE_get() &
-            bind(C, name="_wrap_SQL_ARD_TYPE_get") &
-            result(fresult)
-            use, intrinsic :: iso_c_binding
-            integer(c_int) :: fresult
-        end function
-
-        function swigc_SQL_CODE_DATE_get() &
-            bind(C, name="_wrap_SQL_CODE_DATE_get") &
-            result(fresult)
-            use, intrinsic :: iso_c_binding
-            integer(c_int) :: fresult
-        end function
-
-        function swigc_SQL_CODE_TIME_get() &
-            bind(C, name="_wrap_SQL_CODE_TIME_get") &
-            result(fresult)
-            use, intrinsic :: iso_c_binding
-            integer(c_int) :: fresult
-        end function
-
-        function swigc_SQL_CODE_TIMESTAMP_get() &
-            bind(C, name="_wrap_SQL_CODE_TIMESTAMP_get") &
-            result(fresult)
-            use, intrinsic :: iso_c_binding
-            integer(c_int) :: fresult
-        end function
-
-        function swigc_SQL_FALSE_get() &
-            bind(C, name="_wrap_SQL_FALSE_get") &
-            result(fresult)
-            use, intrinsic :: iso_c_binding
-            integer(c_int) :: fresult
-        end function
-
-        function swigc_SQL_TRUE_get() &
-            bind(C, name="_wrap_SQL_TRUE_get") &
-            result(fresult)
-            use, intrinsic :: iso_c_binding
-            integer(c_int) :: fresult
-        end function
-
-        function swigc_SQL_NO_NULLS_get() &
-            bind(C, name="_wrap_SQL_NO_NULLS_get") &
-            result(fresult)
-            use, intrinsic :: iso_c_binding
-            integer(c_int) :: fresult
-        end function
-
-        function swigc_SQL_NULLABLE_get() &
-            bind(C, name="_wrap_SQL_NULLABLE_get") &
-            result(fresult)
-            use, intrinsic :: iso_c_binding
-            integer(c_int) :: fresult
-        end function
-
-        function swigc_SQL_NULLABLE_UNKNOWN_get() &
-            bind(C, name="_wrap_SQL_NULLABLE_UNKNOWN_get") &
-            result(fresult)
-            use, intrinsic :: iso_c_binding
-            integer(c_int) :: fresult
-        end function
-
-        function swigc_SQL_PRED_NONE_get() &
-            bind(C, name="_wrap_SQL_PRED_NONE_get") &
-            result(fresult)
-            use, intrinsic :: iso_c_binding
-            integer(c_int) :: fresult
-        end function
-
-        function swigc_SQL_PRED_CHAR_get() &
-            bind(C, name="_wrap_SQL_PRED_CHAR_get") &
-            result(fresult)
-            use, intrinsic :: iso_c_binding
-            integer(c_int) :: fresult
-        end function
-
-        function swigc_SQL_PRED_BASIC_get() &
-            bind(C, name="_wrap_SQL_PRED_BASIC_get") &
-            result(fresult)
-            use, intrinsic :: iso_c_binding
-            integer(c_int) :: fresult
-        end function
-
-        function swigc_SQL_NAMED_get() &
-            bind(C, name="_wrap_SQL_NAMED_get") &
-            result(fresult)
-            use, intrinsic :: iso_c_binding
-            integer(c_int) :: fresult
-        end function
-
-        function swigc_SQL_UNNAMED_get() &
-            bind(C, name="_wrap_SQL_UNNAMED_get") &
-            result(fresult)
-            use, intrinsic :: iso_c_binding
-            integer(c_int) :: fresult
-        end function
-
-        function swigc_SQL_DESC_ALLOC_AUTO_get() &
-            bind(C, name="_wrap_SQL_DESC_ALLOC_AUTO_get") &
-            result(fresult)
-            use, intrinsic :: iso_c_binding
-            integer(c_int) :: fresult
-        end function
-
-        function swigc_SQL_DESC_ALLOC_USER_get() &
-            bind(C, name="_wrap_SQL_DESC_ALLOC_USER_get") &
-            result(fresult)
-            use, intrinsic :: iso_c_binding
-            integer(c_int) :: fresult
-        end function
-
-        function swigc_SQL_CLOSE_get() &
-            bind(C, name="_wrap_SQL_CLOSE_get") &
-            result(fresult)
-            use, intrinsic :: iso_c_binding
-            integer(c_int) :: fresult
-        end function
-
-        function swigc_SQL_DROP_get() &
-            bind(C, name="_wrap_SQL_DROP_get") &
-            result(fresult)
-            use, intrinsic :: iso_c_binding
-            integer(c_int) :: fresult
-        end function
-
-        function swigc_SQL_UNBIND_get() &
-            bind(C, name="_wrap_SQL_UNBIND_get") &
-            result(fresult)
-            use, intrinsic :: iso_c_binding
-            integer(c_int) :: fresult
-        end function
-
-        function swigc_SQL_RESET_PARAMS_get() &
-            bind(C, name="_wrap_SQL_RESET_PARAMS_get") &
-            result(fresult)
-            use, intrinsic :: iso_c_binding
-            integer(c_int) :: fresult
-        end function
-
-        function swigc_SQL_FETCH_NEXT_get() &
-            bind(C, name="_wrap_SQL_FETCH_NEXT_get") &
-            result(fresult)
-            use, intrinsic :: iso_c_binding
-            integer(c_int) :: fresult
-        end function
-
-        function swigc_SQL_FETCH_FIRST_get() &
-            bind(C, name="_wrap_SQL_FETCH_FIRST_get") &
-            result(fresult)
-            use, intrinsic :: iso_c_binding
-            integer(c_int) :: fresult
-        end function
-
-        function swigc_SQL_FETCH_LAST_get() &
-            bind(C, name="_wrap_SQL_FETCH_LAST_get") &
-            result(fresult)
-            use, intrinsic :: iso_c_binding
-            integer(c_int) :: fresult
-        end function
-
-        function swigc_SQL_FETCH_PRIOR_get() &
-            bind(C, name="_wrap_SQL_FETCH_PRIOR_get") &
-            result(fresult)
-            use, intrinsic :: iso_c_binding
-            integer(c_int) :: fresult
-        end function
-
-        function swigc_SQL_FETCH_ABSOLUTE_get() &
-            bind(C, name="_wrap_SQL_FETCH_ABSOLUTE_get") &
-            result(fresult)
-            use, intrinsic :: iso_c_binding
-            integer(c_int) :: fresult
-        end function
-
-        function swigc_SQL_FETCH_RELATIVE_get() &
-            bind(C, name="_wrap_SQL_FETCH_RELATIVE_get") &
-            result(fresult)
-            use, intrinsic :: iso_c_binding
-            integer(c_int) :: fresult
-        end function
-
-        function swigc_SQL_COMMIT_get() &
-            bind(C, name="_wrap_SQL_COMMIT_get") &
-            result(fresult)
-            use, intrinsic :: iso_c_binding
-            integer(c_int) :: fresult
-        end function
-
-        function swigc_SQL_ROLLBACK_get() &
-            bind(C, name="_wrap_SQL_ROLLBACK_get") &
-            result(fresult)
-            use, intrinsic :: iso_c_binding
-            integer(c_int) :: fresult
-        end function
-
-        function swigc_SQL_NULL_HENV_get() &
-            bind(C, name="_wrap_SQL_NULL_HENV_get") &
-            result(fresult)
-            use, intrinsic :: iso_c_binding
-            integer(c_int) :: fresult
-        end function
-
-        function swigc_SQL_NULL_HDBC_get() &
-            bind(C, name="_wrap_SQL_NULL_HDBC_get") &
-            result(fresult)
-            use, intrinsic :: iso_c_binding
-            integer(c_int) :: fresult
-        end function
-
-        function swigc_SQL_NULL_HSTMT_get() &
-            bind(C, name="_wrap_SQL_NULL_HSTMT_get") &
-            result(fresult)
-            use, intrinsic :: iso_c_binding
-            integer(c_int) :: fresult
-        end function
-
-        function swigc_SQL_NULL_HDESC_get() &
-            bind(C, name="_wrap_SQL_NULL_HDESC_get") &
-            result(fresult)
-            use, intrinsic :: iso_c_binding
-            integer(c_int) :: fresult
-        end function
-
-        function swigc_SQL_NULL_DESC_get() &
-            bind(C, name="_wrap_SQL_NULL_DESC_get") &
-            result(fresult)
-            use, intrinsic :: iso_c_binding
-            integer(c_int) :: fresult
-        end function
-
-        function swigc_SQL_NULL_HANDLE_get() &
-            bind(C, name="_wrap_SQL_NULL_HANDLE_get") &
-            result(fresult)
-            use, intrinsic :: iso_c_binding
-            integer(c_long) :: fresult
-        end function
-
-        function swigc_SQL_SCOPE_CURROW_get() &
-            bind(C, name="_wrap_SQL_SCOPE_CURROW_get") &
-            result(fresult)
-            use, intrinsic :: iso_c_binding
-            integer(c_int) :: fresult
-        end function
-
-        function swigc_SQL_SCOPE_TRANSACTION_get() &
-            bind(C, name="_wrap_SQL_SCOPE_TRANSACTION_get") &
-            result(fresult)
-            use, intrinsic :: iso_c_binding
-            integer(c_int) :: fresult
-        end function
-
-        function swigc_SQL_SCOPE_SESSION_get() &
-            bind(C, name="_wrap_SQL_SCOPE_SESSION_get") &
-            result(fresult)
-            use, intrinsic :: iso_c_binding
-            integer(c_int) :: fresult
-        end function
-
-        function swigc_SQL_PC_UNKNOWN_get() &
-            bind(C, name="_wrap_SQL_PC_UNKNOWN_get") &
-            result(fresult)
-            use, intrinsic :: iso_c_binding
-            integer(c_int) :: fresult
-        end function
-
-        function swigc_SQL_PC_NON_PSEUDO_get() &
-            bind(C, name="_wrap_SQL_PC_NON_PSEUDO_get") &
-            result(fresult)
-            use, intrinsic :: iso_c_binding
-            integer(c_int) :: fresult
-        end function
-
-        function swigc_SQL_PC_PSEUDO_get() &
-            bind(C, name="_wrap_SQL_PC_PSEUDO_get") &
-            result(fresult)
-            use, intrinsic :: iso_c_binding
-            integer(c_int) :: fresult
-        end function
-
-        function swigc_SQL_ROW_IDENTIFIER_get() &
-            bind(C, name="_wrap_SQL_ROW_IDENTIFIER_get") &
-            result(fresult)
-            use, intrinsic :: iso_c_binding
-            integer(c_int) :: fresult
-        end function
-
-        function swigc_SQL_INDEX_UNIQUE_get() &
-            bind(C, name="_wrap_SQL_INDEX_UNIQUE_get") &
-            result(fresult)
-            use, intrinsic :: iso_c_binding
-            integer(c_int) :: fresult
-        end function
-
-        function swigc_SQL_INDEX_ALL_get() &
-            bind(C, name="_wrap_SQL_INDEX_ALL_get") &
-            result(fresult)
-            use, intrinsic :: iso_c_binding
-            integer(c_int) :: fresult
-        end function
-
-        function swigc_SQL_INDEX_CLUSTERED_get() &
-            bind(C, name="_wrap_SQL_INDEX_CLUSTERED_get") &
-            result(fresult)
-            use, intrinsic :: iso_c_binding
-            integer(c_int) :: fresult
-        end function
-
-        function swigc_SQL_INDEX_HASHED_get() &
-            bind(C, name="_wrap_SQL_INDEX_HASHED_get") &
-            result(fresult)
-            use, intrinsic :: iso_c_binding
-            integer(c_int) :: fresult
-        end function
-
-        function swigc_SQL_INDEX_OTHER_get() &
-            bind(C, name="_wrap_SQL_INDEX_OTHER_get") &
-            result(fresult)
-            use, intrinsic :: iso_c_binding
-            integer(c_int) :: fresult
-        end function
-
-        function swigc_SQL_API_SQLALLOCCONNECT_get() &
-            bind(C, name="_wrap_SQL_API_SQLALLOCCONNECT_get") &
-            result(fresult)
-            use, intrinsic :: iso_c_binding
-            integer(c_int) :: fresult
-        end function
-
-        function swigc_SQL_API_SQLALLOCENV_get() &
-            bind(C, name="_wrap_SQL_API_SQLALLOCENV_get") &
-            result(fresult)
-            use, intrinsic :: iso_c_binding
-            integer(c_int) :: fresult
-        end function
-
-        function swigc_SQL_API_SQLALLOCHANDLE_get() &
-            bind(C, name="_wrap_SQL_API_SQLALLOCHANDLE_get") &
-            result(fresult)
-            use, intrinsic :: iso_c_binding
-            integer(c_int) :: fresult
-        end function
-
-        function swigc_SQL_API_SQLALLOCSTMT_get() &
-            bind(C, name="_wrap_SQL_API_SQLALLOCSTMT_get") &
-            result(fresult)
-            use, intrinsic :: iso_c_binding
-            integer(c_int) :: fresult
-        end function
-
-        function swigc_SQL_API_SQLBINDCOL_get() &
-            bind(C, name="_wrap_SQL_API_SQLBINDCOL_get") &
-            result(fresult)
-            use, intrinsic :: iso_c_binding
-            integer(c_int) :: fresult
-        end function
-
-        function swigc_SQL_API_SQLBINDPARAM_get() &
-            bind(C, name="_wrap_SQL_API_SQLBINDPARAM_get") &
-            result(fresult)
-            use, intrinsic :: iso_c_binding
-            integer(c_int) :: fresult
-        end function
-
-        function swigc_SQL_API_SQLCANCEL_get() &
-            bind(C, name="_wrap_SQL_API_SQLCANCEL_get") &
-            result(fresult)
-            use, intrinsic :: iso_c_binding
-            integer(c_int) :: fresult
-        end function
-
-        function swigc_SQL_API_SQLCLOSECURSOR_get() &
-            bind(C, name="_wrap_SQL_API_SQLCLOSECURSOR_get") &
-            result(fresult)
-            use, intrinsic :: iso_c_binding
-            integer(c_int) :: fresult
-        end function
-
-        function swigc_SQL_API_SQLCOLATTRIBUTE_get() &
-            bind(C, name="_wrap_SQL_API_SQLCOLATTRIBUTE_get") &
-            result(fresult)
-            use, intrinsic :: iso_c_binding
-            integer(c_int) :: fresult
-        end function
-
-        function swigc_SQL_API_SQLCOLUMNS_get() &
-            bind(C, name="_wrap_SQL_API_SQLCOLUMNS_get") &
-            result(fresult)
-            use, intrinsic :: iso_c_binding
-            integer(c_int) :: fresult
-        end function
-
-        function swigc_SQL_API_SQLCONNECT_get() &
-            bind(C, name="_wrap_SQL_API_SQLCONNECT_get") &
-            result(fresult)
-            use, intrinsic :: iso_c_binding
-            integer(c_int) :: fresult
-        end function
-
-        function swigc_SQL_API_SQLCOPYDESC_get() &
-            bind(C, name="_wrap_SQL_API_SQLCOPYDESC_get") &
-            result(fresult)
-            use, intrinsic :: iso_c_binding
-            integer(c_int) :: fresult
-        end function
-
-        function swigc_SQL_API_SQLDATASOURCES_get() &
-            bind(C, name="_wrap_SQL_API_SQLDATASOURCES_get") &
-            result(fresult)
-            use, intrinsic :: iso_c_binding
-            integer(c_int) :: fresult
-        end function
-
-        function swigc_SQL_API_SQLDESCRIBECOL_get() &
-            bind(C, name="_wrap_SQL_API_SQLDESCRIBECOL_get") &
-            result(fresult)
-            use, intrinsic :: iso_c_binding
-            integer(c_int) :: fresult
-        end function
-
-        function swigc_SQL_API_SQLDISCONNECT_get() &
-            bind(C, name="_wrap_SQL_API_SQLDISCONNECT_get") &
-            result(fresult)
-            use, intrinsic :: iso_c_binding
-            integer(c_int) :: fresult
-        end function
-
-        function swigc_SQL_API_SQLENDTRAN_get() &
-            bind(C, name="_wrap_SQL_API_SQLENDTRAN_get") &
-            result(fresult)
-            use, intrinsic :: iso_c_binding
-            integer(c_int) :: fresult
-        end function
-
-        function swigc_SQL_API_SQLERROR_get() &
-            bind(C, name="_wrap_SQL_API_SQLERROR_get") &
-            result(fresult)
-            use, intrinsic :: iso_c_binding
-            integer(c_int) :: fresult
-        end function
-
-        function swigc_SQL_API_SQLEXECDIRECT_get() &
-            bind(C, name="_wrap_SQL_API_SQLEXECDIRECT_get") &
-            result(fresult)
-            use, intrinsic :: iso_c_binding
-            integer(c_int) :: fresult
-        end function
-
-        function swigc_SQL_API_SQLEXECUTE_get() &
-            bind(C, name="_wrap_SQL_API_SQLEXECUTE_get") &
-            result(fresult)
-            use, intrinsic :: iso_c_binding
-            integer(c_int) :: fresult
-        end function
-
-        function swigc_SQL_API_SQLFETCH_get() &
-            bind(C, name="_wrap_SQL_API_SQLFETCH_get") &
-            result(fresult)
-            use, intrinsic :: iso_c_binding
-            integer(c_int) :: fresult
-        end function
-
-        function swigc_SQL_API_SQLFETCHSCROLL_get() &
-            bind(C, name="_wrap_SQL_API_SQLFETCHSCROLL_get") &
-            result(fresult)
-            use, intrinsic :: iso_c_binding
-            integer(c_int) :: fresult
-        end function
-
-        function swigc_SQL_API_SQLFREECONNECT_get() &
-            bind(C, name="_wrap_SQL_API_SQLFREECONNECT_get") &
-            result(fresult)
-            use, intrinsic :: iso_c_binding
-            integer(c_int) :: fresult
-        end function
-
-        function swigc_SQL_API_SQLFREEENV_get() &
-            bind(C, name="_wrap_SQL_API_SQLFREEENV_get") &
-            result(fresult)
-            use, intrinsic :: iso_c_binding
-            integer(c_int) :: fresult
-        end function
-
-        function swigc_SQL_API_SQLFREEHANDLE_get() &
-            bind(C, name="_wrap_SQL_API_SQLFREEHANDLE_get") &
-            result(fresult)
-            use, intrinsic :: iso_c_binding
-            integer(c_int) :: fresult
-        end function
-
-        function swigc_SQL_API_SQLFREESTMT_get() &
-            bind(C, name="_wrap_SQL_API_SQLFREESTMT_get") &
-            result(fresult)
-            use, intrinsic :: iso_c_binding
-            integer(c_int) :: fresult
-        end function
-
-        function swigc_SQL_API_SQLGETCONNECTATTR_get() &
-            bind(C, name="_wrap_SQL_API_SQLGETCONNECTATTR_get") &
-            result(fresult)
-            use, intrinsic :: iso_c_binding
-            integer(c_int) :: fresult
-        end function
-
-        function swigc_SQL_API_SQLGETCONNECTOPTION_get() &
-            bind(C, name="_wrap_SQL_API_SQLGETCONNECTOPTION_get") &
-            result(fresult)
-            use, intrinsic :: iso_c_binding
-            integer(c_int) :: fresult
-        end function
-
-        function swigc_SQL_API_SQLGETCURSORNAME_get() &
-            bind(C, name="_wrap_SQL_API_SQLGETCURSORNAME_get") &
-            result(fresult)
-            use, intrinsic :: iso_c_binding
-            integer(c_int) :: fresult
-        end function
-
-        function swigc_SQL_API_SQLGETDATA_get() &
-            bind(C, name="_wrap_SQL_API_SQLGETDATA_get") &
-            result(fresult)
-            use, intrinsic :: iso_c_binding
-            integer(c_int) :: fresult
-        end function
-
-        function swigc_SQL_API_SQLGETDESCFIELD_get() &
-            bind(C, name="_wrap_SQL_API_SQLGETDESCFIELD_get") &
-            result(fresult)
-            use, intrinsic :: iso_c_binding
-            integer(c_int) :: fresult
-        end function
-
-        function swigc_SQL_API_SQLGETDESCREC_get() &
-            bind(C, name="_wrap_SQL_API_SQLGETDESCREC_get") &
-            result(fresult)
-            use, intrinsic :: iso_c_binding
-            integer(c_int) :: fresult
-        end function
-
-        function swigc_SQL_API_SQLGETDIAGFIELD_get() &
-            bind(C, name="_wrap_SQL_API_SQLGETDIAGFIELD_get") &
-            result(fresult)
-            use, intrinsic :: iso_c_binding
-            integer(c_int) :: fresult
-        end function
-
-        function swigc_SQL_API_SQLGETDIAGREC_get() &
-            bind(C, name="_wrap_SQL_API_SQLGETDIAGREC_get") &
-            result(fresult)
-            use, intrinsic :: iso_c_binding
-            integer(c_int) :: fresult
-        end function
-
-        function swigc_SQL_API_SQLGETENVATTR_get() &
-            bind(C, name="_wrap_SQL_API_SQLGETENVATTR_get") &
-            result(fresult)
-            use, intrinsic :: iso_c_binding
-            integer(c_int) :: fresult
-        end function
-
-        function swigc_SQL_API_SQLGETFUNCTIONS_get() &
-            bind(C, name="_wrap_SQL_API_SQLGETFUNCTIONS_get") &
-            result(fresult)
-            use, intrinsic :: iso_c_binding
-            integer(c_int) :: fresult
-        end function
-
-        function swigc_SQL_API_SQLGETINFO_get() &
-            bind(C, name="_wrap_SQL_API_SQLGETINFO_get") &
-            result(fresult)
-            use, intrinsic :: iso_c_binding
-            integer(c_int) :: fresult
-        end function
-
-        function swigc_SQL_API_SQLGETSTMTATTR_get() &
-            bind(C, name="_wrap_SQL_API_SQLGETSTMTATTR_get") &
-            result(fresult)
-            use, intrinsic :: iso_c_binding
-            integer(c_int) :: fresult
-        end function
-
-        function swigc_SQL_API_SQLGETSTMTOPTION_get() &
-            bind(C, name="_wrap_SQL_API_SQLGETSTMTOPTION_get") &
-            result(fresult)
-            use, intrinsic :: iso_c_binding
-            integer(c_int) :: fresult
-        end function
-
-        function swigc_SQL_API_SQLGETTYPEINFO_get() &
-            bind(C, name="_wrap_SQL_API_SQLGETTYPEINFO_get") &
-            result(fresult)
-            use, intrinsic :: iso_c_binding
-            integer(c_int) :: fresult
-        end function
-
-        function swigc_SQL_API_SQLNUMRESULTCOLS_get() &
-            bind(C, name="_wrap_SQL_API_SQLNUMRESULTCOLS_get") &
-            result(fresult)
-            use, intrinsic :: iso_c_binding
-            integer(c_int) :: fresult
-        end function
-
-        function swigc_SQL_API_SQLPARAMDATA_get() &
-            bind(C, name="_wrap_SQL_API_SQLPARAMDATA_get") &
-            result(fresult)
-            use, intrinsic :: iso_c_binding
-            integer(c_int) :: fresult
-        end function
-
-        function swigc_SQL_API_SQLPREPARE_get() &
-            bind(C, name="_wrap_SQL_API_SQLPREPARE_get") &
-            result(fresult)
-            use, intrinsic :: iso_c_binding
-            integer(c_int) :: fresult
-        end function
-
-        function swigc_SQL_API_SQLPUTDATA_get() &
-            bind(C, name="_wrap_SQL_API_SQLPUTDATA_get") &
-            result(fresult)
-            use, intrinsic :: iso_c_binding
-            integer(c_int) :: fresult
-        end function
-
-        function swigc_SQL_API_SQLROWCOUNT_get() &
-            bind(C, name="_wrap_SQL_API_SQLROWCOUNT_get") &
-            result(fresult)
-            use, intrinsic :: iso_c_binding
-            integer(c_int) :: fresult
-        end function
-
-        function swigc_SQL_API_SQLSETCONNECTATTR_get() &
-            bind(C, name="_wrap_SQL_API_SQLSETCONNECTATTR_get") &
-            result(fresult)
-            use, intrinsic :: iso_c_binding
-            integer(c_int) :: fresult
-        end function
-
-        function swigc_SQL_API_SQLSETCONNECTOPTION_get() &
-            bind(C, name="_wrap_SQL_API_SQLSETCONNECTOPTION_get") &
-            result(fresult)
-            use, intrinsic :: iso_c_binding
-            integer(c_int) :: fresult
-        end function
-
-        function swigc_SQL_API_SQLSETCURSORNAME_get() &
-            bind(C, name="_wrap_SQL_API_SQLSETCURSORNAME_get") &
-            result(fresult)
-            use, intrinsic :: iso_c_binding
-            integer(c_int) :: fresult
-        end function
-
-        function swigc_SQL_API_SQLSETDESCFIELD_get() &
-            bind(C, name="_wrap_SQL_API_SQLSETDESCFIELD_get") &
-            result(fresult)
-            use, intrinsic :: iso_c_binding
-            integer(c_int) :: fresult
-        end function
-
-        function swigc_SQL_API_SQLSETDESCREC_get() &
-            bind(C, name="_wrap_SQL_API_SQLSETDESCREC_get") &
-            result(fresult)
-            use, intrinsic :: iso_c_binding
-            integer(c_int) :: fresult
-        end function
-
-        function swigc_SQL_API_SQLSETENVATTR_get() &
-            bind(C, name="_wrap_SQL_API_SQLSETENVATTR_get") &
-            result(fresult)
-            use, intrinsic :: iso_c_binding
-            integer(c_int) :: fresult
-        end function
-
-        function swigc_SQL_API_SQLSETPARAM_get() &
-            bind(C, name="_wrap_SQL_API_SQLSETPARAM_get") &
-            result(fresult)
-            use, intrinsic :: iso_c_binding
-            integer(c_int) :: fresult
-        end function
-
-        function swigc_SQL_API_SQLSETSTMTATTR_get() &
-            bind(C, name="_wrap_SQL_API_SQLSETSTMTATTR_get") &
-            result(fresult)
-            use, intrinsic :: iso_c_binding
-            integer(c_int) :: fresult
-        end function
-
-        function swigc_SQL_API_SQLSETSTMTOPTION_get() &
-            bind(C, name="_wrap_SQL_API_SQLSETSTMTOPTION_get") &
-            result(fresult)
-            use, intrinsic :: iso_c_binding
-            integer(c_int) :: fresult
-        end function
-
-        function swigc_SQL_API_SQLSPECIALCOLUMNS_get() &
-            bind(C, name="_wrap_SQL_API_SQLSPECIALCOLUMNS_get") &
-            result(fresult)
-            use, intrinsic :: iso_c_binding
-            integer(c_int) :: fresult
-        end function
-
-        function swigc_SQL_API_SQLSTATISTICS_get() &
-            bind(C, name="_wrap_SQL_API_SQLSTATISTICS_get") &
-            result(fresult)
-            use, intrinsic :: iso_c_binding
-            integer(c_int) :: fresult
-        end function
-
-        function swigc_SQL_API_SQLTABLES_get() &
-            bind(C, name="_wrap_SQL_API_SQLTABLES_get") &
-            result(fresult)
-            use, intrinsic :: iso_c_binding
-            integer(c_int) :: fresult
-        end function
-
-        function swigc_SQL_API_SQLTRANSACT_get() &
-            bind(C, name="_wrap_SQL_API_SQLTRANSACT_get") &
-            result(fresult)
-            use, intrinsic :: iso_c_binding
-            integer(c_int) :: fresult
-        end function
-
-        function swigc_SQL_API_SQLCANCELHANDLE_get() &
-            bind(C, name="_wrap_SQL_API_SQLCANCELHANDLE_get") &
-            result(fresult)
-            use, intrinsic :: iso_c_binding
-            integer(c_int) :: fresult
-        end function
-
-        function swigc_SQL_MAX_DRIVER_CONNECTIONS_get() &
-            bind(C, name="_wrap_SQL_MAX_DRIVER_CONNECTIONS_get") &
-            result(fresult)
-            use, intrinsic :: iso_c_binding
-            integer(c_int) :: fresult
-        end function
-
-        function swigc_SQL_MAXIMUM_DRIVER_CONNECTIONS_get() &
-            bind(C, name="_wrap_SQL_MAXIMUM_DRIVER_CONNECTIONS_get") &
-            result(fresult)
-            use, intrinsic :: iso_c_binding
-            integer(c_int) :: fresult
-        end function
-
-        function swigc_SQL_MAX_CONCURRENT_ACTIVITIES_get() &
-            bind(C, name="_wrap_SQL_MAX_CONCURRENT_ACTIVITIES_get") &
-            result(fresult)
-            use, intrinsic :: iso_c_binding
-            integer(c_int) :: fresult
-        end function
-
-        function swigc_SQL_MAXIMUM_CONCURRENT_ACTIVITIES_get() &
-            bind(C, name="_wrap_SQL_MAXIMUM_CONCURRENT_ACTIVITIES_get") &
-            result(fresult)
-            use, intrinsic :: iso_c_binding
-            integer(c_int) :: fresult
-        end function
-
-        function swigc_SQL_DATA_SOURCE_NAME_get() &
-            bind(C, name="_wrap_SQL_DATA_SOURCE_NAME_get") &
-            result(fresult)
-            use, intrinsic :: iso_c_binding
-            integer(c_int) :: fresult
-        end function
-
-        function swigc_SQL_FETCH_DIRECTION_get() &
-            bind(C, name="_wrap_SQL_FETCH_DIRECTION_get") &
-            result(fresult)
-            use, intrinsic :: iso_c_binding
-            integer(c_int) :: fresult
-        end function
-
-        function swigc_SQL_SERVER_NAME_get() &
-            bind(C, name="_wrap_SQL_SERVER_NAME_get") &
-            result(fresult)
-            use, intrinsic :: iso_c_binding
-            integer(c_int) :: fresult
-        end function
-
-        function swigc_SQL_SEARCH_PATTERN_ESCAPE_get() &
-            bind(C, name="_wrap_SQL_SEARCH_PATTERN_ESCAPE_get") &
-            result(fresult)
-            use, intrinsic :: iso_c_binding
-            integer(c_int) :: fresult
-        end function
-
-        function swigc_SQL_DBMS_NAME_get() &
-            bind(C, name="_wrap_SQL_DBMS_NAME_get") &
-            result(fresult)
-            use, intrinsic :: iso_c_binding
-            integer(c_int) :: fresult
-        end function
-
-        function swigc_SQL_DBMS_VER_get() &
-            bind(C, name="_wrap_SQL_DBMS_VER_get") &
-            result(fresult)
-            use, intrinsic :: iso_c_binding
-            integer(c_int) :: fresult
-        end function
-
-        function swigc_SQL_ACCESSIBLE_TABLES_get() &
-            bind(C, name="_wrap_SQL_ACCESSIBLE_TABLES_get") &
-            result(fresult)
-            use, intrinsic :: iso_c_binding
-            integer(c_int) :: fresult
-        end function
-
-        function swigc_SQL_ACCESSIBLE_PROCEDURES_get() &
-            bind(C, name="_wrap_SQL_ACCESSIBLE_PROCEDURES_get") &
-            result(fresult)
-            use, intrinsic :: iso_c_binding
-            integer(c_int) :: fresult
-        end function
-
-        function swigc_SQL_CURSOR_COMMIT_BEHAVIOR_get() &
-            bind(C, name="_wrap_SQL_CURSOR_COMMIT_BEHAVIOR_get") &
-            result(fresult)
-            use, intrinsic :: iso_c_binding
-            integer(c_int) :: fresult
-        end function
-
-        function swigc_SQL_DATA_SOURCE_READ_ONLY_get() &
-            bind(C, name="_wrap_SQL_DATA_SOURCE_READ_ONLY_get") &
-            result(fresult)
-            use, intrinsic :: iso_c_binding
-            integer(c_int) :: fresult
-        end function
-
-        function swigc_SQL_DEFAULT_TXN_ISOLATION_get() &
-            bind(C, name="_wrap_SQL_DEFAULT_TXN_ISOLATION_get") &
-            result(fresult)
-            use, intrinsic :: iso_c_binding
-            integer(c_int) :: fresult
-        end function
-
-        function swigc_SQL_IDENTIFIER_CASE_get() &
-            bind(C, name="_wrap_SQL_IDENTIFIER_CASE_get") &
-            result(fresult)
-            use, intrinsic :: iso_c_binding
-            integer(c_int) :: fresult
-        end function
-
-        function swigc_SQL_IDENTIFIER_QUOTE_CHAR_get() &
-            bind(C, name="_wrap_SQL_IDENTIFIER_QUOTE_CHAR_get") &
-            result(fresult)
-            use, intrinsic :: iso_c_binding
-            integer(c_int) :: fresult
-        end function
-
-        function swigc_SQL_MAX_COLUMN_NAME_LEN_get() &
-            bind(C, name="_wrap_SQL_MAX_COLUMN_NAME_LEN_get") &
-            result(fresult)
-            use, intrinsic :: iso_c_binding
-            integer(c_int) :: fresult
-        end function
-
-        function swigc_SQL_MAXIMUM_COLUMN_NAME_LENGTH_get() &
-            bind(C, name="_wrap_SQL_MAXIMUM_COLUMN_NAME_LENGTH_get") &
-            result(fresult)
-            use, intrinsic :: iso_c_binding
-            integer(c_int) :: fresult
-        end function
-
-        function swigc_SQL_MAX_CURSOR_NAME_LEN_get() &
-            bind(C, name="_wrap_SQL_MAX_CURSOR_NAME_LEN_get") &
-            result(fresult)
-            use, intrinsic :: iso_c_binding
-            integer(c_int) :: fresult
-        end function
-
-        function swigc_SQL_MAXIMUM_CURSOR_NAME_LENGTH_get() &
-            bind(C, name="_wrap_SQL_MAXIMUM_CURSOR_NAME_LENGTH_get") &
-            result(fresult)
-            use, intrinsic :: iso_c_binding
-            integer(c_int) :: fresult
-        end function
-
-        function swigc_SQL_MAX_SCHEMA_NAME_LEN_get() &
-            bind(C, name="_wrap_SQL_MAX_SCHEMA_NAME_LEN_get") &
-            result(fresult)
-            use, intrinsic :: iso_c_binding
-            integer(c_int) :: fresult
-        end function
-
-        function swigc_SQL_MAXIMUM_SCHEMA_NAME_LENGTH_get() &
-            bind(C, name="_wrap_SQL_MAXIMUM_SCHEMA_NAME_LENGTH_get") &
-            result(fresult)
-            use, intrinsic :: iso_c_binding
-            integer(c_int) :: fresult
-        end function
-
-        function swigc_SQL_MAX_CATALOG_NAME_LEN_get() &
-            bind(C, name="_wrap_SQL_MAX_CATALOG_NAME_LEN_get") &
-            result(fresult)
-            use, intrinsic :: iso_c_binding
-            integer(c_int) :: fresult
-        end function
-
-        function swigc_SQL_MAXIMUM_CATALOG_NAME_LENGTH_get() &
-            bind(C, name="_wrap_SQL_MAXIMUM_CATALOG_NAME_LENGTH_get") &
-            result(fresult)
-            use, intrinsic :: iso_c_binding
-            integer(c_int) :: fresult
-        end function
-
-        function swigc_SQL_MAX_TABLE_NAME_LEN_get() &
-            bind(C, name="_wrap_SQL_MAX_TABLE_NAME_LEN_get") &
-            result(fresult)
-            use, intrinsic :: iso_c_binding
-            integer(c_int) :: fresult
-        end function
-
-        function swigc_SQL_SCROLL_CONCURRENCY_get() &
-            bind(C, name="_wrap_SQL_SCROLL_CONCURRENCY_get") &
-            result(fresult)
-            use, intrinsic :: iso_c_binding
-            integer(c_int) :: fresult
-        end function
-
-        function swigc_SQL_TXN_CAPABLE_get() &
-            bind(C, name="_wrap_SQL_TXN_CAPABLE_get") &
-            result(fresult)
-            use, intrinsic :: iso_c_binding
-            integer(c_int) :: fresult
-        end function
-
-        function swigc_SQL_TRANSACTION_CAPABLE_get() &
-            bind(C, name="_wrap_SQL_TRANSACTION_CAPABLE_get") &
-            result(fresult)
-            use, intrinsic :: iso_c_binding
-            integer(c_int) :: fresult
-        end function
-
-        function swigc_SQL_USER_NAME_get() &
-            bind(C, name="_wrap_SQL_USER_NAME_get") &
-            result(fresult)
-            use, intrinsic :: iso_c_binding
-            integer(c_int) :: fresult
-        end function
-
-        function swigc_SQL_TXN_ISOLATION_OPTION_get() &
-            bind(C, name="_wrap_SQL_TXN_ISOLATION_OPTION_get") &
-            result(fresult)
-            use, intrinsic :: iso_c_binding
-            integer(c_int) :: fresult
-        end function
-
-        function swigc_SQL_TRANSACTION_ISOLATION_OPTION_get() &
-            bind(C, name="_wrap_SQL_TRANSACTION_ISOLATION_OPTION_get") &
-            result(fresult)
-            use, intrinsic :: iso_c_binding
-            integer(c_int) :: fresult
-        end function
-
-        function swigc_SQL_INTEGRITY_get() &
-            bind(C, name="_wrap_SQL_INTEGRITY_get") &
-            result(fresult)
-            use, intrinsic :: iso_c_binding
-            integer(c_int) :: fresult
-        end function
-
-        function swigc_SQL_GETDATA_EXTENSIONS_get() &
-            bind(C, name="_wrap_SQL_GETDATA_EXTENSIONS_get") &
-            result(fresult)
-            use, intrinsic :: iso_c_binding
-            integer(c_int) :: fresult
-        end function
-
-        function swigc_SQL_NULL_COLLATION_get() &
-            bind(C, name="_wrap_SQL_NULL_COLLATION_get") &
-            result(fresult)
-            use, intrinsic :: iso_c_binding
-            integer(c_int) :: fresult
-        end function
-
-        function swigc_SQL_ALTER_TABLE_get() &
-            bind(C, name="_wrap_SQL_ALTER_TABLE_get") &
-            result(fresult)
-            use, intrinsic :: iso_c_binding
-            integer(c_int) :: fresult
-        end function
-
-        function swigc_SQL_ORDER_BY_COLUMNS_IN_SELECT_get() &
-            bind(C, name="_wrap_SQL_ORDER_BY_COLUMNS_IN_SELECT_get") &
-            result(fresult)
-            use, intrinsic :: iso_c_binding
-            integer(c_int) :: fresult
-        end function
-
-        function swigc_SQL_SPECIAL_CHARACTERS_get() &
-            bind(C, name="_wrap_SQL_SPECIAL_CHARACTERS_get") &
-            result(fresult)
-            use, intrinsic :: iso_c_binding
-            integer(c_int) :: fresult
-        end function
-
-        function swigc_SQL_MAX_COLUMNS_IN_GROUP_BY_get() &
-            bind(C, name="_wrap_SQL_MAX_COLUMNS_IN_GROUP_BY_get") &
-            result(fresult)
-            use, intrinsic :: iso_c_binding
-            integer(c_int) :: fresult
-        end function
-
-        function swigc_SQL_MAXIMUM_COLUMNS_IN_GROUP_BY_get() &
-            bind(C, name="_wrap_SQL_MAXIMUM_COLUMNS_IN_GROUP_BY_get") &
-            result(fresult)
-            use, intrinsic :: iso_c_binding
-            integer(c_int) :: fresult
-        end function
-
-        function swigc_SQL_MAX_COLUMNS_IN_INDEX_get() &
-            bind(C, name="_wrap_SQL_MAX_COLUMNS_IN_INDEX_get") &
-            result(fresult)
-            use, intrinsic :: iso_c_binding
-            integer(c_int) :: fresult
-        end function
-
-        function swigc_SQL_MAXIMUM_COLUMNS_IN_INDEX_get() &
-            bind(C, name="_wrap_SQL_MAXIMUM_COLUMNS_IN_INDEX_get") &
-            result(fresult)
-            use, intrinsic :: iso_c_binding
-            integer(c_int) :: fresult
-        end function
-
-        function swigc_SQL_MAX_COLUMNS_IN_ORDER_BY_get() &
-            bind(C, name="_wrap_SQL_MAX_COLUMNS_IN_ORDER_BY_get") &
-            result(fresult)
-            use, intrinsic :: iso_c_binding
-            integer(c_int) :: fresult
-        end function
-
-        function swigc_SQL_MAXIMUM_COLUMNS_IN_ORDER_BY_get() &
-            bind(C, name="_wrap_SQL_MAXIMUM_COLUMNS_IN_ORDER_BY_get") &
-            result(fresult)
-            use, intrinsic :: iso_c_binding
-            integer(c_int) :: fresult
-        end function
-
-        function swigc_SQL_MAX_COLUMNS_IN_SELECT_get() &
-            bind(C, name="_wrap_SQL_MAX_COLUMNS_IN_SELECT_get") &
-            result(fresult)
-            use, intrinsic :: iso_c_binding
-            integer(c_int) :: fresult
-        end function
-
-        function swigc_SQL_MAXIMUM_COLUMNS_IN_SELECT_get() &
-            bind(C, name="_wrap_SQL_MAXIMUM_COLUMNS_IN_SELECT_get") &
-            result(fresult)
-            use, intrinsic :: iso_c_binding
-            integer(c_int) :: fresult
-        end function
-
-        function swigc_SQL_MAX_COLUMNS_IN_TABLE_get() &
-            bind(C, name="_wrap_SQL_MAX_COLUMNS_IN_TABLE_get") &
-            result(fresult)
-            use, intrinsic :: iso_c_binding
-            integer(c_int) :: fresult
-        end function
-
-        function swigc_SQL_MAX_INDEX_SIZE_get() &
-            bind(C, name="_wrap_SQL_MAX_INDEX_SIZE_get") &
-            result(fresult)
-            use, intrinsic :: iso_c_binding
-            integer(c_int) :: fresult
-        end function
-
-        function swigc_SQL_MAXIMUM_INDEX_SIZE_get() &
-            bind(C, name="_wrap_SQL_MAXIMUM_INDEX_SIZE_get") &
-            result(fresult)
-            use, intrinsic :: iso_c_binding
-            integer(c_int) :: fresult
-        end function
-
-        function swigc_SQL_MAX_ROW_SIZE_get() &
-            bind(C, name="_wrap_SQL_MAX_ROW_SIZE_get") &
-            result(fresult)
-            use, intrinsic :: iso_c_binding
-            integer(c_int) :: fresult
-        end function
-
-        function swigc_SQL_MAXIMUM_ROW_SIZE_get() &
-            bind(C, name="_wrap_SQL_MAXIMUM_ROW_SIZE_get") &
-            result(fresult)
-            use, intrinsic :: iso_c_binding
-            integer(c_int) :: fresult
-        end function
-
-        function swigc_SQL_MAX_STATEMENT_LEN_get() &
-            bind(C, name="_wrap_SQL_MAX_STATEMENT_LEN_get") &
-            result(fresult)
-            use, intrinsic :: iso_c_binding
-            integer(c_int) :: fresult
-        end function
-
-        function swigc_SQL_MAXIMUM_STATEMENT_LENGTH_get() &
-            bind(C, name="_wrap_SQL_MAXIMUM_STATEMENT_LENGTH_get") &
-            result(fresult)
-            use, intrinsic :: iso_c_binding
-            integer(c_int) :: fresult
-        end function
-
-        function swigc_SQL_MAX_TABLES_IN_SELECT_get() &
-            bind(C, name="_wrap_SQL_MAX_TABLES_IN_SELECT_get") &
-            result(fresult)
-            use, intrinsic :: iso_c_binding
-            integer(c_int) :: fresult
-        end function
-
-        function swigc_SQL_MAXIMUM_TABLES_IN_SELECT_get() &
-            bind(C, name="_wrap_SQL_MAXIMUM_TABLES_IN_SELECT_get") &
-            result(fresult)
-            use, intrinsic :: iso_c_binding
-            integer(c_int) :: fresult
-        end function
-
-        function swigc_SQL_MAX_USER_NAME_LEN_get() &
-            bind(C, name="_wrap_SQL_MAX_USER_NAME_LEN_get") &
-            result(fresult)
-            use, intrinsic :: iso_c_binding
-            integer(c_int) :: fresult
-        end function
-
-        function swigc_SQL_MAXIMUM_USER_NAME_LENGTH_get() &
-            bind(C, name="_wrap_SQL_MAXIMUM_USER_NAME_LENGTH_get") &
-            result(fresult)
-            use, intrinsic :: iso_c_binding
-            integer(c_int) :: fresult
-        end function
-
-        function swigc_SQL_OJ_CAPABILITIES_get() &
-            bind(C, name="_wrap_SQL_OJ_CAPABILITIES_get") &
-            result(fresult)
-            use, intrinsic :: iso_c_binding
-            integer(c_int) :: fresult
-        end function
-
-        function swigc_SQL_OUTER_JOIN_CAPABILITIES_get() &
-            bind(C, name="_wrap_SQL_OUTER_JOIN_CAPABILITIES_get") &
-            result(fresult)
-            use, intrinsic :: iso_c_binding
-            integer(c_int) :: fresult
-        end function
-
-        function swigc_SQL_XOPEN_CLI_YEAR_get() &
-            bind(C, name="_wrap_SQL_XOPEN_CLI_YEAR_get") &
-            result(fresult)
-            use, intrinsic :: iso_c_binding
-            integer(c_int) :: fresult
-        end function
-
-        function swigc_SQL_CURSOR_SENSITIVITY_get() &
-            bind(C, name="_wrap_SQL_CURSOR_SENSITIVITY_get") &
-            result(fresult)
-            use, intrinsic :: iso_c_binding
-            integer(c_int) :: fresult
-        end function
-
-        function swigc_SQL_DESCRIBE_PARAMETER_get() &
-            bind(C, name="_wrap_SQL_DESCRIBE_PARAMETER_get") &
-            result(fresult)
-            use, intrinsic :: iso_c_binding
-            integer(c_int) :: fresult
-        end function
-
-        function swigc_SQL_CATALOG_NAME_get() &
-            bind(C, name="_wrap_SQL_CATALOG_NAME_get") &
-            result(fresult)
-            use, intrinsic :: iso_c_binding
-            integer(c_int) :: fresult
-        end function
-
-        function swigc_SQL_COLLATION_SEQ_get() &
-            bind(C, name="_wrap_SQL_COLLATION_SEQ_get") &
-            result(fresult)
-            use, intrinsic :: iso_c_binding
-            integer(c_int) :: fresult
-        end function
-
-        function swigc_SQL_MAX_IDENTIFIER_LEN_get() &
-            bind(C, name="_wrap_SQL_MAX_IDENTIFIER_LEN_get") &
-            result(fresult)
-            use, intrinsic :: iso_c_binding
-            integer(c_int) :: fresult
-        end function
-
-        function swigc_SQL_MAXIMUM_IDENTIFIER_LENGTH_get() &
-            bind(C, name="_wrap_SQL_MAXIMUM_IDENTIFIER_LENGTH_get") &
-            result(fresult)
-            use, intrinsic :: iso_c_binding
-            integer(c_int) :: fresult
-        end function
-
-        function swigc_SQL_AT_ADD_COLUMN_get() &
-            bind(C, name="_wrap_SQL_AT_ADD_COLUMN_get") &
-            result(fresult)
-            use, intrinsic :: iso_c_binding
-            integer(c_long) :: fresult
-        end function
-
-        function swigc_SQL_AT_DROP_COLUMN_get() &
-            bind(C, name="_wrap_SQL_AT_DROP_COLUMN_get") &
-            result(fresult)
-            use, intrinsic :: iso_c_binding
-            integer(c_long) :: fresult
-        end function
-
-        function swigc_SQL_AT_ADD_CONSTRAINT_get() &
-            bind(C, name="_wrap_SQL_AT_ADD_CONSTRAINT_get") &
-            result(fresult)
-            use, intrinsic :: iso_c_binding
-            integer(c_long) :: fresult
-        end function
-
-        function swigc_SQL_AM_NONE_get() &
-            bind(C, name="_wrap_SQL_AM_NONE_get") &
-            result(fresult)
-            use, intrinsic :: iso_c_binding
-            integer(c_int) :: fresult
-        end function
-
-        function swigc_SQL_AM_CONNECTION_get() &
-            bind(C, name="_wrap_SQL_AM_CONNECTION_get") &
-            result(fresult)
-            use, intrinsic :: iso_c_binding
-            integer(c_int) :: fresult
-        end function
-
-        function swigc_SQL_AM_STATEMENT_get() &
-            bind(C, name="_wrap_SQL_AM_STATEMENT_get") &
-            result(fresult)
-            use, intrinsic :: iso_c_binding
-            integer(c_int) :: fresult
-        end function
-
-        function swigc_SQL_CB_DELETE_get() &
-            bind(C, name="_wrap_SQL_CB_DELETE_get") &
-            result(fresult)
-            use, intrinsic :: iso_c_binding
-            integer(c_int) :: fresult
-        end function
-
-        function swigc_SQL_CB_CLOSE_get() &
-            bind(C, name="_wrap_SQL_CB_CLOSE_get") &
-            result(fresult)
-            use, intrinsic :: iso_c_binding
-            integer(c_int) :: fresult
-        end function
-
-        function swigc_SQL_CB_PRESERVE_get() &
-            bind(C, name="_wrap_SQL_CB_PRESERVE_get") &
-            result(fresult)
-            use, intrinsic :: iso_c_binding
-            integer(c_int) :: fresult
-        end function
-
-        function swigc_SQL_FD_FETCH_NEXT_get() &
-            bind(C, name="_wrap_SQL_FD_FETCH_NEXT_get") &
-            result(fresult)
-            use, intrinsic :: iso_c_binding
-            integer(c_long) :: fresult
-        end function
-
-        function swigc_SQL_FD_FETCH_FIRST_get() &
-            bind(C, name="_wrap_SQL_FD_FETCH_FIRST_get") &
-            result(fresult)
-            use, intrinsic :: iso_c_binding
-            integer(c_long) :: fresult
-        end function
-
-        function swigc_SQL_FD_FETCH_LAST_get() &
-            bind(C, name="_wrap_SQL_FD_FETCH_LAST_get") &
-            result(fresult)
-            use, intrinsic :: iso_c_binding
-            integer(c_long) :: fresult
-        end function
-
-        function swigc_SQL_FD_FETCH_PRIOR_get() &
-            bind(C, name="_wrap_SQL_FD_FETCH_PRIOR_get") &
-            result(fresult)
-            use, intrinsic :: iso_c_binding
-            integer(c_long) :: fresult
-        end function
-
-        function swigc_SQL_FD_FETCH_ABSOLUTE_get() &
-            bind(C, name="_wrap_SQL_FD_FETCH_ABSOLUTE_get") &
-            result(fresult)
-            use, intrinsic :: iso_c_binding
-            integer(c_long) :: fresult
-        end function
-
-        function swigc_SQL_FD_FETCH_RELATIVE_get() &
-            bind(C, name="_wrap_SQL_FD_FETCH_RELATIVE_get") &
-            result(fresult)
-            use, intrinsic :: iso_c_binding
-            integer(c_long) :: fresult
-        end function
-
-        function swigc_SQL_GD_ANY_COLUMN_get() &
-            bind(C, name="_wrap_SQL_GD_ANY_COLUMN_get") &
-            result(fresult)
-            use, intrinsic :: iso_c_binding
-            integer(c_long) :: fresult
-        end function
-
-        function swigc_SQL_GD_ANY_ORDER_get() &
-            bind(C, name="_wrap_SQL_GD_ANY_ORDER_get") &
-            result(fresult)
-            use, intrinsic :: iso_c_binding
-            integer(c_long) :: fresult
-        end function
-
-        function swigc_SQL_IC_UPPER_get() &
-            bind(C, name="_wrap_SQL_IC_UPPER_get") &
-            result(fresult)
-            use, intrinsic :: iso_c_binding
-            integer(c_int) :: fresult
-        end function
-
-        function swigc_SQL_IC_LOWER_get() &
-            bind(C, name="_wrap_SQL_IC_LOWER_get") &
-            result(fresult)
-            use, intrinsic :: iso_c_binding
-            integer(c_int) :: fresult
-        end function
-
-        function swigc_SQL_IC_SENSITIVE_get() &
-            bind(C, name="_wrap_SQL_IC_SENSITIVE_get") &
-            result(fresult)
-            use, intrinsic :: iso_c_binding
-            integer(c_int) :: fresult
-        end function
-
-        function swigc_SQL_IC_MIXED_get() &
-            bind(C, name="_wrap_SQL_IC_MIXED_get") &
-            result(fresult)
-            use, intrinsic :: iso_c_binding
-            integer(c_int) :: fresult
-        end function
-
-        function swigc_SQL_OJ_LEFT_get() &
-            bind(C, name="_wrap_SQL_OJ_LEFT_get") &
-            result(fresult)
-            use, intrinsic :: iso_c_binding
-            integer(c_long) :: fresult
-        end function
-
-        function swigc_SQL_OJ_RIGHT_get() &
-            bind(C, name="_wrap_SQL_OJ_RIGHT_get") &
-            result(fresult)
-            use, intrinsic :: iso_c_binding
-            integer(c_long) :: fresult
-        end function
-
-        function swigc_SQL_OJ_FULL_get() &
-            bind(C, name="_wrap_SQL_OJ_FULL_get") &
-            result(fresult)
-            use, intrinsic :: iso_c_binding
-            integer(c_long) :: fresult
-        end function
-
-        function swigc_SQL_OJ_NESTED_get() &
-            bind(C, name="_wrap_SQL_OJ_NESTED_get") &
-            result(fresult)
-            use, intrinsic :: iso_c_binding
-            integer(c_long) :: fresult
-        end function
-
-        function swigc_SQL_OJ_NOT_ORDERED_get() &
-            bind(C, name="_wrap_SQL_OJ_NOT_ORDERED_get") &
-            result(fresult)
-            use, intrinsic :: iso_c_binding
-            integer(c_long) :: fresult
-        end function
-
-        function swigc_SQL_OJ_INNER_get() &
-            bind(C, name="_wrap_SQL_OJ_INNER_get") &
-            result(fresult)
-            use, intrinsic :: iso_c_binding
-            integer(c_long) :: fresult
-        end function
-
-        function swigc_SQL_OJ_ALL_COMPARISON_OPS_get() &
-            bind(C, name="_wrap_SQL_OJ_ALL_COMPARISON_OPS_get") &
-            result(fresult)
-            use, intrinsic :: iso_c_binding
-            integer(c_long) :: fresult
-        end function
-
-        function swigc_SQL_SCCO_READ_ONLY_get() &
-            bind(C, name="_wrap_SQL_SCCO_READ_ONLY_get") &
-            result(fresult)
-            use, intrinsic :: iso_c_binding
-            integer(c_long) :: fresult
-        end function
-
-        function swigc_SQL_SCCO_LOCK_get() &
-            bind(C, name="_wrap_SQL_SCCO_LOCK_get") &
-            result(fresult)
-            use, intrinsic :: iso_c_binding
-            integer(c_long) :: fresult
-        end function
-
-        function swigc_SQL_SCCO_OPT_ROWVER_get() &
-            bind(C, name="_wrap_SQL_SCCO_OPT_ROWVER_get") &
-            result(fresult)
-            use, intrinsic :: iso_c_binding
-            integer(c_long) :: fresult
-        end function
-
-        function swigc_SQL_SCCO_OPT_VALUES_get() &
-            bind(C, name="_wrap_SQL_SCCO_OPT_VALUES_get") &
-            result(fresult)
-            use, intrinsic :: iso_c_binding
-            integer(c_long) :: fresult
-        end function
-
-        function swigc_SQL_TC_NONE_get() &
-            bind(C, name="_wrap_SQL_TC_NONE_get") &
-            result(fresult)
-            use, intrinsic :: iso_c_binding
-            integer(c_int) :: fresult
-        end function
-
-        function swigc_SQL_TC_DML_get() &
-            bind(C, name="_wrap_SQL_TC_DML_get") &
-            result(fresult)
-            use, intrinsic :: iso_c_binding
-            integer(c_int) :: fresult
-        end function
-
-        function swigc_SQL_TC_ALL_get() &
-            bind(C, name="_wrap_SQL_TC_ALL_get") &
-            result(fresult)
-            use, intrinsic :: iso_c_binding
-            integer(c_int) :: fresult
-        end function
-
-        function swigc_SQL_TC_DDL_COMMIT_get() &
-            bind(C, name="_wrap_SQL_TC_DDL_COMMIT_get") &
-            result(fresult)
-            use, intrinsic :: iso_c_binding
-            integer(c_int) :: fresult
-        end function
-
-        function swigc_SQL_TC_DDL_IGNORE_get() &
-            bind(C, name="_wrap_SQL_TC_DDL_IGNORE_get") &
-            result(fresult)
-            use, intrinsic :: iso_c_binding
-            integer(c_int) :: fresult
-        end function
-
-        function swigc_SQL_TXN_READ_UNCOMMITTED_get() &
-            bind(C, name="_wrap_SQL_TXN_READ_UNCOMMITTED_get") &
-            result(fresult)
-            use, intrinsic :: iso_c_binding
-            integer(c_long) :: fresult
-        end function
-
-        function swigc_SQL_TRANSACTION_READ_UNCOMMITTED_get() &
-            bind(C, name="_wrap_SQL_TRANSACTION_READ_UNCOMMITTED_get") &
-            result(fresult)
-            use, intrinsic :: iso_c_binding
-            integer(c_long) :: fresult
-        end function
-
-        function swigc_SQL_TXN_READ_COMMITTED_get() &
-            bind(C, name="_wrap_SQL_TXN_READ_COMMITTED_get") &
-            result(fresult)
-            use, intrinsic :: iso_c_binding
-            integer(c_long) :: fresult
-        end function
-
-        function swigc_SQL_TRANSACTION_READ_COMMITTED_get() &
-            bind(C, name="_wrap_SQL_TRANSACTION_READ_COMMITTED_get") &
-            result(fresult)
-            use, intrinsic :: iso_c_binding
-            integer(c_long) :: fresult
-        end function
-
-        function swigc_SQL_TXN_REPEATABLE_READ_get() &
-            bind(C, name="_wrap_SQL_TXN_REPEATABLE_READ_get") &
-            result(fresult)
-            use, intrinsic :: iso_c_binding
-            integer(c_long) :: fresult
-        end function
-
-        function swigc_SQL_TRANSACTION_REPEATABLE_READ_get() &
-            bind(C, name="_wrap_SQL_TRANSACTION_REPEATABLE_READ_get") &
-            result(fresult)
-            use, intrinsic :: iso_c_binding
-            integer(c_long) :: fresult
-        end function
-
-        function swigc_SQL_TXN_SERIALIZABLE_get() &
-            bind(C, name="_wrap_SQL_TXN_SERIALIZABLE_get") &
-            result(fresult)
-            use, intrinsic :: iso_c_binding
-            integer(c_long) :: fresult
-        end function
-
-        function swigc_SQL_TRANSACTION_SERIALIZABLE_get() &
-            bind(C, name="_wrap_SQL_TRANSACTION_SERIALIZABLE_get") &
-            result(fresult)
-            use, intrinsic :: iso_c_binding
-            integer(c_long) :: fresult
-        end function
-
-        function swigc_SQL_NC_HIGH_get() &
-            bind(C, name="_wrap_SQL_NC_HIGH_get") &
-            result(fresult)
-            use, intrinsic :: iso_c_binding
-            integer(c_int) :: fresult
-        end function
-
-        function swigc_SQL_NC_LOW_get() &
-            bind(C, name="_wrap_SQL_NC_LOW_get") &
-            result(fresult)
-            use, intrinsic :: iso_c_binding
-            integer(c_int) :: fresult
-        end function
-
-        function SQLAllocConnect(environmenthandle, connectionhandle) &
-            bind(C, name="SQLAllocConnect") &
-            result(fresult)
-            use, intrinsic :: iso_c_binding
-            type(c_ptr) :: environmenthandle
-            type(c_ptr), value :: connectionhandle
-            integer(c_short) :: fresult
-        end function
-
-        function SQLAllocEnv(environmenthandle) &
-            bind(C, name="SQLAllocEnv") &
-            result(fresult)
-            use, intrinsic :: iso_c_binding
-            type(c_ptr), value :: environmenthandle
-            integer(c_short) :: fresult
-        end function
-
-        function SQLAllocHandle(handletype, inputhandle, outputhandle) &
-            bind(C, name="SQLAllocHandle") &
-            result(fresult)
-            use, intrinsic :: iso_c_binding
-            integer(c_short), intent(in), value :: handletype
-            type(c_ptr), value :: inputhandle
-            type(c_ptr), intent(out) :: outputhandle
-            integer(c_short) :: fresult
-        end function
-
-        function SQLAllocStmt(connectionhandle, statementhandle) &
-            bind(C, name="SQLAllocStmt") &
-            result(fresult)
-            use, intrinsic :: iso_c_binding
-            type(c_ptr) :: connectionhandle
-            type(c_ptr), value :: statementhandle
-            integer(c_short) :: fresult
-        end function
-
-        function SQLBindCol(statementhandle, columnnumber, targettype, targetvalue, bufferlength, strlen_or_ind) &
-            bind(C, name="SQLBindCol") &
-            result(fresult)
-            use, intrinsic :: iso_c_binding
-            type(c_ptr) :: statementhandle
-            integer(c_short) :: columnnumber
-            integer(c_short) :: targettype
-            type(c_ptr) :: targetvalue
-            integer(c_long_long) :: bufferlength
-            type(c_ptr), value :: strlen_or_ind
-            integer(c_short) :: fresult
-        end function
-
-        function SQLBindParam(statementhandle, parameternumber, valuetype, parametertype, lengthprecision, parameterscale, &
-                              parametervalue, strlen_or_ind) &
-            bind(C, name="SQLBindParam") &
-            result(fresult)
-            use, intrinsic :: iso_c_binding
-            type(c_ptr) :: statementhandle
-            integer(c_short) :: parameternumber
-            integer(c_short) :: valuetype
-            integer(c_short) :: parametertype
-            integer(c_long_long) :: lengthprecision
-            integer(c_short) :: parameterscale
-            type(c_ptr) :: parametervalue
-            type(c_ptr), value :: strlen_or_ind
-            integer(c_short) :: fresult
-        end function
-
-        function SQLCancel(statementhandle) &
-            bind(C, name="SQLCancel") &
-            result(fresult)
-            use, intrinsic :: iso_c_binding
-            type(c_ptr) :: statementhandle
-            integer(c_short) :: fresult
-        end function
-
-        function SQLCancelHandle(handletype, inputhandle) &
-            bind(C, name="SQLCancelHandle") &
-            result(fresult)
-            use, intrinsic :: iso_c_binding
-            integer(c_short) :: handletype
-            type(c_ptr) :: inputhandle
-            integer(c_short) :: fresult
-        end function
-
-        function SQLCloseCursor(statementhandle) &
-            bind(C, name="SQLCloseCursor") &
-            result(fresult)
-            use, intrinsic :: iso_c_binding
-            type(c_ptr) :: statementhandle
-            integer(c_short) :: fresult
-        end function
-
-        function SQLColAttribute(statementhandle, columnnumber, fieldidentifier, characterattribute, bufferlength, stringlength, &
-                                 numericattribute) &
-            bind(C, name="SQLColAttribute") &
-            result(fresult)
-            use, intrinsic :: iso_c_binding
-            type(c_ptr) :: statementhandle
-            integer(c_short) :: columnnumber
-            integer(c_short) :: fieldidentifier
-            type(c_ptr) :: characterattribute
-            integer(c_short) :: bufferlength
-            type(c_ptr), value :: stringlength
-            type(c_ptr), value :: numericattribute
-            integer(c_short) :: fresult
-        end function
-
-       function SQLColumns(statementhandle, catalogname, namelength1, schemaname, namelength2, tablename, namelength3, columnname, &
-                            namelength4) &
-            bind(C, name="SQLColumns") &
-            result(fresult)
-            use, intrinsic :: iso_c_binding
-            type(c_ptr) :: statementhandle
-            type(c_ptr), value :: catalogname
-            integer(c_short) :: namelength1
-            type(c_ptr), value :: schemaname
-            integer(c_short) :: namelength2
-            type(c_ptr), value :: tablename
-            integer(c_short) :: namelength3
-            type(c_ptr), value :: columnname
-            integer(c_short) :: namelength4
-            integer(c_short) :: fresult
-        end function
-
-        function SQLConnect(connectionhandle, servername, namelength1, username, namelength2, authentication, namelength3) &
-            bind(C, name="SQLConnect") &
-            result(fresult)
-            use, intrinsic :: iso_c_binding
-            type(c_ptr) :: connectionhandle
-            type(c_ptr), value :: servername
-            integer(c_short) :: namelength1
-            type(c_ptr), value :: username
-            integer(c_short) :: namelength2
-            type(c_ptr), value :: authentication
-            integer(c_short) :: namelength3
-            integer(c_short) :: fresult
-        end function
-
-        function SQLCopyDesc(sourcedeschandle, targetdeschandle) &
-            bind(C, name="SQLCopyDesc") &
-            result(fresult)
-            use, intrinsic :: iso_c_binding
-            type(c_ptr) :: sourcedeschandle
-            type(c_ptr) :: targetdeschandle
-            integer(c_short) :: fresult
-        end function
-
-        function SQLDataSources(environmenthandle, direction, servername, bufferlength1, namelength1, description, bufferlength2, &
-                                namelength2) &
-            bind(C, name="SQLDataSources") &
-            result(fresult)
-            use, intrinsic :: iso_c_binding
-            type(c_ptr) :: environmenthandle
-            integer(c_short) :: direction
-            type(c_ptr), value :: servername
-            integer(c_short) :: bufferlength1
-            type(c_ptr), value :: namelength1
-            type(c_ptr), value :: description
-            integer(c_short) :: bufferlength2
-            type(c_ptr), value :: namelength2
-            integer(c_short) :: fresult
-        end function
-
-        function SQLDescribeCol(statementhandle, columnnumber, columnname, bufferlength, namelength, datatype, columnsize, &
-                                decimaldigits, nullable) &
-            bind(C, name="SQLDescribeCol") &
-            result(fresult)
-            use, intrinsic :: iso_c_binding
-            type(c_ptr) :: statementhandle
-            integer(c_short) :: columnnumber
-            type(c_ptr), value :: columnname
-            integer(c_short) :: bufferlength
-            type(c_ptr), value :: namelength
-            type(c_ptr), value :: datatype
-            type(c_ptr), value :: columnsize
-            type(c_ptr), value :: decimaldigits
-            type(c_ptr), value :: nullable
-            integer(c_short) :: fresult
-        end function
-
-        function SQLDisconnect(connectionhandle) &
-            bind(C, name="SQLDisconnect") &
-            result(fresult)
-            use, intrinsic :: iso_c_binding
-            type(c_ptr) :: connectionhandle
-            integer(c_short) :: fresult
-        end function
-
-        function SQLEndTran(handletype, handle, completiontype) &
-            bind(C, name="SQLEndTran") &
-            result(fresult)
-            use, intrinsic :: iso_c_binding
-            integer(c_short) :: handletype
-            type(c_ptr) :: handle
-            integer(c_short) :: completiontype
-            integer(c_short) :: fresult
-        end function
-
-        function SQLError(environmenthandle, connectionhandle, statementhandle, sqlstate, nativeerror, messagetext, bufferlength, &
-                          textlength) &
-            bind(C, name="SQLError") &
-            result(fresult)
-            use, intrinsic :: iso_c_binding
-            type(c_ptr) :: environmenthandle
-            type(c_ptr) :: connectionhandle
-            type(c_ptr) :: statementhandle
-            type(c_ptr), value :: sqlstate
-            type(c_ptr), value :: nativeerror
-            type(c_ptr), value :: messagetext
-            integer(c_short) :: bufferlength
-            type(c_ptr), value :: textlength
-            integer(c_short) :: fresult
-        end function
-
-        function SQLExecDirect(statementhandle, statementtext, textlength) &
-            bind(C, name="SQLExecDirect") &
-            result(fresult)
-            use, intrinsic :: iso_c_binding
-            type(c_ptr) :: statementhandle
-            type(c_ptr), value :: statementtext
-            integer(c_int) :: textlength
-            integer(c_short) :: fresult
-        end function
-
-        function SQLExecute(statementhandle) &
-            bind(C, name="SQLExecute") &
-            result(fresult)
-            use, intrinsic :: iso_c_binding
-            type(c_ptr) :: statementhandle
-            integer(c_short) :: fresult
-        end function
-
-        function SQLFetch(statementhandle) &
-            bind(C, name="SQLFetch") &
-            result(fresult)
-            use, intrinsic :: iso_c_binding
-            type(c_ptr) :: statementhandle
-            integer(c_short) :: fresult
-        end function
-
-        function SQLFetchScroll(statementhandle, fetchorientation, fetchoffset) &
-            bind(C, name="SQLFetchScroll") &
-            result(fresult)
-            use, intrinsic :: iso_c_binding
-            type(c_ptr) :: statementhandle
-            integer(c_short) :: fetchorientation
-            integer(c_long_long) :: fetchoffset
-            integer(c_short) :: fresult
-        end function
-
-        function SQLFreeConnect(connectionhandle) &
-            bind(C, name="SQLFreeConnect") &
-            result(fresult)
-            use, intrinsic :: iso_c_binding
-            type(c_ptr) :: connectionhandle
-            integer(c_short) :: fresult
-        end function
-
-        function SQLFreeEnv(environmenthandle) &
-            bind(C, name="SQLFreeEnv") &
-            result(fresult)
-            use, intrinsic :: iso_c_binding
-            type(c_ptr) :: environmenthandle
-            integer(c_short) :: fresult
-        end function
-
-        function SQLFreeHandle(handletype, handle) &
-            bind(C, name="SQLFreeHandle") &
-            result(fresult)
-            use, intrinsic :: iso_c_binding
-            integer(c_short) :: handletype
-            type(c_ptr) :: handle
-            integer(c_short) :: fresult
-        end function
-
-        function SQLFreeStmt(statementhandle, option) &
-            bind(C, name="SQLFreeStmt") &
-            result(fresult)
-            use, intrinsic :: iso_c_binding
-            type(c_ptr) :: statementhandle
-            integer(c_short) :: option
-            integer(c_short) :: fresult
-        end function
-
-        function SQLGetConnectAttr(connectionhandle, attribute, value, bufferlength, stringlength) &
-            bind(C, name="SQLGetConnectAttr") &
-            result(fresult)
-            use, intrinsic :: iso_c_binding
-            type(c_ptr) :: connectionhandle
-            integer(c_int) :: attribute
-            type(c_ptr) :: value
-            integer(c_int) :: bufferlength
-            type(c_ptr), value :: stringlength
-            integer(c_short) :: fresult
-        end function
-
-        function SQLGetConnectOption(connectionhandle, option, value) &
-            bind(C, name="SQLGetConnectOption") &
-            result(fresult)
-            use, intrinsic :: iso_c_binding
-            type(c_ptr) :: connectionhandle
-            integer(c_short) :: option
-            type(c_ptr) :: value
-            integer(c_short) :: fresult
-        end function
-
-        function SQLGetCursorName(statementhandle, cursorname, bufferlength, namelength) &
-            bind(C, name="SQLGetCursorName") &
-            result(fresult)
-            use, intrinsic :: iso_c_binding
-            type(c_ptr) :: statementhandle
-            type(c_ptr), value :: cursorname
-            integer(c_short) :: bufferlength
-            type(c_ptr), value :: namelength
-            integer(c_short) :: fresult
-        end function
-
-        function SQLGetData(statementhandle, columnnumber, targettype, targetvalue, bufferlength, strlen_or_ind) &
-            bind(C, name="SQLGetData") &
-            result(fresult)
-            use, intrinsic :: iso_c_binding
-            type(c_ptr) :: statementhandle
-            integer(c_short) :: columnnumber
-            integer(c_short) :: targettype
-            type(c_ptr) :: targetvalue
-            integer(c_long_long) :: bufferlength
-            type(c_ptr), value :: strlen_or_ind
-            integer(c_short) :: fresult
-        end function
-
-        function SQLGetDescField(descriptorhandle, recnumber, fieldidentifier, value, bufferlength, stringlength) &
-            bind(C, name="SQLGetDescField") &
-            result(fresult)
-            use, intrinsic :: iso_c_binding
-            type(c_ptr) :: descriptorhandle
-            integer(c_short) :: recnumber
-            integer(c_short) :: fieldidentifier
-            type(c_ptr) :: value
-            integer(c_int) :: bufferlength
-            type(c_ptr), value :: stringlength
-            integer(c_short) :: fresult
-        end function
-
-    function SQLGetDescRec(descriptorhandle, recnumber, name, bufferlength, stringlength, type, subtype, length, precision, scale, &
-                               nullable) &
-            bind(C, name="SQLGetDescRec") &
-            result(fresult)
-            use, intrinsic :: iso_c_binding
-            type(c_ptr) :: descriptorhandle
-            integer(c_short) :: recnumber
-            type(c_ptr), value :: name
-            integer(c_short) :: bufferlength
-            type(c_ptr), value :: stringlength
-            type(c_ptr), value :: type
-            type(c_ptr), value :: subtype
-            type(c_ptr), value :: length
-            type(c_ptr), value :: precision
-            type(c_ptr), value :: scale
-            type(c_ptr), value :: nullable
-            integer(c_short) :: fresult
-        end function
-
-        function SQLGetDiagField(handletype, handle, recnumber, diagidentifier, diaginfo, bufferlength, stringlength) &
-            bind(C, name="SQLGetDiagField") &
-            result(fresult)
-            use, intrinsic :: iso_c_binding
-            integer(c_short) :: handletype
-            type(c_ptr) :: handle
-            integer(c_short) :: recnumber
-            integer(c_short) :: diagidentifier
-            type(c_ptr) :: diaginfo
-            integer(c_short) :: bufferlength
-            type(c_ptr), value :: stringlength
-            integer(c_short) :: fresult
-        end function
-
-        function SQLGetDiagRec(handletype, handle, recnumber, sqlstate, nativeerror, messagetext, bufferlength, textlength) &
-            bind(C, name="SQLGetDiagRec") &
-            result(fresult)
-            use, intrinsic :: iso_c_binding
-            integer(c_short) :: handletype
-            type(c_ptr) :: handle
-            integer(c_short) :: recnumber
-            type(c_ptr), value :: sqlstate
-            type(c_ptr), value :: nativeerror
-            type(c_ptr), value :: messagetext
-            integer(c_short) :: bufferlength
-            type(c_ptr), value :: textlength
-            integer(c_short) :: fresult
-        end function
-
-        function SQLGetEnvAttr(environmenthandle, attribute, value, bufferlength, stringlength) &
-            bind(C, name="SQLGetEnvAttr") &
-            result(fresult)
-            use, intrinsic :: iso_c_binding
-            type(c_ptr) :: environmenthandle
-            integer(c_int) :: attribute
-            type(c_ptr) :: value
-            integer(c_int) :: bufferlength
-            type(c_ptr), value :: stringlength
-            integer(c_short) :: fresult
-        end function
-
-        function SQLGetFunctions(connectionhandle, functionid, supported) &
-            bind(C, name="SQLGetFunctions") &
-            result(fresult)
-            use, intrinsic :: iso_c_binding
-            type(c_ptr) :: connectionhandle
-            integer(c_short) :: functionid
-            type(c_ptr), value :: supported
-            integer(c_short) :: fresult
-        end function
-
-        function SQLGetInfo(connectionhandle, infotype, infovalue, bufferlength, stringlength) &
-            bind(C, name="SQLGetInfo") &
-            result(fresult)
-            use, intrinsic :: iso_c_binding
-            type(c_ptr) :: connectionhandle
-            integer(c_short) :: infotype
-            type(c_ptr) :: infovalue
-            integer(c_short) :: bufferlength
-            type(c_ptr), value :: stringlength
-            integer(c_short) :: fresult
-        end function
-
-        function SQLGetStmtAttr(statementhandle, attribute, value, bufferlength, stringlength) &
-            bind(C, name="SQLGetStmtAttr") &
-            result(fresult)
-            use, intrinsic :: iso_c_binding
-            type(c_ptr) :: statementhandle
-            integer(c_int) :: attribute
-            type(c_ptr) :: value
-            integer(c_int) :: bufferlength
-            type(c_ptr), value :: stringlength
-            integer(c_short) :: fresult
-        end function
-
-        function SQLGetStmtOption(statementhandle, option, value) &
-            bind(C, name="SQLGetStmtOption") &
-            result(fresult)
-            use, intrinsic :: iso_c_binding
-            type(c_ptr) :: statementhandle
-            integer(c_short) :: option
-            type(c_ptr) :: value
-            integer(c_short) :: fresult
-        end function
-
-        function SQLGetTypeInfo(statementhandle, datatype) &
-            bind(C, name="SQLGetTypeInfo") &
-            result(fresult)
-            use, intrinsic :: iso_c_binding
-            type(c_ptr) :: statementhandle
-            integer(c_short) :: datatype
-            integer(c_short) :: fresult
-        end function
-
-        function SQLNumResultCols(statementhandle, columncount) &
-            bind(C, name="SQLNumResultCols") &
-            result(fresult)
-            use, intrinsic :: iso_c_binding
-            type(c_ptr) :: statementhandle
-            type(c_ptr), value :: columncount
-            integer(c_short) :: fresult
-        end function
-
-        function SQLParamData(statementhandle, value) &
-            bind(C, name="SQLParamData") &
-            result(fresult)
-            use, intrinsic :: iso_c_binding
-            type(c_ptr) :: statementhandle
-            type(c_ptr), value :: value
-            integer(c_short) :: fresult
-        end function
-
-        function SQLPrepare(statementhandle, statementtext, textlength) &
-            bind(C, name="SQLPrepare") &
-            result(fresult)
-            use, intrinsic :: iso_c_binding
-            type(c_ptr) :: statementhandle
-            type(c_ptr), value :: statementtext
-            integer(c_int) :: textlength
-            integer(c_short) :: fresult
-        end function
-
-        function SQLPutData(statementhandle, data, strlen_or_ind) &
-            bind(C, name="SQLPutData") &
-            result(fresult)
-            use, intrinsic :: iso_c_binding
-            type(c_ptr) :: statementhandle
-            type(c_ptr) :: data
-            integer(c_long_long) :: strlen_or_ind
-            integer(c_short) :: fresult
-        end function
-
-        function SQLRowCount(statementhandle, rowcount) &
-            bind(C, name="SQLRowCount") &
-            result(fresult)
-            use, intrinsic :: iso_c_binding
-            type(c_ptr) :: statementhandle
-            type(c_ptr), value :: rowcount
-            integer(c_short) :: fresult
-        end function
-
-        function SQLSetConnectAttr(connectionhandle, attribute, value, stringlength) &
-            bind(C, name="SQLSetConnectAttr") &
-            result(fresult)
-            use, intrinsic :: iso_c_binding
-            type(c_ptr) :: connectionhandle
-            integer(c_int) :: attribute
-            type(c_ptr) :: value
-            integer(c_int) :: stringlength
-            integer(c_short) :: fresult
-        end function
-
-        function SQLSetConnectOption(connectionhandle, option, value) &
-            bind(C, name="SQLSetConnectOption") &
-            result(fresult)
-            use, intrinsic :: iso_c_binding
-            type(c_ptr) :: connectionhandle
-            integer(c_short) :: option
-            integer(c_long_long) :: value
-            integer(c_short) :: fresult
-        end function
-
-        function SQLSetCursorName(statementhandle, cursorname, namelength) &
-            bind(C, name="SQLSetCursorName") &
-            result(fresult)
-            use, intrinsic :: iso_c_binding
-            type(c_ptr) :: statementhandle
-            type(c_ptr), value :: cursorname
-            integer(c_short) :: namelength
-            integer(c_short) :: fresult
-        end function
-
-        function SQLSetDescField(descriptorhandle, recnumber, fieldidentifier, value, bufferlength) &
-            bind(C, name="SQLSetDescField") &
-            result(fresult)
-            use, intrinsic :: iso_c_binding
-            type(c_ptr) :: descriptorhandle
-            integer(c_short) :: recnumber
-            integer(c_short) :: fieldidentifier
-            type(c_ptr) :: value
-            integer(c_int) :: bufferlength
-            integer(c_short) :: fresult
-        end function
-
-       function SQLSetDescRec(descriptorhandle, recnumber, type, subtype, length, precision, scale, data, stringlength, indicator) &
-            bind(C, name="SQLSetDescRec") &
-            result(fresult)
-            use, intrinsic :: iso_c_binding
-            type(c_ptr) :: descriptorhandle
-            integer(c_short) :: recnumber
-            integer(c_short) :: type
-            integer(c_short) :: subtype
-            integer(c_long_long) :: length
-            integer(c_short) :: precision
-            integer(c_short) :: scale
-            type(c_ptr) :: data
-            type(c_ptr), value :: stringlength
-            type(c_ptr), value :: indicator
-            integer(c_short) :: fresult
-        end function
-
-        function SQLSetEnvAttr(environmenthandle, attribute, value, stringlength) &
-            bind(C, name="SQLSetEnvAttr") &
-            result(fresult)
-            use, intrinsic :: iso_c_binding
-            type(c_ptr), intent(in), value      :: environmenthandle
-            integer(c_int), intent(in), value   :: attribute
-            type(c_ptr), intent(in), value      :: value
-            integer(c_int), intent(in), value   :: stringlength
-            integer(c_short) :: fresult
-        end function
-
-        function SQLSetParam(statementhandle, parameternumber, valuetype, parametertype, lengthprecision, parameterscale, &
-                             parametervalue, strlen_or_ind) &
-            bind(C, name="SQLSetParam") &
-            result(fresult)
-            use, intrinsic :: iso_c_binding
-            type(c_ptr) :: statementhandle
-            integer(c_short) :: parameternumber
-            integer(c_short) :: valuetype
-            integer(c_short) :: parametertype
-            integer(c_long_long) :: lengthprecision
-            integer(c_short) :: parameterscale
-            type(c_ptr) :: parametervalue
-            type(c_ptr), value :: strlen_or_ind
-            integer(c_short) :: fresult
-        end function
-
-        function SQLSetStmtAttr(statementhandle, attribute, value, stringlength) &
-            bind(C, name="SQLSetStmtAttr") &
-            result(fresult)
-            use, intrinsic :: iso_c_binding
-            type(c_ptr) :: statementhandle
-            integer(c_int) :: attribute
-            type(c_ptr) :: value
-            integer(c_int) :: stringlength
-            integer(c_short) :: fresult
-        end function
-
-        function SQLSetStmtOption(statementhandle, option, value) &
-            bind(C, name="SQLSetStmtOption") &
-            result(fresult)
-            use, intrinsic :: iso_c_binding
-            type(c_ptr) :: statementhandle
-            integer(c_short) :: option
-            integer(c_long_long) :: value
-            integer(c_short) :: fresult
-        end function
-
-        function SQLSpecialColumns(statementhandle, identifiertype, catalogname, namelength1, schemaname, namelength2, tablename, &
-                                   namelength3, scope, nullable) &
-            bind(C, name="SQLSpecialColumns") &
-            result(fresult)
-            use, intrinsic :: iso_c_binding
-            type(c_ptr) :: statementhandle
-            integer(c_short) :: identifiertype
-            type(c_ptr), value :: catalogname
-            integer(c_short) :: namelength1
-            type(c_ptr), value :: schemaname
-            integer(c_short) :: namelength2
-            type(c_ptr), value :: tablename
-            integer(c_short) :: namelength3
-            integer(c_short) :: scope
-            integer(c_short) :: nullable
-            integer(c_short) :: fresult
-        end function
-
-        function SQLStatistics(statementhandle, catalogname, namelength1, schemaname, namelength2, tablename, namelength3, unique, &
-                               reserved) &
-            bind(C, name="SQLStatistics") &
-            result(fresult)
-            use, intrinsic :: iso_c_binding
-            type(c_ptr) :: statementhandle
-            type(c_ptr), value :: catalogname
-            integer(c_short) :: namelength1
-            type(c_ptr), value :: schemaname
-            integer(c_short) :: namelength2
-            type(c_ptr), value :: tablename
-            integer(c_short) :: namelength3
-            integer(c_short) :: unique
-            integer(c_short) :: reserved
-            integer(c_short) :: fresult
-        end function
-
-        function SQLTables(statementhandle, catalogname, namelength1, schemaname, namelength2, tablename, namelength3, tabletype, &
-                           namelength4) &
-            bind(C, name="SQLTables") &
-            result(fresult)
-            use, intrinsic :: iso_c_binding
-            type(c_ptr) :: statementhandle
-            type(c_ptr), value :: catalogname
-            integer(c_short) :: namelength1
-            type(c_ptr), value :: schemaname
-            integer(c_short) :: namelength2
-            type(c_ptr), value :: tablename
-            integer(c_short) :: namelength3
-            type(c_ptr), value :: tabletype
-            integer(c_short) :: namelength4
-            integer(c_short) :: fresult
-        end function
-
-        function SQLTransact(environmenthandle, connectionhandle, completiontype) &
-            bind(C, name="SQLTransact") &
-            result(fresult)
-            use, intrinsic :: iso_c_binding
-            type(c_ptr) :: environmenthandle
-            type(c_ptr) :: connectionhandle
-            integer(c_short) :: completiontype
-            integer(c_short) :: fresult
-        end function
-
-    end interface
-
-contains
-    ! MODULE SUBPROGRAMS
-    function get_SQL_NULL_DATA() &
-        result(swig_result)
-        use, intrinsic :: iso_c_binding
-        integer(c_int) :: swig_result
-        integer(c_int) :: fresult
-
-        fresult = swigc_SQL_NULL_DATA_get()
-        swig_result = fresult
-    end function
-
-    function get_SQL_DATA_AT_EXEC() &
-        result(swig_result)
-        use, intrinsic :: iso_c_binding
-        integer(c_int) :: swig_result
-        integer(c_int) :: fresult
-
-        fresult = swigc_SQL_DATA_AT_EXEC_get()
-        swig_result = fresult
-    end function
-
-    function get_SQL_SUCCESS() &
-        result(swig_result)
-        use, intrinsic :: iso_c_binding
-        integer(c_int) :: swig_result
-        integer(c_int) :: fresult
-
-        fresult = swigc_SQL_SUCCESS_get()
-        swig_result = fresult
-    end function
-
-    function get_SQL_SUCCESS_WITH_INFO() &
-        result(swig_result)
-        use, intrinsic :: iso_c_binding
-        integer(c_int) :: swig_result
-        integer(c_int) :: fresult
-
-        fresult = swigc_SQL_SUCCESS_WITH_INFO_get()
-        swig_result = fresult
-    end function
-
-    function get_SQL_NO_DATA() &
-        result(swig_result)
-        use, intrinsic :: iso_c_binding
-        integer(c_int) :: swig_result
-        integer(c_int) :: fresult
-
-        fresult = swigc_SQL_NO_DATA_get()
-        swig_result = fresult
-    end function
-
-    function get_SQL_ERROR() &
-        result(swig_result)
-        use, intrinsic :: iso_c_binding
-        integer(c_int) :: swig_result
-        integer(c_int) :: fresult
-
-        fresult = swigc_SQL_ERROR_get()
-        swig_result = fresult
-    end function
-
-    function get_SQL_INVALID_HANDLE() &
-        result(swig_result)
-        use, intrinsic :: iso_c_binding
-        integer(c_int) :: swig_result
-        integer(c_int) :: fresult
-
-        fresult = swigc_SQL_INVALID_HANDLE_get()
-        swig_result = fresult
-    end function
-
-    function get_SQL_STILL_EXECUTING() &
-        result(swig_result)
-        use, intrinsic :: iso_c_binding
-        integer(c_int) :: swig_result
-        integer(c_int) :: fresult
-
-        fresult = swigc_SQL_STILL_EXECUTING_get()
-        swig_result = fresult
-    end function
-
-    function get_SQL_NEED_DATA() &
-        result(swig_result)
-        use, intrinsic :: iso_c_binding
-        integer(c_int) :: swig_result
-        integer(c_int) :: fresult
-
-        fresult = swigc_SQL_NEED_DATA_get()
-        swig_result = fresult
-    end function
-
-    function get_SQL_PARAM_DATA_AVAILABLE() &
-        result(swig_result)
-        use, intrinsic :: iso_c_binding
-        integer(c_int) :: swig_result
-        integer(c_int) :: fresult
-
-        fresult = swigc_SQL_PARAM_DATA_AVAILABLE_get()
-        swig_result = fresult
-    end function
-
-    function get_SQL_NTS() &
-        result(swig_result)
-        use, intrinsic :: iso_c_binding
-        integer(c_int) :: swig_result
-        integer(c_int) :: fresult
-
-        fresult = swigc_SQL_NTS_get()
-        swig_result = fresult
-    end function
-
-    function get_SQL_NTSL() &
-        result(swig_result)
-        use, intrinsic :: iso_c_binding
-        integer(c_long) :: swig_result
-        integer(c_long) :: fresult
-
-        fresult = swigc_SQL_NTSL_get()
-        swig_result = fresult
-    end function
-
-    function get_SQL_MAX_MESSAGE_LENGTH() &
-        result(swig_result)
-        use, intrinsic :: iso_c_binding
-        integer(c_int) :: swig_result
-        integer(c_int) :: fresult
-
-        fresult = swigc_SQL_MAX_MESSAGE_LENGTH_get()
-        swig_result = fresult
-    end function
-
-    function get_SQL_DATE_LEN() &
-        result(swig_result)
-        use, intrinsic :: iso_c_binding
-        integer(c_int) :: swig_result
-        integer(c_int) :: fresult
-
-        fresult = swigc_SQL_DATE_LEN_get()
-        swig_result = fresult
-    end function
-
-    function get_SQL_TIME_LEN() &
-        result(swig_result)
-        use, intrinsic :: iso_c_binding
-        integer(c_int) :: swig_result
-        integer(c_int) :: fresult
-
-        fresult = swigc_SQL_TIME_LEN_get()
-        swig_result = fresult
-    end function
-
-    function get_SQL_TIMESTAMP_LEN() &
-        result(swig_result)
-        use, intrinsic :: iso_c_binding
-        integer(c_int) :: swig_result
-        integer(c_int) :: fresult
-
-        fresult = swigc_SQL_TIMESTAMP_LEN_get()
-        swig_result = fresult
-    end function
-
-    function get_SQL_ATTR_OUTPUT_NTS() &
-        result(swig_result)
-        use, intrinsic :: iso_c_binding
-        integer(c_int) :: swig_result
-        integer(c_int) :: fresult
-
-        fresult = swigc_SQL_ATTR_OUTPUT_NTS_get()
-        swig_result = fresult
-    end function
-
-    function get_SQL_ATTR_AUTO_IPD() &
-        result(swig_result)
-        use, intrinsic :: iso_c_binding
-        integer(c_int) :: swig_result
-        integer(c_int) :: fresult
-
-        fresult = swigc_SQL_ATTR_AUTO_IPD_get()
-        swig_result = fresult
-    end function
-
-    function get_SQL_ATTR_METADATA_ID() &
-        result(swig_result)
-        use, intrinsic :: iso_c_binding
-        integer(c_int) :: swig_result
-        integer(c_int) :: fresult
-
-        fresult = swigc_SQL_ATTR_METADATA_ID_get()
-        swig_result = fresult
-    end function
-
-    function get_SQL_ATTR_APP_ROW_DESC() &
-        result(swig_result)
-        use, intrinsic :: iso_c_binding
-        integer(c_int) :: swig_result
-        integer(c_int) :: fresult
-
-        fresult = swigc_SQL_ATTR_APP_ROW_DESC_get()
-        swig_result = fresult
-    end function
-
-    function get_SQL_ATTR_APP_PARAM_DESC() &
-        result(swig_result)
-        use, intrinsic :: iso_c_binding
-        integer(c_int) :: swig_result
-        integer(c_int) :: fresult
-
-        fresult = swigc_SQL_ATTR_APP_PARAM_DESC_get()
-        swig_result = fresult
-    end function
-
-    function get_SQL_ATTR_IMP_ROW_DESC() &
-        result(swig_result)
-        use, intrinsic :: iso_c_binding
-        integer(c_int) :: swig_result
-        integer(c_int) :: fresult
-
-        fresult = swigc_SQL_ATTR_IMP_ROW_DESC_get()
-        swig_result = fresult
-    end function
-
-    function get_SQL_ATTR_IMP_PARAM_DESC() &
-        result(swig_result)
-        use, intrinsic :: iso_c_binding
-        integer(c_int) :: swig_result
-        integer(c_int) :: fresult
-
-        fresult = swigc_SQL_ATTR_IMP_PARAM_DESC_get()
-        swig_result = fresult
-    end function
-
-    function get_SQL_ATTR_CURSOR_SCROLLABLE() &
-        result(swig_result)
-        use, intrinsic :: iso_c_binding
-        integer(c_int) :: swig_result
-        integer(c_int) :: fresult
-
-        fresult = swigc_SQL_ATTR_CURSOR_SCROLLABLE_get()
-        swig_result = fresult
-    end function
-
-    function get_SQL_ATTR_CURSOR_SENSITIVITY() &
-        result(swig_result)
-        use, intrinsic :: iso_c_binding
-        integer(c_int) :: swig_result
-        integer(c_int) :: fresult
-
-        fresult = swigc_SQL_ATTR_CURSOR_SENSITIVITY_get()
-        swig_result = fresult
-    end function
-
-    function get_SQL_NONSCROLLABLE() &
-        result(swig_result)
-        use, intrinsic :: iso_c_binding
-        integer(c_int) :: swig_result
-        integer(c_int) :: fresult
-
-        fresult = swigc_SQL_NONSCROLLABLE_get()
-        swig_result = fresult
-    end function
-
-    function get_SQL_SCROLLABLE() &
-        result(swig_result)
-        use, intrinsic :: iso_c_binding
-        integer(c_int) :: swig_result
-        integer(c_int) :: fresult
-
-        fresult = swigc_SQL_SCROLLABLE_get()
-        swig_result = fresult
-    end function
-
-    function get_SQL_DESC_COUNT() &
-        result(swig_result)
-        use, intrinsic :: iso_c_binding
-        integer(c_int) :: swig_result
-        integer(c_int) :: fresult
-
-        fresult = swigc_SQL_DESC_COUNT_get()
-        swig_result = fresult
-    end function
-
-    function get_SQL_DESC_TYPE() &
-        result(swig_result)
-        use, intrinsic :: iso_c_binding
-        integer(c_int) :: swig_result
-        integer(c_int) :: fresult
-
-        fresult = swigc_SQL_DESC_TYPE_get()
-        swig_result = fresult
-    end function
-
-    function get_SQL_DESC_LENGTH() &
-        result(swig_result)
-        use, intrinsic :: iso_c_binding
-        integer(c_int) :: swig_result
-        integer(c_int) :: fresult
-
-        fresult = swigc_SQL_DESC_LENGTH_get()
-        swig_result = fresult
-    end function
-
-    function get_SQL_DESC_OCTET_LENGTH_PTR() &
-        result(swig_result)
-        use, intrinsic :: iso_c_binding
-        integer(c_int) :: swig_result
-        integer(c_int) :: fresult
-
-        fresult = swigc_SQL_DESC_OCTET_LENGTH_PTR_get()
-        swig_result = fresult
-    end function
-
-    function get_SQL_DESC_PRECISION() &
-        result(swig_result)
-        use, intrinsic :: iso_c_binding
-        integer(c_int) :: swig_result
-        integer(c_int) :: fresult
-
-        fresult = swigc_SQL_DESC_PRECISION_get()
-        swig_result = fresult
-    end function
-
-    function get_SQL_DESC_SCALE() &
-        result(swig_result)
-        use, intrinsic :: iso_c_binding
-        integer(c_int) :: swig_result
-        integer(c_int) :: fresult
-
-        fresult = swigc_SQL_DESC_SCALE_get()
-        swig_result = fresult
-    end function
-
-    function get_SQL_DESC_DATETIME_INTERVAL_CODE() &
-        result(swig_result)
-        use, intrinsic :: iso_c_binding
-        integer(c_int) :: swig_result
-        integer(c_int) :: fresult
-
-        fresult = swigc_SQL_DESC_DATETIME_INTERVAL_CODE_get()
-        swig_result = fresult
-    end function
-
-    function get_SQL_DESC_NULLABLE() &
-        result(swig_result)
-        use, intrinsic :: iso_c_binding
-        integer(c_int) :: swig_result
-        integer(c_int) :: fresult
-
-        fresult = swigc_SQL_DESC_NULLABLE_get()
-        swig_result = fresult
-    end function
-
-    function get_SQL_DESC_INDICATOR_PTR() &
-        result(swig_result)
-        use, intrinsic :: iso_c_binding
-        integer(c_int) :: swig_result
-        integer(c_int) :: fresult
-
-        fresult = swigc_SQL_DESC_INDICATOR_PTR_get()
-        swig_result = fresult
-    end function
-
-    function get_SQL_DESC_DATA_PTR() &
-        result(swig_result)
-        use, intrinsic :: iso_c_binding
-        integer(c_int) :: swig_result
-        integer(c_int) :: fresult
-
-        fresult = swigc_SQL_DESC_DATA_PTR_get()
-        swig_result = fresult
-    end function
-
-    function get_SQL_DESC_NAME() &
-        result(swig_result)
-        use, intrinsic :: iso_c_binding
-        integer(c_int) :: swig_result
-        integer(c_int) :: fresult
-
-        fresult = swigc_SQL_DESC_NAME_get()
-        swig_result = fresult
-    end function
-
-    function get_SQL_DESC_UNNAMED() &
-        result(swig_result)
-        use, intrinsic :: iso_c_binding
-        integer(c_int) :: swig_result
-        integer(c_int) :: fresult
-
-        fresult = swigc_SQL_DESC_UNNAMED_get()
-        swig_result = fresult
-    end function
-
-    function get_SQL_DESC_OCTET_LENGTH() &
-        result(swig_result)
-        use, intrinsic :: iso_c_binding
-        integer(c_int) :: swig_result
-        integer(c_int) :: fresult
-
-        fresult = swigc_SQL_DESC_OCTET_LENGTH_get()
-        swig_result = fresult
-    end function
-
-    function get_SQL_DESC_ALLOC_TYPE() &
-        result(swig_result)
-        use, intrinsic :: iso_c_binding
-        integer(c_int) :: swig_result
-        integer(c_int) :: fresult
-
-        fresult = swigc_SQL_DESC_ALLOC_TYPE_get()
-        swig_result = fresult
-    end function
-
-    function get_SQL_DIAG_RETURNCODE() &
-        result(swig_result)
-        use, intrinsic :: iso_c_binding
-        integer(c_int) :: swig_result
-        integer(c_int) :: fresult
-
-        fresult = swigc_SQL_DIAG_RETURNCODE_get()
-        swig_result = fresult
-    end function
-
-    function get_SQL_DIAG_NUMBER() &
-        result(swig_result)
-        use, intrinsic :: iso_c_binding
-        integer(c_int) :: swig_result
-        integer(c_int) :: fresult
-
-        fresult = swigc_SQL_DIAG_NUMBER_get()
-        swig_result = fresult
-    end function
-
-    function get_SQL_DIAG_ROW_COUNT() &
-        result(swig_result)
-        use, intrinsic :: iso_c_binding
-        integer(c_int) :: swig_result
-        integer(c_int) :: fresult
-
-        fresult = swigc_SQL_DIAG_ROW_COUNT_get()
-        swig_result = fresult
-    end function
-
-    function get_SQL_DIAG_SQLSTATE() &
-        result(swig_result)
-        use, intrinsic :: iso_c_binding
-        integer(c_int) :: swig_result
-        integer(c_int) :: fresult
-
-        fresult = swigc_SQL_DIAG_SQLSTATE_get()
-        swig_result = fresult
-    end function
-
-    function get_SQL_DIAG_NATIVE() &
-        result(swig_result)
-        use, intrinsic :: iso_c_binding
-        integer(c_int) :: swig_result
-        integer(c_int) :: fresult
-
-        fresult = swigc_SQL_DIAG_NATIVE_get()
-        swig_result = fresult
-    end function
-
-    function get_SQL_DIAG_MESSAGE_TEXT() &
-        result(swig_result)
-        use, intrinsic :: iso_c_binding
-        integer(c_int) :: swig_result
-        integer(c_int) :: fresult
-
-        fresult = swigc_SQL_DIAG_MESSAGE_TEXT_get()
-        swig_result = fresult
-    end function
-
-    function get_SQL_DIAG_DYNAMIC_FUNCTION() &
-        result(swig_result)
-        use, intrinsic :: iso_c_binding
-        integer(c_int) :: swig_result
-        integer(c_int) :: fresult
-
-        fresult = swigc_SQL_DIAG_DYNAMIC_FUNCTION_get()
-        swig_result = fresult
-    end function
-
-    function get_SQL_DIAG_CLASS_ORIGIN() &
-        result(swig_result)
-        use, intrinsic :: iso_c_binding
-        integer(c_int) :: swig_result
-        integer(c_int) :: fresult
-
-        fresult = swigc_SQL_DIAG_CLASS_ORIGIN_get()
-        swig_result = fresult
-    end function
-
-    function get_SQL_DIAG_SUBCLASS_ORIGIN() &
-        result(swig_result)
-        use, intrinsic :: iso_c_binding
-        integer(c_int) :: swig_result
-        integer(c_int) :: fresult
-
-        fresult = swigc_SQL_DIAG_SUBCLASS_ORIGIN_get()
-        swig_result = fresult
-    end function
-
-    function get_SQL_DIAG_CONNECTION_NAME() &
-        result(swig_result)
-        use, intrinsic :: iso_c_binding
-        integer(c_int) :: swig_result
-        integer(c_int) :: fresult
-
-        fresult = swigc_SQL_DIAG_CONNECTION_NAME_get()
-        swig_result = fresult
-    end function
-
-    function get_SQL_DIAG_SERVER_NAME() &
-        result(swig_result)
-        use, intrinsic :: iso_c_binding
-        integer(c_int) :: swig_result
-        integer(c_int) :: fresult
-
-        fresult = swigc_SQL_DIAG_SERVER_NAME_get()
-        swig_result = fresult
-    end function
-
-    function get_SQL_DIAG_DYNAMIC_FUNCTION_CODE() &
-        result(swig_result)
-        use, intrinsic :: iso_c_binding
-        integer(c_int) :: swig_result
-        integer(c_int) :: fresult
-
-        fresult = swigc_SQL_DIAG_DYNAMIC_FUNCTION_CODE_get()
-        swig_result = fresult
-    end function
-
-    function get_SQL_DIAG_ALTER_DOMAIN() &
-        result(swig_result)
-        use, intrinsic :: iso_c_binding
-        integer(c_int) :: swig_result
-        integer(c_int) :: fresult
-
-        fresult = swigc_SQL_DIAG_ALTER_DOMAIN_get()
-        swig_result = fresult
-    end function
-
-    function get_SQL_DIAG_ALTER_TABLE() &
-        result(swig_result)
-        use, intrinsic :: iso_c_binding
-        integer(c_int) :: swig_result
-        integer(c_int) :: fresult
-
-        fresult = swigc_SQL_DIAG_ALTER_TABLE_get()
-        swig_result = fresult
-    end function
-
-    function get_SQL_DIAG_CALL() &
-        result(swig_result)
-        use, intrinsic :: iso_c_binding
-        integer(c_int) :: swig_result
-        integer(c_int) :: fresult
-
-        fresult = swigc_SQL_DIAG_CALL_get()
-        swig_result = fresult
-    end function
-
-    function get_SQL_DIAG_CREATE_ASSERTION() &
-        result(swig_result)
-        use, intrinsic :: iso_c_binding
-        integer(c_int) :: swig_result
-        integer(c_int) :: fresult
-
-        fresult = swigc_SQL_DIAG_CREATE_ASSERTION_get()
-        swig_result = fresult
-    end function
-
-    function get_SQL_DIAG_CREATE_CHARACTER_SET() &
-        result(swig_result)
-        use, intrinsic :: iso_c_binding
-        integer(c_int) :: swig_result
-        integer(c_int) :: fresult
-
-        fresult = swigc_SQL_DIAG_CREATE_CHARACTER_SET_get()
-        swig_result = fresult
-    end function
-
-    function get_SQL_DIAG_CREATE_COLLATION() &
-        result(swig_result)
-        use, intrinsic :: iso_c_binding
-        integer(c_int) :: swig_result
-        integer(c_int) :: fresult
-
-        fresult = swigc_SQL_DIAG_CREATE_COLLATION_get()
-        swig_result = fresult
-    end function
-
-    function get_SQL_DIAG_CREATE_DOMAIN() &
-        result(swig_result)
-        use, intrinsic :: iso_c_binding
-        integer(c_int) :: swig_result
-        integer(c_int) :: fresult
-
-        fresult = swigc_SQL_DIAG_CREATE_DOMAIN_get()
-        swig_result = fresult
-    end function
-
-    function get_SQL_DIAG_CREATE_INDEX() &
-        result(swig_result)
-        use, intrinsic :: iso_c_binding
-        integer(c_int) :: swig_result
-        integer(c_int) :: fresult
-
-        fresult = swigc_SQL_DIAG_CREATE_INDEX_get()
-        swig_result = fresult
-    end function
-
-    function get_SQL_DIAG_CREATE_SCHEMA() &
-        result(swig_result)
-        use, intrinsic :: iso_c_binding
-        integer(c_int) :: swig_result
-        integer(c_int) :: fresult
-
-        fresult = swigc_SQL_DIAG_CREATE_SCHEMA_get()
-        swig_result = fresult
-    end function
-
-    function get_SQL_DIAG_CREATE_TABLE() &
-        result(swig_result)
-        use, intrinsic :: iso_c_binding
-        integer(c_int) :: swig_result
-        integer(c_int) :: fresult
-
-        fresult = swigc_SQL_DIAG_CREATE_TABLE_get()
-        swig_result = fresult
-    end function
-
-    function get_SQL_DIAG_CREATE_TRANSLATION() &
-        result(swig_result)
-        use, intrinsic :: iso_c_binding
-        integer(c_int) :: swig_result
-        integer(c_int) :: fresult
-
-        fresult = swigc_SQL_DIAG_CREATE_TRANSLATION_get()
-        swig_result = fresult
-    end function
-
-    function get_SQL_DIAG_CREATE_VIEW() &
-        result(swig_result)
-        use, intrinsic :: iso_c_binding
-        integer(c_int) :: swig_result
-        integer(c_int) :: fresult
-
-        fresult = swigc_SQL_DIAG_CREATE_VIEW_get()
-        swig_result = fresult
-    end function
-
-    function get_SQL_DIAG_DELETE_WHERE() &
-        result(swig_result)
-        use, intrinsic :: iso_c_binding
-        integer(c_int) :: swig_result
-        integer(c_int) :: fresult
-
-        fresult = swigc_SQL_DIAG_DELETE_WHERE_get()
-        swig_result = fresult
-    end function
-
-    function get_SQL_DIAG_DROP_ASSERTION() &
-        result(swig_result)
-        use, intrinsic :: iso_c_binding
-        integer(c_int) :: swig_result
-        integer(c_int) :: fresult
-
-        fresult = swigc_SQL_DIAG_DROP_ASSERTION_get()
-        swig_result = fresult
-    end function
-
-    function get_SQL_DIAG_DROP_CHARACTER_SET() &
-        result(swig_result)
-        use, intrinsic :: iso_c_binding
-        integer(c_int) :: swig_result
-        integer(c_int) :: fresult
-
-        fresult = swigc_SQL_DIAG_DROP_CHARACTER_SET_get()
-        swig_result = fresult
-    end function
-
-    function get_SQL_DIAG_DROP_COLLATION() &
-        result(swig_result)
-        use, intrinsic :: iso_c_binding
-        integer(c_int) :: swig_result
-        integer(c_int) :: fresult
-
-        fresult = swigc_SQL_DIAG_DROP_COLLATION_get()
-        swig_result = fresult
-    end function
-
-    function get_SQL_DIAG_DROP_DOMAIN() &
-        result(swig_result)
-        use, intrinsic :: iso_c_binding
-        integer(c_int) :: swig_result
-        integer(c_int) :: fresult
-
-        fresult = swigc_SQL_DIAG_DROP_DOMAIN_get()
-        swig_result = fresult
-    end function
-
-    function get_SQL_DIAG_DROP_INDEX() &
-        result(swig_result)
-        use, intrinsic :: iso_c_binding
-        integer(c_int) :: swig_result
-        integer(c_int) :: fresult
-
-        fresult = swigc_SQL_DIAG_DROP_INDEX_get()
-        swig_result = fresult
-    end function
-
-    function get_SQL_DIAG_DROP_SCHEMA() &
-        result(swig_result)
-        use, intrinsic :: iso_c_binding
-        integer(c_int) :: swig_result
-        integer(c_int) :: fresult
-
-        fresult = swigc_SQL_DIAG_DROP_SCHEMA_get()
-        swig_result = fresult
-    end function
-
-    function get_SQL_DIAG_DROP_TABLE() &
-        result(swig_result)
-        use, intrinsic :: iso_c_binding
-        integer(c_int) :: swig_result
-        integer(c_int) :: fresult
-
-        fresult = swigc_SQL_DIAG_DROP_TABLE_get()
-        swig_result = fresult
-    end function
-
-    function get_SQL_DIAG_DROP_TRANSLATION() &
-        result(swig_result)
-        use, intrinsic :: iso_c_binding
-        integer(c_int) :: swig_result
-        integer(c_int) :: fresult
-
-        fresult = swigc_SQL_DIAG_DROP_TRANSLATION_get()
-        swig_result = fresult
-    end function
-
-    function get_SQL_DIAG_DROP_VIEW() &
-        result(swig_result)
-        use, intrinsic :: iso_c_binding
-        integer(c_int) :: swig_result
-        integer(c_int) :: fresult
-
-        fresult = swigc_SQL_DIAG_DROP_VIEW_get()
-        swig_result = fresult
-    end function
-
-    function get_SQL_DIAG_DYNAMIC_DELETE_CURSOR() &
-        result(swig_result)
-        use, intrinsic :: iso_c_binding
-        integer(c_int) :: swig_result
-        integer(c_int) :: fresult
-
-        fresult = swigc_SQL_DIAG_DYNAMIC_DELETE_CURSOR_get()
-        swig_result = fresult
-    end function
-
-    function get_SQL_DIAG_DYNAMIC_UPDATE_CURSOR() &
-        result(swig_result)
-        use, intrinsic :: iso_c_binding
-        integer(c_int) :: swig_result
-        integer(c_int) :: fresult
-
-        fresult = swigc_SQL_DIAG_DYNAMIC_UPDATE_CURSOR_get()
-        swig_result = fresult
-    end function
-
-    function get_SQL_DIAG_GRANT() &
-        result(swig_result)
-        use, intrinsic :: iso_c_binding
-        integer(c_int) :: swig_result
-        integer(c_int) :: fresult
-
-        fresult = swigc_SQL_DIAG_GRANT_get()
-        swig_result = fresult
-    end function
-
-    function get_SQL_DIAG_INSERT() &
-        result(swig_result)
-        use, intrinsic :: iso_c_binding
-        integer(c_int) :: swig_result
-        integer(c_int) :: fresult
-
-        fresult = swigc_SQL_DIAG_INSERT_get()
-        swig_result = fresult
-    end function
-
-    function get_SQL_DIAG_REVOKE() &
-        result(swig_result)
-        use, intrinsic :: iso_c_binding
-        integer(c_int) :: swig_result
-        integer(c_int) :: fresult
-
-        fresult = swigc_SQL_DIAG_REVOKE_get()
-        swig_result = fresult
-    end function
-
-    function get_SQL_DIAG_SELECT_CURSOR() &
-        result(swig_result)
-        use, intrinsic :: iso_c_binding
-        integer(c_int) :: swig_result
-        integer(c_int) :: fresult
-
-        fresult = swigc_SQL_DIAG_SELECT_CURSOR_get()
-        swig_result = fresult
-    end function
-
-    function get_SQL_DIAG_UNKNOWN_STATEMENT() &
-        result(swig_result)
-        use, intrinsic :: iso_c_binding
-        integer(c_int) :: swig_result
-        integer(c_int) :: fresult
-
-        fresult = swigc_SQL_DIAG_UNKNOWN_STATEMENT_get()
-        swig_result = fresult
-    end function
-
-    function get_SQL_DIAG_UPDATE_WHERE() &
-        result(swig_result)
-        use, intrinsic :: iso_c_binding
-        integer(c_int) :: swig_result
-        integer(c_int) :: fresult
-
-        fresult = swigc_SQL_DIAG_UPDATE_WHERE_get()
-        swig_result = fresult
-    end function
-
-    function get_SQL_UNKNOWN_TYPE() &
-        result(swig_result)
-        use, intrinsic :: iso_c_binding
-        integer(c_int) :: swig_result
-        integer(c_int) :: fresult
-
-        fresult = swigc_SQL_UNKNOWN_TYPE_get()
-        swig_result = fresult
-    end function
-
-    function get_SQL_CHAR() &
-        result(swig_result)
-        use, intrinsic :: iso_c_binding
-        integer(c_int) :: swig_result
-        integer(c_int) :: fresult
-
-        fresult = swigc_SQL_CHAR_get()
-        swig_result = fresult
-    end function
-
-    function get_SQL_NUMERIC() &
-        result(swig_result)
-        use, intrinsic :: iso_c_binding
-        integer(c_int) :: swig_result
-        integer(c_int) :: fresult
-
-        fresult = swigc_SQL_NUMERIC_get()
-        swig_result = fresult
-    end function
-
-    function get_SQL_DECIMAL() &
-        result(swig_result)
-        use, intrinsic :: iso_c_binding
-        integer(c_int) :: swig_result
-        integer(c_int) :: fresult
-
-        fresult = swigc_SQL_DECIMAL_get()
-        swig_result = fresult
-    end function
-
-    function get_SQL_INTEGER() &
-        result(swig_result)
-        use, intrinsic :: iso_c_binding
-        integer(c_int) :: swig_result
-        integer(c_int) :: fresult
-
-        fresult = swigc_SQL_INTEGER_get()
-        swig_result = fresult
-    end function
-
-    function get_SQL_SMALLINT() &
-        result(swig_result)
-        use, intrinsic :: iso_c_binding
-        integer(c_int) :: swig_result
-        integer(c_int) :: fresult
-
-        fresult = swigc_SQL_SMALLINT_get()
-        swig_result = fresult
-    end function
-
-    function get_SQL_FLOAT() &
-        result(swig_result)
-        use, intrinsic :: iso_c_binding
-        integer(c_int) :: swig_result
-        integer(c_int) :: fresult
-
-        fresult = swigc_SQL_FLOAT_get()
-        swig_result = fresult
-    end function
-
-    function get_SQL_REAL() &
-        result(swig_result)
-        use, intrinsic :: iso_c_binding
-        integer(c_int) :: swig_result
-        integer(c_int) :: fresult
-
-        fresult = swigc_SQL_REAL_get()
-        swig_result = fresult
-    end function
-
-    function get_SQL_DOUBLE() &
-        result(swig_result)
-        use, intrinsic :: iso_c_binding
-        integer(c_int) :: swig_result
-        integer(c_int) :: fresult
-
-        fresult = swigc_SQL_DOUBLE_get()
-        swig_result = fresult
-    end function
-
-    function get_SQL_DATETIME() &
-        result(swig_result)
-        use, intrinsic :: iso_c_binding
-        integer(c_int) :: swig_result
-        integer(c_int) :: fresult
-
-        fresult = swigc_SQL_DATETIME_get()
-        swig_result = fresult
-    end function
-
-    function get_SQL_VARCHAR() &
-        result(swig_result)
-        use, intrinsic :: iso_c_binding
-        integer(c_int) :: swig_result
-        integer(c_int) :: fresult
-
-        fresult = swigc_SQL_VARCHAR_get()
-        swig_result = fresult
-    end function
-
-    function get_SQL_TYPE_DATE() &
-        result(swig_result)
-        use, intrinsic :: iso_c_binding
-        integer(c_int) :: swig_result
-        integer(c_int) :: fresult
-
-        fresult = swigc_SQL_TYPE_DATE_get()
-        swig_result = fresult
-    end function
-
-    function get_SQL_TYPE_TIME() &
-        result(swig_result)
-        use, intrinsic :: iso_c_binding
-        integer(c_int) :: swig_result
-        integer(c_int) :: fresult
-
-        fresult = swigc_SQL_TYPE_TIME_get()
-        swig_result = fresult
-    end function
-
-    function get_SQL_TYPE_TIMESTAMP() &
-        result(swig_result)
-        use, intrinsic :: iso_c_binding
-        integer(c_int) :: swig_result
-        integer(c_int) :: fresult
-
-        fresult = swigc_SQL_TYPE_TIMESTAMP_get()
-        swig_result = fresult
-    end function
-
-    function get_SQL_UNSPECIFIED() &
-        result(swig_result)
-        use, intrinsic :: iso_c_binding
-        integer(c_int) :: swig_result
-        integer(c_int) :: fresult
-
-        fresult = swigc_SQL_UNSPECIFIED_get()
-        swig_result = fresult
-    end function
-
-    function get_SQL_INSENSITIVE() &
-        result(swig_result)
-        use, intrinsic :: iso_c_binding
-        integer(c_int) :: swig_result
-        integer(c_int) :: fresult
-
-        fresult = swigc_SQL_INSENSITIVE_get()
-        swig_result = fresult
-    end function
-
-    function get_SQL_SENSITIVE() &
-        result(swig_result)
-        use, intrinsic :: iso_c_binding
-        integer(c_int) :: swig_result
-        integer(c_int) :: fresult
-
-        fresult = swigc_SQL_SENSITIVE_get()
-        swig_result = fresult
-    end function
-
-    function get_SQL_ALL_TYPES() &
-        result(swig_result)
-        use, intrinsic :: iso_c_binding
-        integer(c_int) :: swig_result
-        integer(c_int) :: fresult
-
-        fresult = swigc_SQL_ALL_TYPES_get()
-        swig_result = fresult
-    end function
-
-    function get_SQL_DEFAULT() &
-        result(swig_result)
-        use, intrinsic :: iso_c_binding
-        integer(c_int) :: swig_result
-        integer(c_int) :: fresult
-
-        fresult = swigc_SQL_DEFAULT_get()
-        swig_result = fresult
-    end function
-
-    function get_SQL_ARD_TYPE() &
-        result(swig_result)
-        use, intrinsic :: iso_c_binding
-        integer(c_int) :: swig_result
-        integer(c_int) :: fresult
-
-        fresult = swigc_SQL_ARD_TYPE_get()
-        swig_result = fresult
-    end function
-
-    function get_SQL_CODE_DATE() &
-        result(swig_result)
-        use, intrinsic :: iso_c_binding
-        integer(c_int) :: swig_result
-        integer(c_int) :: fresult
-
-        fresult = swigc_SQL_CODE_DATE_get()
-        swig_result = fresult
-    end function
-
-    function get_SQL_CODE_TIME() &
-        result(swig_result)
-        use, intrinsic :: iso_c_binding
-        integer(c_int) :: swig_result
-        integer(c_int) :: fresult
-
-        fresult = swigc_SQL_CODE_TIME_get()
-        swig_result = fresult
-    end function
-
-    function get_SQL_CODE_TIMESTAMP() &
-        result(swig_result)
-        use, intrinsic :: iso_c_binding
-        integer(c_int) :: swig_result
-        integer(c_int) :: fresult
-
-        fresult = swigc_SQL_CODE_TIMESTAMP_get()
-        swig_result = fresult
-    end function
-
-    function get_SQL_FALSE() &
-        result(swig_result)
-        use, intrinsic :: iso_c_binding
-        integer(c_int) :: swig_result
-        integer(c_int) :: fresult
-
-        fresult = swigc_SQL_FALSE_get()
-        swig_result = fresult
-    end function
-
-    function get_SQL_TRUE() &
-        result(swig_result)
-        use, intrinsic :: iso_c_binding
-        integer(c_int) :: swig_result
-        integer(c_int) :: fresult
-
-        fresult = swigc_SQL_TRUE_get()
-        swig_result = fresult
-    end function
-
-    function get_SQL_NO_NULLS() &
-        result(swig_result)
-        use, intrinsic :: iso_c_binding
-        integer(c_int) :: swig_result
-        integer(c_int) :: fresult
-
-        fresult = swigc_SQL_NO_NULLS_get()
-        swig_result = fresult
-    end function
-
-    function get_SQL_NULLABLE() &
-        result(swig_result)
-        use, intrinsic :: iso_c_binding
-        integer(c_int) :: swig_result
-        integer(c_int) :: fresult
-
-        fresult = swigc_SQL_NULLABLE_get()
-        swig_result = fresult
-    end function
-
-    function get_SQL_NULLABLE_UNKNOWN() &
-        result(swig_result)
-        use, intrinsic :: iso_c_binding
-        integer(c_int) :: swig_result
-        integer(c_int) :: fresult
-
-        fresult = swigc_SQL_NULLABLE_UNKNOWN_get()
-        swig_result = fresult
-    end function
-
-    function get_SQL_PRED_NONE() &
-        result(swig_result)
-        use, intrinsic :: iso_c_binding
-        integer(c_int) :: swig_result
-        integer(c_int) :: fresult
-
-        fresult = swigc_SQL_PRED_NONE_get()
-        swig_result = fresult
-    end function
-
-    function get_SQL_PRED_CHAR() &
-        result(swig_result)
-        use, intrinsic :: iso_c_binding
-        integer(c_int) :: swig_result
-        integer(c_int) :: fresult
-
-        fresult = swigc_SQL_PRED_CHAR_get()
-        swig_result = fresult
-    end function
-
-    function get_SQL_PRED_BASIC() &
-        result(swig_result)
-        use, intrinsic :: iso_c_binding
-        integer(c_int) :: swig_result
-        integer(c_int) :: fresult
-
-        fresult = swigc_SQL_PRED_BASIC_get()
-        swig_result = fresult
-    end function
-
-    function get_SQL_NAMED() &
-        result(swig_result)
-        use, intrinsic :: iso_c_binding
-        integer(c_int) :: swig_result
-        integer(c_int) :: fresult
-
-        fresult = swigc_SQL_NAMED_get()
-        swig_result = fresult
-    end function
-
-    function get_SQL_UNNAMED() &
-        result(swig_result)
-        use, intrinsic :: iso_c_binding
-        integer(c_int) :: swig_result
-        integer(c_int) :: fresult
-
-        fresult = swigc_SQL_UNNAMED_get()
-        swig_result = fresult
-    end function
-
-    function get_SQL_DESC_ALLOC_AUTO() &
-        result(swig_result)
-        use, intrinsic :: iso_c_binding
-        integer(c_int) :: swig_result
-        integer(c_int) :: fresult
-
-        fresult = swigc_SQL_DESC_ALLOC_AUTO_get()
-        swig_result = fresult
-    end function
-
-    function get_SQL_DESC_ALLOC_USER() &
-        result(swig_result)
-        use, intrinsic :: iso_c_binding
-        integer(c_int) :: swig_result
-        integer(c_int) :: fresult
-
-        fresult = swigc_SQL_DESC_ALLOC_USER_get()
-        swig_result = fresult
-    end function
-
-    function get_SQL_CLOSE() &
-        result(swig_result)
-        use, intrinsic :: iso_c_binding
-        integer(c_int) :: swig_result
-        integer(c_int) :: fresult
-
-        fresult = swigc_SQL_CLOSE_get()
-        swig_result = fresult
-    end function
-
-    function get_SQL_DROP() &
-        result(swig_result)
-        use, intrinsic :: iso_c_binding
-        integer(c_int) :: swig_result
-        integer(c_int) :: fresult
-
-        fresult = swigc_SQL_DROP_get()
-        swig_result = fresult
-    end function
-
-    function get_SQL_UNBIND() &
-        result(swig_result)
-        use, intrinsic :: iso_c_binding
-        integer(c_int) :: swig_result
-        integer(c_int) :: fresult
-
-        fresult = swigc_SQL_UNBIND_get()
-        swig_result = fresult
-    end function
-
-    function get_SQL_RESET_PARAMS() &
-        result(swig_result)
-        use, intrinsic :: iso_c_binding
-        integer(c_int) :: swig_result
-        integer(c_int) :: fresult
-
-        fresult = swigc_SQL_RESET_PARAMS_get()
-        swig_result = fresult
-    end function
-
-    function get_SQL_FETCH_NEXT() &
-        result(swig_result)
-        use, intrinsic :: iso_c_binding
-        integer(c_int) :: swig_result
-        integer(c_int) :: fresult
-
-        fresult = swigc_SQL_FETCH_NEXT_get()
-        swig_result = fresult
-    end function
-
-    function get_SQL_FETCH_FIRST() &
-        result(swig_result)
-        use, intrinsic :: iso_c_binding
-        integer(c_int) :: swig_result
-        integer(c_int) :: fresult
-
-        fresult = swigc_SQL_FETCH_FIRST_get()
-        swig_result = fresult
-    end function
-
-    function get_SQL_FETCH_LAST() &
-        result(swig_result)
-        use, intrinsic :: iso_c_binding
-        integer(c_int) :: swig_result
-        integer(c_int) :: fresult
-
-        fresult = swigc_SQL_FETCH_LAST_get()
-        swig_result = fresult
-    end function
-
-    function get_SQL_FETCH_PRIOR() &
-        result(swig_result)
-        use, intrinsic :: iso_c_binding
-        integer(c_int) :: swig_result
-        integer(c_int) :: fresult
-
-        fresult = swigc_SQL_FETCH_PRIOR_get()
-        swig_result = fresult
-    end function
-
-    function get_SQL_FETCH_ABSOLUTE() &
-        result(swig_result)
-        use, intrinsic :: iso_c_binding
-        integer(c_int) :: swig_result
-        integer(c_int) :: fresult
-
-        fresult = swigc_SQL_FETCH_ABSOLUTE_get()
-        swig_result = fresult
-    end function
-
-    function get_SQL_FETCH_RELATIVE() &
-        result(swig_result)
-        use, intrinsic :: iso_c_binding
-        integer(c_int) :: swig_result
-        integer(c_int) :: fresult
-
-        fresult = swigc_SQL_FETCH_RELATIVE_get()
-        swig_result = fresult
-    end function
-
-    function get_SQL_COMMIT() &
-        result(swig_result)
-        use, intrinsic :: iso_c_binding
-        integer(c_int) :: swig_result
-        integer(c_int) :: fresult
-
-        fresult = swigc_SQL_COMMIT_get()
-        swig_result = fresult
-    end function
-
-    function get_SQL_ROLLBACK() &
-        result(swig_result)
-        use, intrinsic :: iso_c_binding
-        integer(c_int) :: swig_result
-        integer(c_int) :: fresult
-
-        fresult = swigc_SQL_ROLLBACK_get()
-        swig_result = fresult
-    end function
-
-    function get_SQL_NULL_HENV() &
-        result(swig_result)
-        use, intrinsic :: iso_c_binding
-        integer(c_int) :: swig_result
-        integer(c_int) :: fresult
-
-        fresult = swigc_SQL_NULL_HENV_get()
-        swig_result = fresult
-    end function
-
-    function get_SQL_NULL_HDBC() &
-        result(swig_result)
-        use, intrinsic :: iso_c_binding
-        integer(c_int) :: swig_result
-        integer(c_int) :: fresult
-
-        fresult = swigc_SQL_NULL_HDBC_get()
-        swig_result = fresult
-    end function
-
-    function get_SQL_NULL_HSTMT() &
-        result(swig_result)
-        use, intrinsic :: iso_c_binding
-        integer(c_int) :: swig_result
-        integer(c_int) :: fresult
-
-        fresult = swigc_SQL_NULL_HSTMT_get()
-        swig_result = fresult
-    end function
-
-    function get_SQL_NULL_HDESC() &
-        result(swig_result)
-        use, intrinsic :: iso_c_binding
-        integer(c_int) :: swig_result
-        integer(c_int) :: fresult
-
-        fresult = swigc_SQL_NULL_HDESC_get()
-        swig_result = fresult
-    end function
-
-    function get_SQL_NULL_DESC() &
-        result(swig_result)
-        use, intrinsic :: iso_c_binding
-        integer(c_int) :: swig_result
-        integer(c_int) :: fresult
-
-        fresult = swigc_SQL_NULL_DESC_get()
-        swig_result = fresult
-    end function
-
-    function get_SQL_NULL_HANDLE() &
-        result(swig_result)
-        use, intrinsic :: iso_c_binding
-        integer(c_long) :: swig_result
-        integer(c_long) :: fresult
-
-        fresult = swigc_SQL_NULL_HANDLE_get()
-        swig_result = fresult
-    end function
-
-    function get_SQL_SCOPE_CURROW() &
-        result(swig_result)
-        use, intrinsic :: iso_c_binding
-        integer(c_int) :: swig_result
-        integer(c_int) :: fresult
-
-        fresult = swigc_SQL_SCOPE_CURROW_get()
-        swig_result = fresult
-    end function
-
-    function get_SQL_SCOPE_TRANSACTION() &
-        result(swig_result)
-        use, intrinsic :: iso_c_binding
-        integer(c_int) :: swig_result
-        integer(c_int) :: fresult
-
-        fresult = swigc_SQL_SCOPE_TRANSACTION_get()
-        swig_result = fresult
-    end function
-
-    function get_SQL_SCOPE_SESSION() &
-        result(swig_result)
-        use, intrinsic :: iso_c_binding
-        integer(c_int) :: swig_result
-        integer(c_int) :: fresult
-
-        fresult = swigc_SQL_SCOPE_SESSION_get()
-        swig_result = fresult
-    end function
-
-    function get_SQL_PC_UNKNOWN() &
-        result(swig_result)
-        use, intrinsic :: iso_c_binding
-        integer(c_int) :: swig_result
-        integer(c_int) :: fresult
-
-        fresult = swigc_SQL_PC_UNKNOWN_get()
-        swig_result = fresult
-    end function
-
-    function get_SQL_PC_NON_PSEUDO() &
-        result(swig_result)
-        use, intrinsic :: iso_c_binding
-        integer(c_int) :: swig_result
-        integer(c_int) :: fresult
-
-        fresult = swigc_SQL_PC_NON_PSEUDO_get()
-        swig_result = fresult
-    end function
-
-    function get_SQL_PC_PSEUDO() &
-        result(swig_result)
-        use, intrinsic :: iso_c_binding
-        integer(c_int) :: swig_result
-        integer(c_int) :: fresult
-
-        fresult = swigc_SQL_PC_PSEUDO_get()
-        swig_result = fresult
-    end function
-
-    function get_SQL_ROW_IDENTIFIER() &
-        result(swig_result)
-        use, intrinsic :: iso_c_binding
-        integer(c_int) :: swig_result
-        integer(c_int) :: fresult
-
-        fresult = swigc_SQL_ROW_IDENTIFIER_get()
-        swig_result = fresult
-    end function
-
-    function get_SQL_INDEX_UNIQUE() &
-        result(swig_result)
-        use, intrinsic :: iso_c_binding
-        integer(c_int) :: swig_result
-        integer(c_int) :: fresult
-
-        fresult = swigc_SQL_INDEX_UNIQUE_get()
-        swig_result = fresult
-    end function
-
-    function get_SQL_INDEX_ALL() &
-        result(swig_result)
-        use, intrinsic :: iso_c_binding
-        integer(c_int) :: swig_result
-        integer(c_int) :: fresult
-
-        fresult = swigc_SQL_INDEX_ALL_get()
-        swig_result = fresult
-    end function
-
-    function get_SQL_INDEX_CLUSTERED() &
-        result(swig_result)
-        use, intrinsic :: iso_c_binding
-        integer(c_int) :: swig_result
-        integer(c_int) :: fresult
-
-        fresult = swigc_SQL_INDEX_CLUSTERED_get()
-        swig_result = fresult
-    end function
-
-    function get_SQL_INDEX_HASHED() &
-        result(swig_result)
-        use, intrinsic :: iso_c_binding
-        integer(c_int) :: swig_result
-        integer(c_int) :: fresult
-
-        fresult = swigc_SQL_INDEX_HASHED_get()
-        swig_result = fresult
-    end function
-
-    function get_SQL_INDEX_OTHER() &
-        result(swig_result)
-        use, intrinsic :: iso_c_binding
-        integer(c_int) :: swig_result
-        integer(c_int) :: fresult
-
-        fresult = swigc_SQL_INDEX_OTHER_get()
-        swig_result = fresult
-    end function
-
-    function get_SQL_API_SQLALLOCCONNECT() &
-        result(swig_result)
-        use, intrinsic :: iso_c_binding
-        integer(c_int) :: swig_result
-        integer(c_int) :: fresult
-
-        fresult = swigc_SQL_API_SQLALLOCCONNECT_get()
-        swig_result = fresult
-    end function
-
-    function get_SQL_API_SQLALLOCENV() &
-        result(swig_result)
-        use, intrinsic :: iso_c_binding
-        integer(c_int) :: swig_result
-        integer(c_int) :: fresult
-
-        fresult = swigc_SQL_API_SQLALLOCENV_get()
-        swig_result = fresult
-    end function
-
-    function get_SQL_API_SQLALLOCHANDLE() &
-        result(swig_result)
-        use, intrinsic :: iso_c_binding
-        integer(c_int) :: swig_result
-        integer(c_int) :: fresult
-
-        fresult = swigc_SQL_API_SQLALLOCHANDLE_get()
-        swig_result = fresult
-    end function
-
-    function get_SQL_API_SQLALLOCSTMT() &
-        result(swig_result)
-        use, intrinsic :: iso_c_binding
-        integer(c_int) :: swig_result
-        integer(c_int) :: fresult
-
-        fresult = swigc_SQL_API_SQLALLOCSTMT_get()
-        swig_result = fresult
-    end function
-
-    function get_SQL_API_SQLBINDCOL() &
-        result(swig_result)
-        use, intrinsic :: iso_c_binding
-        integer(c_int) :: swig_result
-        integer(c_int) :: fresult
-
-        fresult = swigc_SQL_API_SQLBINDCOL_get()
-        swig_result = fresult
-    end function
-
-    function get_SQL_API_SQLBINDPARAM() &
-        result(swig_result)
-        use, intrinsic :: iso_c_binding
-        integer(c_int) :: swig_result
-        integer(c_int) :: fresult
-
-        fresult = swigc_SQL_API_SQLBINDPARAM_get()
-        swig_result = fresult
-    end function
-
-    function get_SQL_API_SQLCANCEL() &
-        result(swig_result)
-        use, intrinsic :: iso_c_binding
-        integer(c_int) :: swig_result
-        integer(c_int) :: fresult
-
-        fresult = swigc_SQL_API_SQLCANCEL_get()
-        swig_result = fresult
-    end function
-
-    function get_SQL_API_SQLCLOSECURSOR() &
-        result(swig_result)
-        use, intrinsic :: iso_c_binding
-        integer(c_int) :: swig_result
-        integer(c_int) :: fresult
-
-        fresult = swigc_SQL_API_SQLCLOSECURSOR_get()
-        swig_result = fresult
-    end function
-
-    function get_SQL_API_SQLCOLATTRIBUTE() &
-        result(swig_result)
-        use, intrinsic :: iso_c_binding
-        integer(c_int) :: swig_result
-        integer(c_int) :: fresult
-
-        fresult = swigc_SQL_API_SQLCOLATTRIBUTE_get()
-        swig_result = fresult
-    end function
-
-    function get_SQL_API_SQLCOLUMNS() &
-        result(swig_result)
-        use, intrinsic :: iso_c_binding
-        integer(c_int) :: swig_result
-        integer(c_int) :: fresult
-
-        fresult = swigc_SQL_API_SQLCOLUMNS_get()
-        swig_result = fresult
-    end function
-
-    function get_SQL_API_SQLCONNECT() &
-        result(swig_result)
-        use, intrinsic :: iso_c_binding
-        integer(c_int) :: swig_result
-        integer(c_int) :: fresult
-
-        fresult = swigc_SQL_API_SQLCONNECT_get()
-        swig_result = fresult
-    end function
-
-    function get_SQL_API_SQLCOPYDESC() &
-        result(swig_result)
-        use, intrinsic :: iso_c_binding
-        integer(c_int) :: swig_result
-        integer(c_int) :: fresult
-
-        fresult = swigc_SQL_API_SQLCOPYDESC_get()
-        swig_result = fresult
-    end function
-
-    function get_SQL_API_SQLDATASOURCES() &
-        result(swig_result)
-        use, intrinsic :: iso_c_binding
-        integer(c_int) :: swig_result
-        integer(c_int) :: fresult
-
-        fresult = swigc_SQL_API_SQLDATASOURCES_get()
-        swig_result = fresult
-    end function
-
-    function get_SQL_API_SQLDESCRIBECOL() &
-        result(swig_result)
-        use, intrinsic :: iso_c_binding
-        integer(c_int) :: swig_result
-        integer(c_int) :: fresult
-
-        fresult = swigc_SQL_API_SQLDESCRIBECOL_get()
-        swig_result = fresult
-    end function
-
-    function get_SQL_API_SQLDISCONNECT() &
-        result(swig_result)
-        use, intrinsic :: iso_c_binding
-        integer(c_int) :: swig_result
-        integer(c_int) :: fresult
-
-        fresult = swigc_SQL_API_SQLDISCONNECT_get()
-        swig_result = fresult
-    end function
-
-    function get_SQL_API_SQLENDTRAN() &
-        result(swig_result)
-        use, intrinsic :: iso_c_binding
-        integer(c_int) :: swig_result
-        integer(c_int) :: fresult
-
-        fresult = swigc_SQL_API_SQLENDTRAN_get()
-        swig_result = fresult
-    end function
-
-    function get_SQL_API_SQLERROR() &
-        result(swig_result)
-        use, intrinsic :: iso_c_binding
-        integer(c_int) :: swig_result
-        integer(c_int) :: fresult
-
-        fresult = swigc_SQL_API_SQLERROR_get()
-        swig_result = fresult
-    end function
-
-    function get_SQL_API_SQLEXECDIRECT() &
-        result(swig_result)
-        use, intrinsic :: iso_c_binding
-        integer(c_int) :: swig_result
-        integer(c_int) :: fresult
-
-        fresult = swigc_SQL_API_SQLEXECDIRECT_get()
-        swig_result = fresult
-    end function
-
-    function get_SQL_API_SQLEXECUTE() &
-        result(swig_result)
-        use, intrinsic :: iso_c_binding
-        integer(c_int) :: swig_result
-        integer(c_int) :: fresult
-
-        fresult = swigc_SQL_API_SQLEXECUTE_get()
-        swig_result = fresult
-    end function
-
-    function get_SQL_API_SQLFETCH() &
-        result(swig_result)
-        use, intrinsic :: iso_c_binding
-        integer(c_int) :: swig_result
-        integer(c_int) :: fresult
-
-        fresult = swigc_SQL_API_SQLFETCH_get()
-        swig_result = fresult
-    end function
-
-    function get_SQL_API_SQLFETCHSCROLL() &
-        result(swig_result)
-        use, intrinsic :: iso_c_binding
-        integer(c_int) :: swig_result
-        integer(c_int) :: fresult
-
-        fresult = swigc_SQL_API_SQLFETCHSCROLL_get()
-        swig_result = fresult
-    end function
-
-    function get_SQL_API_SQLFREECONNECT() &
-        result(swig_result)
-        use, intrinsic :: iso_c_binding
-        integer(c_int) :: swig_result
-        integer(c_int) :: fresult
-
-        fresult = swigc_SQL_API_SQLFREECONNECT_get()
-        swig_result = fresult
-    end function
-
-    function get_SQL_API_SQLFREEENV() &
-        result(swig_result)
-        use, intrinsic :: iso_c_binding
-        integer(c_int) :: swig_result
-        integer(c_int) :: fresult
-
-        fresult = swigc_SQL_API_SQLFREEENV_get()
-        swig_result = fresult
-    end function
-
-    function get_SQL_API_SQLFREEHANDLE() &
-        result(swig_result)
-        use, intrinsic :: iso_c_binding
-        integer(c_int) :: swig_result
-        integer(c_int) :: fresult
-
-        fresult = swigc_SQL_API_SQLFREEHANDLE_get()
-        swig_result = fresult
-    end function
-
-    function get_SQL_API_SQLFREESTMT() &
-        result(swig_result)
-        use, intrinsic :: iso_c_binding
-        integer(c_int) :: swig_result
-        integer(c_int) :: fresult
-
-        fresult = swigc_SQL_API_SQLFREESTMT_get()
-        swig_result = fresult
-    end function
-
-    function get_SQL_API_SQLGETCONNECTATTR() &
-        result(swig_result)
-        use, intrinsic :: iso_c_binding
-        integer(c_int) :: swig_result
-        integer(c_int) :: fresult
-
-        fresult = swigc_SQL_API_SQLGETCONNECTATTR_get()
-        swig_result = fresult
-    end function
-
-    function get_SQL_API_SQLGETCONNECTOPTION() &
-        result(swig_result)
-        use, intrinsic :: iso_c_binding
-        integer(c_int) :: swig_result
-        integer(c_int) :: fresult
-
-        fresult = swigc_SQL_API_SQLGETCONNECTOPTION_get()
-        swig_result = fresult
-    end function
-
-    function get_SQL_API_SQLGETCURSORNAME() &
-        result(swig_result)
-        use, intrinsic :: iso_c_binding
-        integer(c_int) :: swig_result
-        integer(c_int) :: fresult
-
-        fresult = swigc_SQL_API_SQLGETCURSORNAME_get()
-        swig_result = fresult
-    end function
-
-    function get_SQL_API_SQLGETDATA() &
-        result(swig_result)
-        use, intrinsic :: iso_c_binding
-        integer(c_int) :: swig_result
-        integer(c_int) :: fresult
-
-        fresult = swigc_SQL_API_SQLGETDATA_get()
-        swig_result = fresult
-    end function
-
-    function get_SQL_API_SQLGETDESCFIELD() &
-        result(swig_result)
-        use, intrinsic :: iso_c_binding
-        integer(c_int) :: swig_result
-        integer(c_int) :: fresult
-
-        fresult = swigc_SQL_API_SQLGETDESCFIELD_get()
-        swig_result = fresult
-    end function
-
-    function get_SQL_API_SQLGETDESCREC() &
-        result(swig_result)
-        use, intrinsic :: iso_c_binding
-        integer(c_int) :: swig_result
-        integer(c_int) :: fresult
-
-        fresult = swigc_SQL_API_SQLGETDESCREC_get()
-        swig_result = fresult
-    end function
-
-    function get_SQL_API_SQLGETDIAGFIELD() &
-        result(swig_result)
-        use, intrinsic :: iso_c_binding
-        integer(c_int) :: swig_result
-        integer(c_int) :: fresult
-
-        fresult = swigc_SQL_API_SQLGETDIAGFIELD_get()
-        swig_result = fresult
-    end function
-
-    function get_SQL_API_SQLGETDIAGREC() &
-        result(swig_result)
-        use, intrinsic :: iso_c_binding
-        integer(c_int) :: swig_result
-        integer(c_int) :: fresult
-
-        fresult = swigc_SQL_API_SQLGETDIAGREC_get()
-        swig_result = fresult
-    end function
-
-    function get_SQL_API_SQLGETENVATTR() &
-        result(swig_result)
-        use, intrinsic :: iso_c_binding
-        integer(c_int) :: swig_result
-        integer(c_int) :: fresult
-
-        fresult = swigc_SQL_API_SQLGETENVATTR_get()
-        swig_result = fresult
-    end function
-
-    function get_SQL_API_SQLGETFUNCTIONS() &
-        result(swig_result)
-        use, intrinsic :: iso_c_binding
-        integer(c_int) :: swig_result
-        integer(c_int) :: fresult
-
-        fresult = swigc_SQL_API_SQLGETFUNCTIONS_get()
-        swig_result = fresult
-    end function
-
-    function get_SQL_API_SQLGETINFO() &
-        result(swig_result)
-        use, intrinsic :: iso_c_binding
-        integer(c_int) :: swig_result
-        integer(c_int) :: fresult
-
-        fresult = swigc_SQL_API_SQLGETINFO_get()
-        swig_result = fresult
-    end function
-
-    function get_SQL_API_SQLGETSTMTATTR() &
-        result(swig_result)
-        use, intrinsic :: iso_c_binding
-        integer(c_int) :: swig_result
-        integer(c_int) :: fresult
-
-        fresult = swigc_SQL_API_SQLGETSTMTATTR_get()
-        swig_result = fresult
-    end function
-
-    function get_SQL_API_SQLGETSTMTOPTION() &
-        result(swig_result)
-        use, intrinsic :: iso_c_binding
-        integer(c_int) :: swig_result
-        integer(c_int) :: fresult
-
-        fresult = swigc_SQL_API_SQLGETSTMTOPTION_get()
-        swig_result = fresult
-    end function
-
-    function get_SQL_API_SQLGETTYPEINFO() &
-        result(swig_result)
-        use, intrinsic :: iso_c_binding
-        integer(c_int) :: swig_result
-        integer(c_int) :: fresult
-
-        fresult = swigc_SQL_API_SQLGETTYPEINFO_get()
-        swig_result = fresult
-    end function
-
-    function get_SQL_API_SQLNUMRESULTCOLS() &
-        result(swig_result)
-        use, intrinsic :: iso_c_binding
-        integer(c_int) :: swig_result
-        integer(c_int) :: fresult
-
-        fresult = swigc_SQL_API_SQLNUMRESULTCOLS_get()
-        swig_result = fresult
-    end function
-
-    function get_SQL_API_SQLPARAMDATA() &
-        result(swig_result)
-        use, intrinsic :: iso_c_binding
-        integer(c_int) :: swig_result
-        integer(c_int) :: fresult
-
-        fresult = swigc_SQL_API_SQLPARAMDATA_get()
-        swig_result = fresult
-    end function
-
-    function get_SQL_API_SQLPREPARE() &
-        result(swig_result)
-        use, intrinsic :: iso_c_binding
-        integer(c_int) :: swig_result
-        integer(c_int) :: fresult
-
-        fresult = swigc_SQL_API_SQLPREPARE_get()
-        swig_result = fresult
-    end function
-
-    function get_SQL_API_SQLPUTDATA() &
-        result(swig_result)
-        use, intrinsic :: iso_c_binding
-        integer(c_int) :: swig_result
-        integer(c_int) :: fresult
-
-        fresult = swigc_SQL_API_SQLPUTDATA_get()
-        swig_result = fresult
-    end function
-
-    function get_SQL_API_SQLROWCOUNT() &
-        result(swig_result)
-        use, intrinsic :: iso_c_binding
-        integer(c_int) :: swig_result
-        integer(c_int) :: fresult
-
-        fresult = swigc_SQL_API_SQLROWCOUNT_get()
-        swig_result = fresult
-    end function
-
-    function get_SQL_API_SQLSETCONNECTATTR() &
-        result(swig_result)
-        use, intrinsic :: iso_c_binding
-        integer(c_int) :: swig_result
-        integer(c_int) :: fresult
-
-        fresult = swigc_SQL_API_SQLSETCONNECTATTR_get()
-        swig_result = fresult
-    end function
-
-    function get_SQL_API_SQLSETCONNECTOPTION() &
-        result(swig_result)
-        use, intrinsic :: iso_c_binding
-        integer(c_int) :: swig_result
-        integer(c_int) :: fresult
-
-        fresult = swigc_SQL_API_SQLSETCONNECTOPTION_get()
-        swig_result = fresult
-    end function
-
-    function get_SQL_API_SQLSETCURSORNAME() &
-        result(swig_result)
-        use, intrinsic :: iso_c_binding
-        integer(c_int) :: swig_result
-        integer(c_int) :: fresult
-
-        fresult = swigc_SQL_API_SQLSETCURSORNAME_get()
-        swig_result = fresult
-    end function
-
-    function get_SQL_API_SQLSETDESCFIELD() &
-        result(swig_result)
-        use, intrinsic :: iso_c_binding
-        integer(c_int) :: swig_result
-        integer(c_int) :: fresult
-
-        fresult = swigc_SQL_API_SQLSETDESCFIELD_get()
-        swig_result = fresult
-    end function
-
-    function get_SQL_API_SQLSETDESCREC() &
-        result(swig_result)
-        use, intrinsic :: iso_c_binding
-        integer(c_int) :: swig_result
-        integer(c_int) :: fresult
-
-        fresult = swigc_SQL_API_SQLSETDESCREC_get()
-        swig_result = fresult
-    end function
-
-    function get_SQL_API_SQLSETENVATTR() &
-        result(swig_result)
-        use, intrinsic :: iso_c_binding
-        integer(c_int) :: swig_result
-        integer(c_int) :: fresult
-
-        fresult = swigc_SQL_API_SQLSETENVATTR_get()
-        swig_result = fresult
-    end function
-
-    function get_SQL_API_SQLSETPARAM() &
-        result(swig_result)
-        use, intrinsic :: iso_c_binding
-        integer(c_int) :: swig_result
-        integer(c_int) :: fresult
-
-        fresult = swigc_SQL_API_SQLSETPARAM_get()
-        swig_result = fresult
-    end function
-
-    function get_SQL_API_SQLSETSTMTATTR() &
-        result(swig_result)
-        use, intrinsic :: iso_c_binding
-        integer(c_int) :: swig_result
-        integer(c_int) :: fresult
-
-        fresult = swigc_SQL_API_SQLSETSTMTATTR_get()
-        swig_result = fresult
-    end function
-
-    function get_SQL_API_SQLSETSTMTOPTION() &
-        result(swig_result)
-        use, intrinsic :: iso_c_binding
-        integer(c_int) :: swig_result
-        integer(c_int) :: fresult
-
-        fresult = swigc_SQL_API_SQLSETSTMTOPTION_get()
-        swig_result = fresult
-    end function
-
-    function get_SQL_API_SQLSPECIALCOLUMNS() &
-        result(swig_result)
-        use, intrinsic :: iso_c_binding
-        integer(c_int) :: swig_result
-        integer(c_int) :: fresult
-
-        fresult = swigc_SQL_API_SQLSPECIALCOLUMNS_get()
-        swig_result = fresult
-    end function
-
-    function get_SQL_API_SQLSTATISTICS() &
-        result(swig_result)
-        use, intrinsic :: iso_c_binding
-        integer(c_int) :: swig_result
-        integer(c_int) :: fresult
-
-        fresult = swigc_SQL_API_SQLSTATISTICS_get()
-        swig_result = fresult
-    end function
-
-    function get_SQL_API_SQLTABLES() &
-        result(swig_result)
-        use, intrinsic :: iso_c_binding
-        integer(c_int) :: swig_result
-        integer(c_int) :: fresult
-
-        fresult = swigc_SQL_API_SQLTABLES_get()
-        swig_result = fresult
-    end function
-
-    function get_SQL_API_SQLTRANSACT() &
-        result(swig_result)
-        use, intrinsic :: iso_c_binding
-        integer(c_int) :: swig_result
-        integer(c_int) :: fresult
-
-        fresult = swigc_SQL_API_SQLTRANSACT_get()
-        swig_result = fresult
-    end function
-
-    function get_SQL_API_SQLCANCELHANDLE() &
-        result(swig_result)
-        use, intrinsic :: iso_c_binding
-        integer(c_int) :: swig_result
-        integer(c_int) :: fresult
-
-        fresult = swigc_SQL_API_SQLCANCELHANDLE_get()
-        swig_result = fresult
-    end function
-
-    function get_SQL_MAX_DRIVER_CONNECTIONS() &
-        result(swig_result)
-        use, intrinsic :: iso_c_binding
-        integer(c_int) :: swig_result
-        integer(c_int) :: fresult
-
-        fresult = swigc_SQL_MAX_DRIVER_CONNECTIONS_get()
-        swig_result = fresult
-    end function
-
-    function get_SQL_MAXIMUM_DRIVER_CONNECTIONS() &
-        result(swig_result)
-        use, intrinsic :: iso_c_binding
-        integer(c_int) :: swig_result
-        integer(c_int) :: fresult
-
-        fresult = swigc_SQL_MAXIMUM_DRIVER_CONNECTIONS_get()
-        swig_result = fresult
-    end function
-
-    function get_SQL_MAX_CONCURRENT_ACTIVITIES() &
-        result(swig_result)
-        use, intrinsic :: iso_c_binding
-        integer(c_int) :: swig_result
-        integer(c_int) :: fresult
-
-        fresult = swigc_SQL_MAX_CONCURRENT_ACTIVITIES_get()
-        swig_result = fresult
-    end function
-
-    function get_SQL_MAXIMUM_CONCURRENT_ACTIVITIES() &
-        result(swig_result)
-        use, intrinsic :: iso_c_binding
-        integer(c_int) :: swig_result
-        integer(c_int) :: fresult
-
-        fresult = swigc_SQL_MAXIMUM_CONCURRENT_ACTIVITIES_get()
-        swig_result = fresult
-    end function
-
-    function get_SQL_DATA_SOURCE_NAME() &
-        result(swig_result)
-        use, intrinsic :: iso_c_binding
-        integer(c_int) :: swig_result
-        integer(c_int) :: fresult
-
-        fresult = swigc_SQL_DATA_SOURCE_NAME_get()
-        swig_result = fresult
-    end function
-
-    function get_SQL_FETCH_DIRECTION() &
-        result(swig_result)
-        use, intrinsic :: iso_c_binding
-        integer(c_int) :: swig_result
-        integer(c_int) :: fresult
-
-        fresult = swigc_SQL_FETCH_DIRECTION_get()
-        swig_result = fresult
-    end function
-
-    function get_SQL_SERVER_NAME() &
-        result(swig_result)
-        use, intrinsic :: iso_c_binding
-        integer(c_int) :: swig_result
-        integer(c_int) :: fresult
-
-        fresult = swigc_SQL_SERVER_NAME_get()
-        swig_result = fresult
-    end function
-
-    function get_SQL_SEARCH_PATTERN_ESCAPE() &
-        result(swig_result)
-        use, intrinsic :: iso_c_binding
-        integer(c_int) :: swig_result
-        integer(c_int) :: fresult
-
-        fresult = swigc_SQL_SEARCH_PATTERN_ESCAPE_get()
-        swig_result = fresult
-    end function
-
-    function get_SQL_DBMS_NAME() &
-        result(swig_result)
-        use, intrinsic :: iso_c_binding
-        integer(c_int) :: swig_result
-        integer(c_int) :: fresult
-
-        fresult = swigc_SQL_DBMS_NAME_get()
-        swig_result = fresult
-    end function
-
-    function get_SQL_DBMS_VER() &
-        result(swig_result)
-        use, intrinsic :: iso_c_binding
-        integer(c_int) :: swig_result
-        integer(c_int) :: fresult
-
-        fresult = swigc_SQL_DBMS_VER_get()
-        swig_result = fresult
-    end function
-
-    function get_SQL_ACCESSIBLE_TABLES() &
-        result(swig_result)
-        use, intrinsic :: iso_c_binding
-        integer(c_int) :: swig_result
-        integer(c_int) :: fresult
-
-        fresult = swigc_SQL_ACCESSIBLE_TABLES_get()
-        swig_result = fresult
-    end function
-
-    function get_SQL_ACCESSIBLE_PROCEDURES() &
-        result(swig_result)
-        use, intrinsic :: iso_c_binding
-        integer(c_int) :: swig_result
-        integer(c_int) :: fresult
-
-        fresult = swigc_SQL_ACCESSIBLE_PROCEDURES_get()
-        swig_result = fresult
-    end function
-
-    function get_SQL_CURSOR_COMMIT_BEHAVIOR() &
-        result(swig_result)
-        use, intrinsic :: iso_c_binding
-        integer(c_int) :: swig_result
-        integer(c_int) :: fresult
-
-        fresult = swigc_SQL_CURSOR_COMMIT_BEHAVIOR_get()
-        swig_result = fresult
-    end function
-
-    function get_SQL_DATA_SOURCE_READ_ONLY() &
-        result(swig_result)
-        use, intrinsic :: iso_c_binding
-        integer(c_int) :: swig_result
-        integer(c_int) :: fresult
-
-        fresult = swigc_SQL_DATA_SOURCE_READ_ONLY_get()
-        swig_result = fresult
-    end function
-
-    function get_SQL_DEFAULT_TXN_ISOLATION() &
-        result(swig_result)
-        use, intrinsic :: iso_c_binding
-        integer(c_int) :: swig_result
-        integer(c_int) :: fresult
-
-        fresult = swigc_SQL_DEFAULT_TXN_ISOLATION_get()
-        swig_result = fresult
-    end function
-
-    function get_SQL_IDENTIFIER_CASE() &
-        result(swig_result)
-        use, intrinsic :: iso_c_binding
-        integer(c_int) :: swig_result
-        integer(c_int) :: fresult
-
-        fresult = swigc_SQL_IDENTIFIER_CASE_get()
-        swig_result = fresult
-    end function
-
-    function get_SQL_IDENTIFIER_QUOTE_CHAR() &
-        result(swig_result)
-        use, intrinsic :: iso_c_binding
-        integer(c_int) :: swig_result
-        integer(c_int) :: fresult
-
-        fresult = swigc_SQL_IDENTIFIER_QUOTE_CHAR_get()
-        swig_result = fresult
-    end function
-
-    function get_SQL_MAX_COLUMN_NAME_LEN() &
-        result(swig_result)
-        use, intrinsic :: iso_c_binding
-        integer(c_int) :: swig_result
-        integer(c_int) :: fresult
-
-        fresult = swigc_SQL_MAX_COLUMN_NAME_LEN_get()
-        swig_result = fresult
-    end function
-
-    function get_SQL_MAXIMUM_COLUMN_NAME_LENGTH() &
-        result(swig_result)
-        use, intrinsic :: iso_c_binding
-        integer(c_int) :: swig_result
-        integer(c_int) :: fresult
-
-        fresult = swigc_SQL_MAXIMUM_COLUMN_NAME_LENGTH_get()
-        swig_result = fresult
-    end function
-
-    function get_SQL_MAX_CURSOR_NAME_LEN() &
-        result(swig_result)
-        use, intrinsic :: iso_c_binding
-        integer(c_int) :: swig_result
-        integer(c_int) :: fresult
-
-        fresult = swigc_SQL_MAX_CURSOR_NAME_LEN_get()
-        swig_result = fresult
-    end function
-
-    function get_SQL_MAXIMUM_CURSOR_NAME_LENGTH() &
-        result(swig_result)
-        use, intrinsic :: iso_c_binding
-        integer(c_int) :: swig_result
-        integer(c_int) :: fresult
-
-        fresult = swigc_SQL_MAXIMUM_CURSOR_NAME_LENGTH_get()
-        swig_result = fresult
-    end function
-
-    function get_SQL_MAX_SCHEMA_NAME_LEN() &
-        result(swig_result)
-        use, intrinsic :: iso_c_binding
-        integer(c_int) :: swig_result
-        integer(c_int) :: fresult
-
-        fresult = swigc_SQL_MAX_SCHEMA_NAME_LEN_get()
-        swig_result = fresult
-    end function
-
-    function get_SQL_MAXIMUM_SCHEMA_NAME_LENGTH() &
-        result(swig_result)
-        use, intrinsic :: iso_c_binding
-        integer(c_int) :: swig_result
-        integer(c_int) :: fresult
-
-        fresult = swigc_SQL_MAXIMUM_SCHEMA_NAME_LENGTH_get()
-        swig_result = fresult
-    end function
-
-    function get_SQL_MAX_CATALOG_NAME_LEN() &
-        result(swig_result)
-        use, intrinsic :: iso_c_binding
-        integer(c_int) :: swig_result
-        integer(c_int) :: fresult
-
-        fresult = swigc_SQL_MAX_CATALOG_NAME_LEN_get()
-        swig_result = fresult
-    end function
-
-    function get_SQL_MAXIMUM_CATALOG_NAME_LENGTH() &
-        result(swig_result)
-        use, intrinsic :: iso_c_binding
-        integer(c_int) :: swig_result
-        integer(c_int) :: fresult
-
-        fresult = swigc_SQL_MAXIMUM_CATALOG_NAME_LENGTH_get()
-        swig_result = fresult
-    end function
-
-    function get_SQL_MAX_TABLE_NAME_LEN() &
-        result(swig_result)
-        use, intrinsic :: iso_c_binding
-        integer(c_int) :: swig_result
-        integer(c_int) :: fresult
-
-        fresult = swigc_SQL_MAX_TABLE_NAME_LEN_get()
-        swig_result = fresult
-    end function
-
-    function get_SQL_SCROLL_CONCURRENCY() &
-        result(swig_result)
-        use, intrinsic :: iso_c_binding
-        integer(c_int) :: swig_result
-        integer(c_int) :: fresult
-
-        fresult = swigc_SQL_SCROLL_CONCURRENCY_get()
-        swig_result = fresult
-    end function
-
-    function get_SQL_TXN_CAPABLE() &
-        result(swig_result)
-        use, intrinsic :: iso_c_binding
-        integer(c_int) :: swig_result
-        integer(c_int) :: fresult
-
-        fresult = swigc_SQL_TXN_CAPABLE_get()
-        swig_result = fresult
-    end function
-
-    function get_SQL_TRANSACTION_CAPABLE() &
-        result(swig_result)
-        use, intrinsic :: iso_c_binding
-        integer(c_int) :: swig_result
-        integer(c_int) :: fresult
-
-        fresult = swigc_SQL_TRANSACTION_CAPABLE_get()
-        swig_result = fresult
-    end function
-
-    function get_SQL_USER_NAME() &
-        result(swig_result)
-        use, intrinsic :: iso_c_binding
-        integer(c_int) :: swig_result
-        integer(c_int) :: fresult
-
-        fresult = swigc_SQL_USER_NAME_get()
-        swig_result = fresult
-    end function
-
-    function get_SQL_TXN_ISOLATION_OPTION() &
-        result(swig_result)
-        use, intrinsic :: iso_c_binding
-        integer(c_int) :: swig_result
-        integer(c_int) :: fresult
-
-        fresult = swigc_SQL_TXN_ISOLATION_OPTION_get()
-        swig_result = fresult
-    end function
-
-    function get_SQL_TRANSACTION_ISOLATION_OPTION() &
-        result(swig_result)
-        use, intrinsic :: iso_c_binding
-        integer(c_int) :: swig_result
-        integer(c_int) :: fresult
-
-        fresult = swigc_SQL_TRANSACTION_ISOLATION_OPTION_get()
-        swig_result = fresult
-    end function
-
-    function get_SQL_INTEGRITY() &
-        result(swig_result)
-        use, intrinsic :: iso_c_binding
-        integer(c_int) :: swig_result
-        integer(c_int) :: fresult
-
-        fresult = swigc_SQL_INTEGRITY_get()
-        swig_result = fresult
-    end function
-
-    function get_SQL_GETDATA_EXTENSIONS() &
-        result(swig_result)
-        use, intrinsic :: iso_c_binding
-        integer(c_int) :: swig_result
-        integer(c_int) :: fresult
-
-        fresult = swigc_SQL_GETDATA_EXTENSIONS_get()
-        swig_result = fresult
-    end function
-
-    function get_SQL_NULL_COLLATION() &
-        result(swig_result)
-        use, intrinsic :: iso_c_binding
-        integer(c_int) :: swig_result
-        integer(c_int) :: fresult
-
-        fresult = swigc_SQL_NULL_COLLATION_get()
-        swig_result = fresult
-    end function
-
-    function get_SQL_ALTER_TABLE() &
-        result(swig_result)
-        use, intrinsic :: iso_c_binding
-        integer(c_int) :: swig_result
-        integer(c_int) :: fresult
-
-        fresult = swigc_SQL_ALTER_TABLE_get()
-        swig_result = fresult
-    end function
-
-    function get_SQL_ORDER_BY_COLUMNS_IN_SELECT() &
-        result(swig_result)
-        use, intrinsic :: iso_c_binding
-        integer(c_int) :: swig_result
-        integer(c_int) :: fresult
-
-        fresult = swigc_SQL_ORDER_BY_COLUMNS_IN_SELECT_get()
-        swig_result = fresult
-    end function
-
-    function get_SQL_SPECIAL_CHARACTERS() &
-        result(swig_result)
-        use, intrinsic :: iso_c_binding
-        integer(c_int) :: swig_result
-        integer(c_int) :: fresult
-
-        fresult = swigc_SQL_SPECIAL_CHARACTERS_get()
-        swig_result = fresult
-    end function
-
-    function get_SQL_MAX_COLUMNS_IN_GROUP_BY() &
-        result(swig_result)
-        use, intrinsic :: iso_c_binding
-        integer(c_int) :: swig_result
-        integer(c_int) :: fresult
-
-        fresult = swigc_SQL_MAX_COLUMNS_IN_GROUP_BY_get()
-        swig_result = fresult
-    end function
-
-    function get_SQL_MAXIMUM_COLUMNS_IN_GROUP_BY() &
-        result(swig_result)
-        use, intrinsic :: iso_c_binding
-        integer(c_int) :: swig_result
-        integer(c_int) :: fresult
-
-        fresult = swigc_SQL_MAXIMUM_COLUMNS_IN_GROUP_BY_get()
-        swig_result = fresult
-    end function
-
-    function get_SQL_MAX_COLUMNS_IN_INDEX() &
-        result(swig_result)
-        use, intrinsic :: iso_c_binding
-        integer(c_int) :: swig_result
-        integer(c_int) :: fresult
-
-        fresult = swigc_SQL_MAX_COLUMNS_IN_INDEX_get()
-        swig_result = fresult
-    end function
-
-    function get_SQL_MAXIMUM_COLUMNS_IN_INDEX() &
-        result(swig_result)
-        use, intrinsic :: iso_c_binding
-        integer(c_int) :: swig_result
-        integer(c_int) :: fresult
-
-        fresult = swigc_SQL_MAXIMUM_COLUMNS_IN_INDEX_get()
-        swig_result = fresult
-    end function
-
-    function get_SQL_MAX_COLUMNS_IN_ORDER_BY() &
-        result(swig_result)
-        use, intrinsic :: iso_c_binding
-        integer(c_int) :: swig_result
-        integer(c_int) :: fresult
-
-        fresult = swigc_SQL_MAX_COLUMNS_IN_ORDER_BY_get()
-        swig_result = fresult
-    end function
-
-    function get_SQL_MAXIMUM_COLUMNS_IN_ORDER_BY() &
-        result(swig_result)
-        use, intrinsic :: iso_c_binding
-        integer(c_int) :: swig_result
-        integer(c_int) :: fresult
-
-        fresult = swigc_SQL_MAXIMUM_COLUMNS_IN_ORDER_BY_get()
-        swig_result = fresult
-    end function
-
-    function get_SQL_MAX_COLUMNS_IN_SELECT() &
-        result(swig_result)
-        use, intrinsic :: iso_c_binding
-        integer(c_int) :: swig_result
-        integer(c_int) :: fresult
-
-        fresult = swigc_SQL_MAX_COLUMNS_IN_SELECT_get()
-        swig_result = fresult
-    end function
-
-    function get_SQL_MAXIMUM_COLUMNS_IN_SELECT() &
-        result(swig_result)
-        use, intrinsic :: iso_c_binding
-        integer(c_int) :: swig_result
-        integer(c_int) :: fresult
-
-        fresult = swigc_SQL_MAXIMUM_COLUMNS_IN_SELECT_get()
-        swig_result = fresult
-    end function
-
-    function get_SQL_MAX_COLUMNS_IN_TABLE() &
-        result(swig_result)
-        use, intrinsic :: iso_c_binding
-        integer(c_int) :: swig_result
-        integer(c_int) :: fresult
-
-        fresult = swigc_SQL_MAX_COLUMNS_IN_TABLE_get()
-        swig_result = fresult
-    end function
-
-    function get_SQL_MAX_INDEX_SIZE() &
-        result(swig_result)
-        use, intrinsic :: iso_c_binding
-        integer(c_int) :: swig_result
-        integer(c_int) :: fresult
-
-        fresult = swigc_SQL_MAX_INDEX_SIZE_get()
-        swig_result = fresult
-    end function
-
-    function get_SQL_MAXIMUM_INDEX_SIZE() &
-        result(swig_result)
-        use, intrinsic :: iso_c_binding
-        integer(c_int) :: swig_result
-        integer(c_int) :: fresult
-
-        fresult = swigc_SQL_MAXIMUM_INDEX_SIZE_get()
-        swig_result = fresult
-    end function
-
-    function get_SQL_MAX_ROW_SIZE() &
-        result(swig_result)
-        use, intrinsic :: iso_c_binding
-        integer(c_int) :: swig_result
-        integer(c_int) :: fresult
-
-        fresult = swigc_SQL_MAX_ROW_SIZE_get()
-        swig_result = fresult
-    end function
-
-    function get_SQL_MAXIMUM_ROW_SIZE() &
-        result(swig_result)
-        use, intrinsic :: iso_c_binding
-        integer(c_int) :: swig_result
-        integer(c_int) :: fresult
-
-        fresult = swigc_SQL_MAXIMUM_ROW_SIZE_get()
-        swig_result = fresult
-    end function
-
-    function get_SQL_MAX_STATEMENT_LEN() &
-        result(swig_result)
-        use, intrinsic :: iso_c_binding
-        integer(c_int) :: swig_result
-        integer(c_int) :: fresult
-
-        fresult = swigc_SQL_MAX_STATEMENT_LEN_get()
-        swig_result = fresult
-    end function
-
-    function get_SQL_MAXIMUM_STATEMENT_LENGTH() &
-        result(swig_result)
-        use, intrinsic :: iso_c_binding
-        integer(c_int) :: swig_result
-        integer(c_int) :: fresult
-
-        fresult = swigc_SQL_MAXIMUM_STATEMENT_LENGTH_get()
-        swig_result = fresult
-    end function
-
-    function get_SQL_MAX_TABLES_IN_SELECT() &
-        result(swig_result)
-        use, intrinsic :: iso_c_binding
-        integer(c_int) :: swig_result
-        integer(c_int) :: fresult
-
-        fresult = swigc_SQL_MAX_TABLES_IN_SELECT_get()
-        swig_result = fresult
-    end function
-
-    function get_SQL_MAXIMUM_TABLES_IN_SELECT() &
-        result(swig_result)
-        use, intrinsic :: iso_c_binding
-        integer(c_int) :: swig_result
-        integer(c_int) :: fresult
-
-        fresult = swigc_SQL_MAXIMUM_TABLES_IN_SELECT_get()
-        swig_result = fresult
-    end function
-
-    function get_SQL_MAX_USER_NAME_LEN() &
-        result(swig_result)
-        use, intrinsic :: iso_c_binding
-        integer(c_int) :: swig_result
-        integer(c_int) :: fresult
-
-        fresult = swigc_SQL_MAX_USER_NAME_LEN_get()
-        swig_result = fresult
-    end function
-
-    function get_SQL_MAXIMUM_USER_NAME_LENGTH() &
-        result(swig_result)
-        use, intrinsic :: iso_c_binding
-        integer(c_int) :: swig_result
-        integer(c_int) :: fresult
-
-        fresult = swigc_SQL_MAXIMUM_USER_NAME_LENGTH_get()
-        swig_result = fresult
-    end function
-
-    function get_SQL_OJ_CAPABILITIES() &
-        result(swig_result)
-        use, intrinsic :: iso_c_binding
-        integer(c_int) :: swig_result
-        integer(c_int) :: fresult
-
-        fresult = swigc_SQL_OJ_CAPABILITIES_get()
-        swig_result = fresult
-    end function
-
-    function get_SQL_OUTER_JOIN_CAPABILITIES() &
-        result(swig_result)
-        use, intrinsic :: iso_c_binding
-        integer(c_int) :: swig_result
-        integer(c_int) :: fresult
-
-        fresult = swigc_SQL_OUTER_JOIN_CAPABILITIES_get()
-        swig_result = fresult
-    end function
-
-    function get_SQL_XOPEN_CLI_YEAR() &
-        result(swig_result)
-        use, intrinsic :: iso_c_binding
-        integer(c_int) :: swig_result
-        integer(c_int) :: fresult
-
-        fresult = swigc_SQL_XOPEN_CLI_YEAR_get()
-        swig_result = fresult
-    end function
-
-    function get_SQL_CURSOR_SENSITIVITY() &
-        result(swig_result)
-        use, intrinsic :: iso_c_binding
-        integer(c_int) :: swig_result
-        integer(c_int) :: fresult
-
-        fresult = swigc_SQL_CURSOR_SENSITIVITY_get()
-        swig_result = fresult
-    end function
-
-    function get_SQL_DESCRIBE_PARAMETER() &
-        result(swig_result)
-        use, intrinsic :: iso_c_binding
-        integer(c_int) :: swig_result
-        integer(c_int) :: fresult
-
-        fresult = swigc_SQL_DESCRIBE_PARAMETER_get()
-        swig_result = fresult
-    end function
-
-    function get_SQL_CATALOG_NAME() &
-        result(swig_result)
-        use, intrinsic :: iso_c_binding
-        integer(c_int) :: swig_result
-        integer(c_int) :: fresult
-
-        fresult = swigc_SQL_CATALOG_NAME_get()
-        swig_result = fresult
-    end function
-
-    function get_SQL_COLLATION_SEQ() &
-        result(swig_result)
-        use, intrinsic :: iso_c_binding
-        integer(c_int) :: swig_result
-        integer(c_int) :: fresult
-
-        fresult = swigc_SQL_COLLATION_SEQ_get()
-        swig_result = fresult
-    end function
-
-    function get_SQL_MAX_IDENTIFIER_LEN() &
-        result(swig_result)
-        use, intrinsic :: iso_c_binding
-        integer(c_int) :: swig_result
-        integer(c_int) :: fresult
-
-        fresult = swigc_SQL_MAX_IDENTIFIER_LEN_get()
-        swig_result = fresult
-    end function
-
-    function get_SQL_MAXIMUM_IDENTIFIER_LENGTH() &
-        result(swig_result)
-        use, intrinsic :: iso_c_binding
-        integer(c_int) :: swig_result
-        integer(c_int) :: fresult
-
-        fresult = swigc_SQL_MAXIMUM_IDENTIFIER_LENGTH_get()
-        swig_result = fresult
-    end function
-
-    function get_SQL_AT_ADD_COLUMN() &
-        result(swig_result)
-        use, intrinsic :: iso_c_binding
-        integer(c_long) :: swig_result
-        integer(c_long) :: fresult
-
-        fresult = swigc_SQL_AT_ADD_COLUMN_get()
-        swig_result = fresult
-    end function
-
-    function get_SQL_AT_DROP_COLUMN() &
-        result(swig_result)
-        use, intrinsic :: iso_c_binding
-        integer(c_long) :: swig_result
-        integer(c_long) :: fresult
-
-        fresult = swigc_SQL_AT_DROP_COLUMN_get()
-        swig_result = fresult
-    end function
-
-    function get_SQL_AT_ADD_CONSTRAINT() &
-        result(swig_result)
-        use, intrinsic :: iso_c_binding
-        integer(c_long) :: swig_result
-        integer(c_long) :: fresult
-
-        fresult = swigc_SQL_AT_ADD_CONSTRAINT_get()
-        swig_result = fresult
-    end function
-
-    function get_SQL_AM_NONE() &
-        result(swig_result)
-        use, intrinsic :: iso_c_binding
-        integer(c_int) :: swig_result
-        integer(c_int) :: fresult
-
-        fresult = swigc_SQL_AM_NONE_get()
-        swig_result = fresult
-    end function
-
-    function get_SQL_AM_CONNECTION() &
-        result(swig_result)
-        use, intrinsic :: iso_c_binding
-        integer(c_int) :: swig_result
-        integer(c_int) :: fresult
-
-        fresult = swigc_SQL_AM_CONNECTION_get()
-        swig_result = fresult
-    end function
-
-    function get_SQL_AM_STATEMENT() &
-        result(swig_result)
-        use, intrinsic :: iso_c_binding
-        integer(c_int) :: swig_result
-        integer(c_int) :: fresult
-
-        fresult = swigc_SQL_AM_STATEMENT_get()
-        swig_result = fresult
-    end function
-
-    function get_SQL_CB_DELETE() &
-        result(swig_result)
-        use, intrinsic :: iso_c_binding
-        integer(c_int) :: swig_result
-        integer(c_int) :: fresult
-
-        fresult = swigc_SQL_CB_DELETE_get()
-        swig_result = fresult
-    end function
-
-    function get_SQL_CB_CLOSE() &
-        result(swig_result)
-        use, intrinsic :: iso_c_binding
-        integer(c_int) :: swig_result
-        integer(c_int) :: fresult
-
-        fresult = swigc_SQL_CB_CLOSE_get()
-        swig_result = fresult
-    end function
-
-    function get_SQL_CB_PRESERVE() &
-        result(swig_result)
-        use, intrinsic :: iso_c_binding
-        integer(c_int) :: swig_result
-        integer(c_int) :: fresult
-
-        fresult = swigc_SQL_CB_PRESERVE_get()
-        swig_result = fresult
-    end function
-
-    function get_SQL_FD_FETCH_NEXT() &
-        result(swig_result)
-        use, intrinsic :: iso_c_binding
-        integer(c_long) :: swig_result
-        integer(c_long) :: fresult
-
-        fresult = swigc_SQL_FD_FETCH_NEXT_get()
-        swig_result = fresult
-    end function
-
-    function get_SQL_FD_FETCH_FIRST() &
-        result(swig_result)
-        use, intrinsic :: iso_c_binding
-        integer(c_long) :: swig_result
-        integer(c_long) :: fresult
-
-        fresult = swigc_SQL_FD_FETCH_FIRST_get()
-        swig_result = fresult
-    end function
-
-    function get_SQL_FD_FETCH_LAST() &
-        result(swig_result)
-        use, intrinsic :: iso_c_binding
-        integer(c_long) :: swig_result
-        integer(c_long) :: fresult
-
-        fresult = swigc_SQL_FD_FETCH_LAST_get()
-        swig_result = fresult
-    end function
-
-    function get_SQL_FD_FETCH_PRIOR() &
-        result(swig_result)
-        use, intrinsic :: iso_c_binding
-        integer(c_long) :: swig_result
-        integer(c_long) :: fresult
-
-        fresult = swigc_SQL_FD_FETCH_PRIOR_get()
-        swig_result = fresult
-    end function
-
-    function get_SQL_FD_FETCH_ABSOLUTE() &
-        result(swig_result)
-        use, intrinsic :: iso_c_binding
-        integer(c_long) :: swig_result
-        integer(c_long) :: fresult
-
-        fresult = swigc_SQL_FD_FETCH_ABSOLUTE_get()
-        swig_result = fresult
-    end function
-
-    function get_SQL_FD_FETCH_RELATIVE() &
-        result(swig_result)
-        use, intrinsic :: iso_c_binding
-        integer(c_long) :: swig_result
-        integer(c_long) :: fresult
-
-        fresult = swigc_SQL_FD_FETCH_RELATIVE_get()
-        swig_result = fresult
-    end function
-
-    function get_SQL_GD_ANY_COLUMN() &
-        result(swig_result)
-        use, intrinsic :: iso_c_binding
-        integer(c_long) :: swig_result
-        integer(c_long) :: fresult
-
-        fresult = swigc_SQL_GD_ANY_COLUMN_get()
-        swig_result = fresult
-    end function
-
-    function get_SQL_GD_ANY_ORDER() &
-        result(swig_result)
-        use, intrinsic :: iso_c_binding
-        integer(c_long) :: swig_result
-        integer(c_long) :: fresult
-
-        fresult = swigc_SQL_GD_ANY_ORDER_get()
-        swig_result = fresult
-    end function
-
-    function get_SQL_IC_UPPER() &
-        result(swig_result)
-        use, intrinsic :: iso_c_binding
-        integer(c_int) :: swig_result
-        integer(c_int) :: fresult
-
-        fresult = swigc_SQL_IC_UPPER_get()
-        swig_result = fresult
-    end function
-
-    function get_SQL_IC_LOWER() &
-        result(swig_result)
-        use, intrinsic :: iso_c_binding
-        integer(c_int) :: swig_result
-        integer(c_int) :: fresult
-
-        fresult = swigc_SQL_IC_LOWER_get()
-        swig_result = fresult
-    end function
-
-    function get_SQL_IC_SENSITIVE() &
-        result(swig_result)
-        use, intrinsic :: iso_c_binding
-        integer(c_int) :: swig_result
-        integer(c_int) :: fresult
-
-        fresult = swigc_SQL_IC_SENSITIVE_get()
-        swig_result = fresult
-    end function
-
-    function get_SQL_IC_MIXED() &
-        result(swig_result)
-        use, intrinsic :: iso_c_binding
-        integer(c_int) :: swig_result
-        integer(c_int) :: fresult
-
-        fresult = swigc_SQL_IC_MIXED_get()
-        swig_result = fresult
-    end function
-
-    function get_SQL_OJ_LEFT() &
-        result(swig_result)
-        use, intrinsic :: iso_c_binding
-        integer(c_long) :: swig_result
-        integer(c_long) :: fresult
-
-        fresult = swigc_SQL_OJ_LEFT_get()
-        swig_result = fresult
-    end function
-
-    function get_SQL_OJ_RIGHT() &
-        result(swig_result)
-        use, intrinsic :: iso_c_binding
-        integer(c_long) :: swig_result
-        integer(c_long) :: fresult
-
-        fresult = swigc_SQL_OJ_RIGHT_get()
-        swig_result = fresult
-    end function
-
-    function get_SQL_OJ_FULL() &
-        result(swig_result)
-        use, intrinsic :: iso_c_binding
-        integer(c_long) :: swig_result
-        integer(c_long) :: fresult
-
-        fresult = swigc_SQL_OJ_FULL_get()
-        swig_result = fresult
-    end function
-
-    function get_SQL_OJ_NESTED() &
-        result(swig_result)
-        use, intrinsic :: iso_c_binding
-        integer(c_long) :: swig_result
-        integer(c_long) :: fresult
-
-        fresult = swigc_SQL_OJ_NESTED_get()
-        swig_result = fresult
-    end function
-
-    function get_SQL_OJ_NOT_ORDERED() &
-        result(swig_result)
-        use, intrinsic :: iso_c_binding
-        integer(c_long) :: swig_result
-        integer(c_long) :: fresult
-
-        fresult = swigc_SQL_OJ_NOT_ORDERED_get()
-        swig_result = fresult
-    end function
-
-    function get_SQL_OJ_INNER() &
-        result(swig_result)
-        use, intrinsic :: iso_c_binding
-        integer(c_long) :: swig_result
-        integer(c_long) :: fresult
-
-        fresult = swigc_SQL_OJ_INNER_get()
-        swig_result = fresult
-    end function
-
-    function get_SQL_OJ_ALL_COMPARISON_OPS() &
-        result(swig_result)
-        use, intrinsic :: iso_c_binding
-        integer(c_long) :: swig_result
-        integer(c_long) :: fresult
-
-        fresult = swigc_SQL_OJ_ALL_COMPARISON_OPS_get()
-        swig_result = fresult
-    end function
-
-    function get_SQL_SCCO_READ_ONLY() &
-        result(swig_result)
-        use, intrinsic :: iso_c_binding
-        integer(c_long) :: swig_result
-        integer(c_long) :: fresult
-
-        fresult = swigc_SQL_SCCO_READ_ONLY_get()
-        swig_result = fresult
-    end function
-
-    function get_SQL_SCCO_LOCK() &
-        result(swig_result)
-        use, intrinsic :: iso_c_binding
-        integer(c_long) :: swig_result
-        integer(c_long) :: fresult
-
-        fresult = swigc_SQL_SCCO_LOCK_get()
-        swig_result = fresult
-    end function
-
-    function get_SQL_SCCO_OPT_ROWVER() &
-        result(swig_result)
-        use, intrinsic :: iso_c_binding
-        integer(c_long) :: swig_result
-        integer(c_long) :: fresult
-
-        fresult = swigc_SQL_SCCO_OPT_ROWVER_get()
-        swig_result = fresult
-    end function
-
-    function get_SQL_SCCO_OPT_VALUES() &
-        result(swig_result)
-        use, intrinsic :: iso_c_binding
-        integer(c_long) :: swig_result
-        integer(c_long) :: fresult
-
-        fresult = swigc_SQL_SCCO_OPT_VALUES_get()
-        swig_result = fresult
-    end function
-
-    function get_SQL_TC_NONE() &
-        result(swig_result)
-        use, intrinsic :: iso_c_binding
-        integer(c_int) :: swig_result
-        integer(c_int) :: fresult
-
-        fresult = swigc_SQL_TC_NONE_get()
-        swig_result = fresult
-    end function
-
-    function get_SQL_TC_DML() &
-        result(swig_result)
-        use, intrinsic :: iso_c_binding
-        integer(c_int) :: swig_result
-        integer(c_int) :: fresult
-
-        fresult = swigc_SQL_TC_DML_get()
-        swig_result = fresult
-    end function
-
-    function get_SQL_TC_ALL() &
-        result(swig_result)
-        use, intrinsic :: iso_c_binding
-        integer(c_int) :: swig_result
-        integer(c_int) :: fresult
-
-        fresult = swigc_SQL_TC_ALL_get()
-        swig_result = fresult
-    end function
-
-    function get_SQL_TC_DDL_COMMIT() &
-        result(swig_result)
-        use, intrinsic :: iso_c_binding
-        integer(c_int) :: swig_result
-        integer(c_int) :: fresult
-
-        fresult = swigc_SQL_TC_DDL_COMMIT_get()
-        swig_result = fresult
-    end function
-
-    function get_SQL_TC_DDL_IGNORE() &
-        result(swig_result)
-        use, intrinsic :: iso_c_binding
-        integer(c_int) :: swig_result
-        integer(c_int) :: fresult
-
-        fresult = swigc_SQL_TC_DDL_IGNORE_get()
-        swig_result = fresult
-    end function
-
-    function get_SQL_TXN_READ_UNCOMMITTED() &
-        result(swig_result)
-        use, intrinsic :: iso_c_binding
-        integer(c_long) :: swig_result
-        integer(c_long) :: fresult
-
-        fresult = swigc_SQL_TXN_READ_UNCOMMITTED_get()
-        swig_result = fresult
-    end function
-
-    function get_SQL_TRANSACTION_READ_UNCOMMITTED() &
-        result(swig_result)
-        use, intrinsic :: iso_c_binding
-        integer(c_long) :: swig_result
-        integer(c_long) :: fresult
-
-        fresult = swigc_SQL_TRANSACTION_READ_UNCOMMITTED_get()
-        swig_result = fresult
-    end function
-
-    function get_SQL_TXN_READ_COMMITTED() &
-        result(swig_result)
-        use, intrinsic :: iso_c_binding
-        integer(c_long) :: swig_result
-        integer(c_long) :: fresult
-
-        fresult = swigc_SQL_TXN_READ_COMMITTED_get()
-        swig_result = fresult
-    end function
-
-    function get_SQL_TRANSACTION_READ_COMMITTED() &
-        result(swig_result)
-        use, intrinsic :: iso_c_binding
-        integer(c_long) :: swig_result
-        integer(c_long) :: fresult
-
-        fresult = swigc_SQL_TRANSACTION_READ_COMMITTED_get()
-        swig_result = fresult
-    end function
-
-    function get_SQL_TXN_REPEATABLE_READ() &
-        result(swig_result)
-        use, intrinsic :: iso_c_binding
-        integer(c_long) :: swig_result
-        integer(c_long) :: fresult
-
-        fresult = swigc_SQL_TXN_REPEATABLE_READ_get()
-        swig_result = fresult
-    end function
-
-    function get_SQL_TRANSACTION_REPEATABLE_READ() &
-        result(swig_result)
-        use, intrinsic :: iso_c_binding
-        integer(c_long) :: swig_result
-        integer(c_long) :: fresult
-
-        fresult = swigc_SQL_TRANSACTION_REPEATABLE_READ_get()
-        swig_result = fresult
-    end function
-
-    function get_SQL_TXN_SERIALIZABLE() &
-        result(swig_result)
-        use, intrinsic :: iso_c_binding
-        integer(c_long) :: swig_result
-        integer(c_long) :: fresult
-
-        fresult = swigc_SQL_TXN_SERIALIZABLE_get()
-        swig_result = fresult
-    end function
-
-    function get_SQL_TRANSACTION_SERIALIZABLE() &
-        result(swig_result)
-        use, intrinsic :: iso_c_binding
-        integer(c_long) :: swig_result
-        integer(c_long) :: fresult
-
-        fresult = swigc_SQL_TRANSACTION_SERIALIZABLE_get()
-        swig_result = fresult
-    end function
-
-    function get_SQL_NC_HIGH() &
-        result(swig_result)
-        use, intrinsic :: iso_c_binding
-        integer(c_int) :: swig_result
-        integer(c_int) :: fresult
-
-        fresult = swigc_SQL_NC_HIGH_get()
-        swig_result = fresult
-    end function
-
-    function get_SQL_NC_LOW() &
-        result(swig_result)
-        use, intrinsic :: iso_c_binding
-        integer(c_int) :: swig_result
-        integer(c_int) :: fresult
-
-        fresult = swigc_SQL_NC_LOW_get()
-        swig_result = fresult
-    end function
 
 end module

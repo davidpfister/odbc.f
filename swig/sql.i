@@ -1,22 +1,34 @@
 #define SQL_API
 %module sql
-%typemap(bindc) SQLSMALLINT "integer(c_short)"
-%typemap(bindc) SQLUSMALLINT "integer(c_short)"
+%typemap(bindc) WORD "integer(c_short)"
+%typemap(bindc) BYTE "integer(c_signed_char)"
+%typemap(bindc) DWORD "integer(c_long)"
+%typemap(bindc) SQLSMALLINT "integer(c_short), intent(in), value"
+%typemap(bindc) SQLSMALLINT *"integer(c_short), intent(out)"
+%typemap(bindc) SQLUSMALLINT "integer(c_short), intent(in), value"
+%typemap(bindc) SQLUSMALLINT *"integer(c_short), intent(out)"
 %typemap(bindc) SQLRETURN "integer(c_short)"
-%typemap(bindc) SQLHANDLE "type(c_ptr)"
-%typemap(bindc) SQLHENV "type(c_ptr)"
-%typemap(bindc) SQLHDBC "type(c_ptr)"
-%typemap(bindc) SQLHSTMT "type(c_ptr)"
-%typemap(bindc) SQLHDESC "type(c_ptr)"
-%typemap(bindc) SQLPOINTER "type(c_ptr)"
-%typemap(bindc) SQLLEN "integer(c_long_long)"
-%typemap(bindc) SQLULEN "integer(c_long_long)"
-%typemap(bindc) SQLCHAR "integer(c_signed_char)"
-%typemap(bindc) SQLINTEGER "integer(c_int)"
-%apply short {int SQL_HANDLE_ENV};%fortranconst SQL_HANDLE_ENV;
-%apply short {int SQL_HANDLE_DBC};%fortranconst SQL_HANDLE_DBC;
-%apply short {int SQL_HANDLE_STMT};%fortranconst SQL_HANDLE_STMT;
-%apply short {int SQL_HANDLE_DESC};%fortranconst SQL_HANDLE_DESC;
+%typemap(bindc) SQLHANDLE "type(c_ptr), intent(in), value"
+%typemap(bindc) SQLHANDLE *"type(c_ptr), intent(out)"
+%typemap(bindc) SQLHENV "type(c_ptr), intent(in), value"
+%typemap(bindc) SQLHENV * "type(c_ptr), intent(out)"
+%typemap(bindc) SQLHDBC "type(c_ptr), intent(in), value"
+%typemap(bindc) SQLHDBC * "type(c_ptr), intent(out)"
+%typemap(bindc) SQLHSTMT "type(c_ptr), intent(in), value"
+%typemap(bindc) SQLHSTMT *"type(c_ptr), intent(out)"
+%typemap(bindc) SQLHDESC "type(c_ptr), intent(in), value"
+%typemap(bindc) SQLHDESC *"type(c_ptr), intent(out)"
+%typemap(bindc) SQLPOINTER "type(c_ptr), intent(in), value"
+%typemap(bindc) SQLPOINTER *"type(c_ptr), intent(out)"
+%typemap(bindc) SQLLEN "integer(c_long), intent(in), value"
+%typemap(bindc) SQLLEN *"integer(c_long), intent(out)"
+%typemap(bindc) SQLULEN "integer(c_long), intent(in), value"
+%typemap(bindc) SQLULEN *"integer(c_long), intent(out)"
+%typemap(bindc) SQLCHAR "character(kind=c_char, len=*), intent(in)"
+%typemap(bindc) SQLCHAR *"character(kind=c_char)"
+%typemap(bindc) SQLINTEGER *"integer(c_int), intent(out)"
+%typemap(bindc) SQLINTEGER "integer(c_int), intent(in), value"
+
 %fortranbindc SQLAllocConnect;
 %fortranbindc SQLAllocConnect;
 %fortranbindc SQLAllocEnv;
@@ -77,6 +89,7 @@
 %fortranbindc SQLTables;
 %fortranbindc SQLTransact;
 %{                // This adds the include to the generated wrapper.
-#include "../include/sql.h"
+#include <sql.h>
 %}
+%rename("$ignore", regexmatch$name="^SQL_") "";  
 %include "../include/sql.h"

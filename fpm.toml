@@ -15,7 +15,7 @@ link = "odbc32"
 
 [preprocess]
 cpp.suffixes = ["F90", "f90"]
-cpp.macros = ["_FPM", "_WIN32"]
+cpp.macros = ["_FPM"]
 
 [library]
 source-dir = "src"

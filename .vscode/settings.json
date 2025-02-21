@@ -1,5 +1,6 @@
 {
     "search.exclude": {
         "**/*.code-workspace": true
-    }
+    },
+    "C_Cpp.errorSquiggles": "disabled"
 }
