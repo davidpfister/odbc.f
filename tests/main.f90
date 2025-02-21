@@ -1,6 +1,7 @@
 program test 
     use, intrinsic :: iso_c_binding
     use sql
+    use odbc_constants
     
     integer(c_short) :: err
     type(c_ptr) :: env, dbc, stmt

@@ -5,11 +5,11 @@ module odbc_resultsetmetadata
     implicit none; private
 
     type, public :: column
-        character(kind=c_char, len=1)  :: name(51)
-        integer                         :: type
-        integer                         :: size
-        integer                         :: decim_size
-        integer                         :: nullable !0: NOT-NULL,1: NULL,2: NOT-KNOWN
+        character(kind=c_char, len=51)  :: name
+        integer(SQLSMALLINT)            :: type
+        integer(SQLULEN)                :: size
+        integer(SQLSMALLINT)            :: decim_size
+        integer(SQLSMALLINT)            :: nullable !0: NOT-NULL,1: NULL,2: NOT-KNOWN
     end type
 
     type, public :: resultsetmetadata
@@ -40,7 +40,7 @@ contains
 
     subroutine resultsetmetadata_set_ncols(this, count)
         class(resultsetmetadata), intent(inout) :: this
-        integer, intent(in) :: count
+        integer(SQLSMALLINT), intent(in) :: count
         this%ncols = count
         if (allocated(this%columns)) deallocate (this%columns)
         allocate (this%columns(count))

@@ -6,13 +6,6 @@ module odbc_connection
 
     implicit none; private
 
-    enum, bind(c)
-        enumerator :: SQL_CURSOR_FORWARD_ONLY = 0
-        enumerator :: SQL_CURSOR_KEYSET_DRIVEN = 1
-        enumerator :: SQL_CURSOR_DYNAMIC = 2
-        enumerator :: SQL_CURSOR_STATIC = 3
-    end enum
-
     type, public :: connection
         private
         type(SQLHENV)                   :: env
@@ -21,9 +14,9 @@ module odbc_connection
         logical                         :: is_opened
         integer                         :: timeout
         integer(SQLSMALLINT)            :: rec
-        character(kind=SQLTCHAR, len=1) :: state(6)
-        character(kind=SQLTCHAR, len=1) :: msg(SQL_MAX_MESSAGE_LENGTH)
-        integer(SQLSMALLINT)            :: ierr
+        character(kind=SQLTCHAR, len=6) :: state
+        character(kind=SQLTCHAR, len=SQL_MAX_MESSAGE_LENGTH) :: msg
+        integer(SQLINTEGER)             :: ierr
         integer(SQLSMALLINT)            :: imsg
     contains
         private
@@ -49,6 +42,11 @@ module odbc_connection
         module procedure :: connection_new
     end interface
 
+    interface throw_exception
+            module procedure :: throw_exception_i2
+            module procedure :: throw_exception_i4
+    end interface
+
 contains
 
     function connection_new() result(that)
@@ -72,9 +70,9 @@ contains
 
     function connection_open_with_pwd(this, dsn, user, pwd) result(success)
         class(connection), intent(inout)    :: this
-        character(*), intent(in), target    :: dsn
-        character(*), target                :: user
-        character(*), target                :: pwd
+        character(*), intent(in)    :: dsn
+        character(*)                :: user
+        character(*)                :: pwd
         logical :: success
         !private
         integer(SQLRETURN) :: ret
@@ -91,9 +89,9 @@ contains
             call handle_error(this, 'ENV')
         end if
 
-        ret = SQLConnect(this%dbc, c_loc(dsn), len_trim(dsn, kind=c_short), &
-                         c_loc(user), len_trim(user, kind=c_short), &
-                         c_loc(pwd), len_trim(pwd, kind=c_short))
+        ret = SQLConnect(this%dbc, dsn, len_trim(dsn, kind=c_short), &
+                         user, len_trim(user, kind=c_short), &
+                         pwd, len_trim(pwd, kind=c_short))
         if (ret == SQL_ERROR) call handle_error(this, 'DBC')
 
         ret = SQLAllocStmt(this%dbc, this%stmt)
@@ -126,28 +124,28 @@ contains
 
     function connection_execute(this, sql) result(count)
         class(connection), intent(inout)    :: this
-        character(*), intent(in), target    :: sql
+        character(*), intent(in)            :: sql
         integer(c_int) :: count
         !private
         integer(SQLRETURN) :: ret
-        integer(c_long), target :: countInt
+        integer(c_long) :: countInt
 
         if (.not. this%is_opened) call handle_error(this, 'Call Open() before execute()')
 
-        ret = SQLPrepare(this%stmt, c_loc(sql), SQL_NTS)
+        ret = SQLPrepare(this%stmt, sql, SQL_NTS)
         if (ret == SQL_ERROR) call handle_error(this, 'STMT')
 
         ret = SQLExecute(this%stmt)
         if (ret == SQL_ERROR .or. ret < SQL_SUCCESS) call handle_error(this, 'STMT')
 
         countInt = -1
-        ret = SQLRowCount(this%stmt, c_loc(countInt))
+        ret = SQLRowCount(this%stmt, countInt)
         count = countInt
     end function
 
     function connection_execute_query(this, sql) result(rslt)
         class(connection), intent(inout)    :: this
-        character(*), intent(in), target    :: sql
+        character(*), intent(in)            :: sql
         type(resultset) :: rslt
         !private
         integer(SQLRETURN) :: ret
@@ -164,7 +162,7 @@ contains
         ret = SQLSetStmtAttr(this%stmt, SQL_ATTR_CURSOR_TYPE, c_loc(cursor), SQL_IS_INTEGER)
         if (ret < SQL_SUCCESS) call handle_error(this, 'STMT')
 
-        ret = SQLExecDirect(this%stmt, c_loc(sql), len_trim(sql))
+        ret = SQLExecDirect(this%stmt, sql, len_trim(sql))
         if (ret == -1) call handle_error(this, 'STMT')
 
         rslt = resultset(this%stmt)
@@ -172,7 +170,7 @@ contains
 
     function connection_execute_query_with_cursor(this, sql, cursor_type, scrollable) result(rslt)
         class(connection), intent(inout)        :: this
-        character(*), intent(in), target        :: sql
+        character(*), intent(in)                :: sql
         integer(c_short), intent(in), target    :: cursor_type
         logical, intent(in)                     :: scrollable
         type(resultset) :: rslt
@@ -202,7 +200,7 @@ contains
             if (ret < SQL_SUCCESS) call handle_error(this, 'STMT')
         end if
 
-        ret = SQLExecDirect(this%stmt, c_loc(sql), len_trim(sql))
+        ret = SQLExecDirect(this%stmt, sql, len_trim(sql))
         if (ret == SQL_ERROR) call handle_error(this, 'STMT')
 
         rslt = resultset(this%stmt)
@@ -260,16 +258,16 @@ contains
         ! Error handling
         if (trim(type) == 'STMT') then
             status = SQLGetDiagRec(SQL_HANDLE_STMT, this%stmt, this%rec, &
-                                   c_loc(this%state), c_loc(this%ierr), c_loc(this%msg), &
-                                   int(c_sizeof(this%msg), SQLSMALLINT), c_loc(this%imsg))
+                                    this%state, this%ierr, this%msg, &
+                                    len(this%msg, SQLSMALLINT), this%imsg)
         else if (trim(type) == 'ENV') then
             status = SQLGetDiagRec(SQL_HANDLE_ENV, this%env, this%rec, &
-                                   c_loc(this%state), c_loc(this%ierr), c_loc(this%msg), &
-                                   int(c_sizeof(this%msg), SQLSMALLINT), c_loc(this%imsg))
+                                    this%state, this%ierr, this%msg, &
+                                    len(this%msg, SQLSMALLINT), this%imsg)
         else if (trim(type) == 'DBC') then
             status = SQLGetDiagRec(SQL_HANDLE_DBC, this%dbc, this%rec, &
-                                   c_loc(this%state), c_loc(this%ierr), c_loc(this%msg), &
-                                   int(c_sizeof(this%msg), SQLSMALLINT), c_loc(this%imsg))
+                                   this%state, this%ierr, this%msg, &
+                                   len(this%msg, SQLSMALLINT), this%imsg)
         else
             call throw_exception(trim(this%msg), this%ierr)
         end if
@@ -279,9 +277,17 @@ contains
         end if
     end subroutine
 
-    subroutine throw_exception(msg, errCode)
+    subroutine throw_exception_i2(msg, errCode)
         character(*), intent(in)        :: msg
-        integer(c_short), intent(in)    :: errCode
+        integer(SQLSMALLINT), intent(in) :: errCode
+
+        print *, 'connection error: ', msg, ' Error code: ', errCode
+        stop
+    end subroutine
+
+    subroutine throw_exception_i4(msg, errCode)
+        character(*), intent(in)        :: msg
+        integer(SQLINTEGER), intent(in) :: errCode
 
         print *, 'connection error: ', msg, ' Error code: ', errCode
         stop

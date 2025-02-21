@@ -12,9 +12,9 @@ module odbc_resultset
         integer(SQLUINTEGER)            :: nrows
         integer(SQLUSMALLINT)           :: status(10)
         integer(SQLSMALLINT)            :: rec
-        character(kind=SQLTCHAR, len=1) :: state(6)
-        character(kind=SQLTCHAR, len=1) :: msg(SQL_MAX_MESSAGE_LENGTH)
-        integer(SQLSMALLINT)            :: ierr
+        character(kind=SQLTCHAR, len=6) :: state
+        character(kind=SQLTCHAR, len=SQL_MAX_MESSAGE_LENGTH) :: msg
+        integer(SQLINTEGER)             :: ierr
         integer(SQLSMALLINT)            :: imsg
     contains
         private
@@ -48,17 +48,17 @@ contains
     end function
 
     function resultset_get_metadata(this) result(mtdt)
-        class(resultset), intent(in) :: this
+        class(resultset), intent(inout) :: this
         type(resultsetmetadata) :: mtdt
         !private
-        integer, target :: i, name_length
-        integer, target :: column_count
+        integer :: i
+        integer(SQLSMALLINT) :: name_length, column_count
         integer(SQLRETURN) :: ret
         type(column), target :: col
         character(len=256) :: cMsg
         integer :: nErr, nMsg, iRec, cState
 
-        ret = SQLNumResultCols(this%stmt, c_loc(column_count))
+        ret = SQLNumResultCols(this%stmt, column_count)
         if (ret == SQL_ERROR .or. ret == SQL_INVALID_HANDLE) then
             call this%handle_errors()
         end if
@@ -70,9 +70,9 @@ contains
             col%nullable = 0
             col%size = 0
             col%type = 0
-            ret = SQLDescribeCol(this%stmt, int(i, c_short), c_loc(col%name), size(col%name, kind=c_short), &
-                                 c_loc(name_length), c_loc(col%type), c_loc(col%size), &
-                                 c_loc(col%decim_size), c_loc(col%nullable))
+            ret = SQLDescribeCol(this%stmt, int(i, c_short), col%name, len(col%name, kind=c_short), &
+                                 name_length, col%type, col%size, &
+                                 col%decim_size, col%nullable)
             if (ret == SQL_ERROR .or. ret == SQL_INVALID_HANDLE) then
                 call this%handle_errors()
             end if
@@ -81,11 +81,11 @@ contains
     end function
 
     logical function resultset_movenext(this) result(res)
-        class(resultset), intent(in)    :: this
+        class(resultset), intent(inout)    :: this
         integer(SQLRETURN) :: rc
         !private
-        integer(c_long_long) :: offset
-        offset = 0_c_long_long
+        integer(c_long) :: offset
+        offset = 0_c_long
 
         res = .true.
         rc = SQLFetchScroll(this%stmt, SQL_FETCH_NEXT, offset)
@@ -94,11 +94,11 @@ contains
     end function
 
     logical function resultset_moveprevious(this) result(res)
-        class(resultset), intent(in)    :: this
+        class(resultset), intent(inout)    :: this
         integer(SQLRETURN) :: rc
         !private
-        integer(c_long_long) :: offset
-        offset = 0_c_long_long
+        integer(c_long) :: offset
+        offset = 0_c_long
 
         res = .true.
         rc = SQLFetchScroll(this%stmt, SQL_FETCH_PRIOR, offset)
@@ -107,11 +107,11 @@ contains
     end function
 
     logical function resultset_movefirst(this) result(res)
-        class(resultset), intent(in)    :: this
+        class(resultset), intent(inout)    :: this
         integer(SQLRETURN) :: rc
         !private
-        integer(c_long_long) :: offset
-        offset = 0_c_long_long
+        integer(c_long) :: offset
+        offset = 0_c_long
 
         res = .true.
         rc = SQLFetchScroll(this%stmt, SQL_FETCH_FIRST, offset)
@@ -121,11 +121,11 @@ contains
     end function
 
     logical function resultset_movelast(this) result(res)
-        class(resultset), intent(in)    :: this
+        class(resultset), intent(inout)    :: this
         integer(SQLRETURN) :: rc
         !private
-        integer(c_long_long) :: offset
-        offset = 0_c_long_long
+        integer(c_long) :: offset
+        offset = 0_c_long
 
         res = .true.
         rc = SQLFetchScroll(this%stmt, SQL_FETCH_LAST, offset)
@@ -134,15 +134,15 @@ contains
     end function
 
     logical function resultset_bind(this, col_no, buff, n) result(res)
-        class(resultset), intent(in)        :: this
+        class(resultset), intent(inout)        :: this
         integer(SQLUSMALLINT), intent(in)   :: col_no
         character(kind=SQLCHAR, len=1), intent(inout), target :: buff(n)
-        integer(c_long_long), intent(in)                 :: n
+        integer(c_long), intent(in)                 :: n
         !private
-        integer, target :: sz
+        integer(SQLLEN) :: sz
         integer(SQLRETURN) :: rc
 
-        rc = SQLBindCol(this%stmt, col_no, SQL_CHAR, c_loc(buff), n, c_loc(sz))
+        rc = SQLBindCol(this%stmt, col_no, SQL_CHAR, c_loc(buff), n, sz)
         if (rc == SQL_ERROR) call this%handle_errors()
         res = .true.
     end function
@@ -155,13 +155,13 @@ contains
     end function
 
     subroutine handle_errors(this)
-        class(resultset), intent(in), target    :: this
+        class(resultset), intent(inout), target    :: this
         !private
         integer(SQLRETURN) :: status
 
         status = SQLGetDiagRec(SQL_HANDLE_STMT, this%stmt, this%rec, &
-                               c_loc(this%state), c_loc(this%ierr), c_loc(this%msg), &
-                               int(c_sizeof(this%msg), SQLSMALLINT), c_loc(this%imsg))
+                               this%state, this%ierr, this%msg, &
+                               len(this%msg, kind=SQLSMALLINT), this%imsg)
 
         print *, this%msg, ' Error code: ', this%ierr
         error stop this%ierr
