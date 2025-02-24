@@ -8,6 +8,7 @@ module sqltypes
  implicit none
  private
 
+ ! DECLARATION CONSTRUCTS
  ! struct struct tagDATE_STRUCT
  type, bind(C), public :: DATE_STRUCT
   integer(c_short), public :: year
@@ -63,7 +64,6 @@ module sqltypes
   integer(C_INT), public :: second
   integer(C_INT), public :: fraction
  end type SQL_DAY_SECOND_STRUCT
-
  integer(C_INT), parameter, public :: SQL_MAX_NUMERIC_LEN = 16_C_INT
  ! struct struct tagSQL_NUMERIC_STRUCT
  type, bind(C), public :: SQL_NUMERIC_STRUCT

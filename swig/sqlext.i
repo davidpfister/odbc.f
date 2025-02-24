@@ -4,7 +4,7 @@
 %typemap(bindc) BOOL "integer(c_int), intent(in), value"
 %typemap(bindc) SQLSMALLINT "integer(c_short), intent(in), value"
 %typemap(bindc) SQLUSMALLINT "integer(c_short), intent(in), value"
-%typemap(bindc) RETCODE "integer(c_short), intent(in), value"
+%typemap(bindc) RETCODE "integer(c_short)"
 %typemap(bindc) SQLRETURN "integer(c_short)"
 %typemap(bindc) SQLHANDLE "type(c_ptr), intent(in), value"
 %typemap(bindc) SQLHWND "type(c_ptr), intent(in), value"
@@ -22,7 +22,6 @@
 %typemap(bindc) BOOL *"integer(c_int), intent(out)"
 %typemap(bindc) SQLSMALLINT *"integer(c_short), intent(out)"
 %typemap(bindc) SQLUSMALLINT *"integer(c_short), intent(out)"
-%typemap(bindc) RETCODE *"integer(c_short), intent(out)"
 %typemap(bindc) SQLHANDLE *"type(c_ptr), intent(out)"
 %typemap(bindc) SQLHWND *"type(c_ptr), intent(out)"
 %typemap(bindc) SQLHENV *"type(c_ptr), intent(out)"
@@ -74,5 +73,8 @@
 %rename("$ignore", regexmatch$name="^SQLColumns_") "";  
 %rename("$ignore", regexmatch$name="^SQLTables_") "";  
 %rename("$ignore", regexmatch$name="^ODBC_") "";  
-%rename("$ignore", regexmatch$name="^TRACE_") "";  
+%rename("$ignore", regexmatch$name="^TRACE_") "";
+%ignore tagODBC_VS_ARGS;
+%ignore tagODBC_VS_ARGS_u1;
+%ignore tagODBC_VS_ARGS_u2;
 %include "../include/sqlext.h"

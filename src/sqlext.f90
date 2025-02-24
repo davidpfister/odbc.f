@@ -35,6 +35,9 @@ module sqlext
  public :: TraceReturn
  public :: TraceVersion
  public :: TraceVSControl
+ public :: FireVSDebugEvent
+ public :: ODBCSetTryWaitValue
+ public :: ODBCGetTryWaitValue
 
 ! WRAPPER DECLARATIONS
 interface
@@ -349,7 +352,7 @@ function TraceVersion() &
 bind(C, name="TraceVersion") &
 result(fresult)
 use, intrinsic :: ISO_C_BINDING
-integer(c_int) :: fresult
+integer(c_int):: fresult
 end function
 
 function TraceVSControl(arg0) &
@@ -371,16 +374,17 @@ bind(C, name="ODBCSetTryWaitValue") &
 result(fresult)
 use, intrinsic :: ISO_C_BINDING
 integer(c_int), intent(in), value :: dwvalue
-integer(c_int) :: fresult
+integer(c_int):: fresult
 end function
 
 function ODBCGetTryWaitValue() &
 bind(C, name="ODBCGetTryWaitValue") &
 result(fresult)
 use, intrinsic :: ISO_C_BINDING
-integer(c_int) :: fresult
+integer(c_int):: fresult
 end function
 
 end interface
+
 
 end module

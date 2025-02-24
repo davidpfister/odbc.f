@@ -3,23 +3,11 @@ and #define SQL_API in other files
 
  
 ```cmd
-@echo off
-
-set mylist=sqltypes,sql,sqlext
-
-for %%i in (%mylist%) do (
-  unifdef -DODBCVER=0x0380 -DSIZEOF_LONG_INT=8 include/origin/%%i.h > include/%%i.h
-  swig -fortran -outdir src/ swig/%%i.i
-  move /Y swig\%%i_wrap.c src
-)
+swig -fortran -outdir src/ swig/sqltypes.i
+swig -fortran -outdir src/ swig/sql.i
+swig -fortran -outdir src/ swig/sqlext.i
+sed -i "s/, intent(in), value :: fresult/:: fresult/g" src/sqlext.f90 
 ```
-
-for WINDOWS 
-```
-unifdef -DODBCVER=0x0380 -D_MSC_VER=1920 -DEXPORT -D_WIN64 -UWIN32 -UUNIX -UOS2 include/origin/sqltypes.h > include/sqltypes.h
-```
-
-SQL_SUCCEEDED(rc) (((rc)&(~1))==0) => rc = 0; result = ((iand(rc, ior(-1, 1))) == 0)
 
 ## Redefine constant
 

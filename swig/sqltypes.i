@@ -1,4 +1,3 @@
-#define ODBCVER 0x0380
 %module sqltypes
 %typemap(bindc) WORD "integer(c_short)"
 %typemap(bindc) BYTE "integer(c_signed_char)"
@@ -29,4 +28,8 @@
 %{                // This adds the include to the generated wrapper.
 #include <sqltypes.h>
 %}
+%ignore tagSQL_INTERVAL_STRUCT;
+%ignore tagSQL_INTERVAL_STRUCT_intval;
+%ignore ODBCINT64_TYPE;
+%ignore UODBCINT64_TYPE;
 %include "../include/sqltypes.h"
