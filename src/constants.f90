@@ -56,6 +56,8 @@ module odbc_constants
               SQLTCHAR
 
     public :: trim
+    character(kind=c_char), pointer, public :: STR_NULL_PTR => NULL()
+    integer(kind=c_short), pointer, public :: SHORT_NULL_PTR => NULL()
 
     !from sql.h
     integer(C_SHORT), parameter, public :: SQL_NULL_DATA = -1
