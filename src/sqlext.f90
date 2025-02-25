@@ -89,7 +89,7 @@ integer(c_short), intent(in), value :: fdesctype
 type(c_ptr), intent(in), value :: rgbdesc
 integer(c_short), intent(in), value :: cbdescmax
 integer(c_short), intent(out) :: pcbdesc
-integer(c_long_long), intent(out) :: pfdesc
+integer(c_long), intent(out) :: pfdesc
 integer(c_short) :: fresult
 end function
 
@@ -117,7 +117,7 @@ use, intrinsic :: ISO_C_BINDING
 type(c_ptr), intent(in), value :: hstmt
 integer(c_short), intent(in), value :: ipar
 integer(c_short), intent(out) :: pfsqltype
-integer(c_long_long), intent(out) :: pcbparamdef
+integer(c_long), intent(out) :: pcbparamdef
 integer(c_short), intent(out) :: pibscale
 integer(c_short), intent(out) :: pfnullable
 integer(c_short) :: fresult
@@ -129,8 +129,8 @@ result(fresult)
 use, intrinsic :: ISO_C_BINDING
 type(c_ptr), intent(in), value :: hstmt
 integer(c_short), intent(in), value :: ffetchtype
-integer(c_long_long), intent(in), value :: irow
-integer(c_long_long), intent(out) :: pcrow
+integer(c_long), intent(in), value :: irow
+integer(c_long), intent(out) :: pcrow
 integer(c_short), intent(out) :: rgfrowstatus
 integer(c_short) :: fresult
 end function
@@ -191,8 +191,8 @@ bind(C, name="SQLParamOptions") &
 result(fresult)
 use, intrinsic :: ISO_C_BINDING
 type(c_ptr), intent(in), value :: hstmt
-integer(c_long_long), intent(in), value :: crow
-integer(c_long_long), intent(out) :: pirow
+integer(c_long), intent(in), value :: crow
+integer(c_long), intent(out) :: pirow
 integer(c_short) :: fresult
 end function
 
@@ -246,7 +246,7 @@ bind(C, name="SQLSetPos") &
 result(fresult)
 use, intrinsic :: ISO_C_BINDING
 type(c_ptr), intent(in), value :: hstmt
-integer(c_long_long), intent(in), value :: irow
+integer(c_long), intent(in), value :: irow
 integer(c_short), intent(in), value :: foption
 integer(c_short), intent(in), value :: flock
 integer(c_short) :: fresult
@@ -291,11 +291,11 @@ integer(c_short), intent(in), value :: ipar
 integer(c_short), intent(in), value :: fparamtype
 integer(c_short), intent(in), value :: fctype
 integer(c_short), intent(in), value :: fsqltype
-integer(c_long_long), intent(in), value :: cbcoldef
+integer(c_long), intent(in), value :: cbcoldef
 integer(c_short), intent(in), value :: ibscale
 type(c_ptr), intent(in), value :: rgbvalue
-integer(c_long_long), intent(in), value :: cbvaluemax
-integer(c_long_long), intent(out) :: pcbvalue
+integer(c_long), intent(in), value :: cbvaluemax
+integer(c_long), intent(out) :: pcbvalue
 integer(c_short) :: fresult
 end function
 
@@ -315,7 +315,7 @@ result(fresult)
 use, intrinsic :: ISO_C_BINDING
 type(c_ptr), intent(in), value :: hstmt
 integer(c_short), intent(in), value :: fconcurrency
-integer(c_long_long), intent(in), value :: crowkeyset
+integer(c_long), intent(in), value :: crowkeyset
 integer(c_short), intent(in), value :: crowrowset
 integer(c_short) :: fresult
 end function

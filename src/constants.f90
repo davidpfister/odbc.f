@@ -2,7 +2,10 @@ module odbc_constants
     use, intrinsic :: iso_c_binding, only: c_short, &
                                                                               c_int, &
                                                                               c_long, &
+                                                                              c_long_long, &
                                                                               c_char, &
+                                                                              c_ptr, &
+                                                                              c_null_ptr, &
                                                                               SQLCHAR => c_char, &
                                                                               SQLTCHAR => c_char, &
                                                                               SQLNUMERIC => c_char, &
@@ -199,7 +202,7 @@ module odbc_constants
     integer(C_SHORT), parameter, public :: SQL_NULL_HSTMT = 0
     integer(C_SHORT), parameter, public :: SQL_NULL_HDESC = 0
     integer(C_SHORT), parameter, public :: SQL_NULL_DESC = 0
-    integer(C_LONG), parameter, public :: SQL_NULL_HANDLE = 0
+    type(C_PTR), parameter, public :: SQL_NULL_HANDLE = C_NULL_PTR
     integer(C_SHORT), parameter, public :: SQL_SCOPE_CURROW = 0
     integer(C_SHORT), parameter, public :: SQL_SCOPE_TRANSACTION = 1
     integer(C_SHORT), parameter, public :: SQL_SCOPE_SESSION = 2
@@ -425,8 +428,8 @@ module odbc_constants
     integer(C_LONG), parameter, public :: SQL_CP_STRICT_MATCH = 0
     integer(C_LONG), parameter, public :: SQL_CP_RELAXED_MATCH = 1
     integer(C_LONG), parameter, public :: SQL_CP_MATCH_DEFAULT = 0
-    integer(C_LONG), parameter, public :: SQL_OV_ODBC2 = 2
-    integer(C_LONG), parameter, public :: SQL_OV_ODBC3 = 3
+    integer(C_LONG_LONG), parameter, public :: SQL_OV_ODBC2 = 2
+    integer(C_LONG_LONG), parameter, public :: SQL_OV_ODBC3 = 3
     integer(C_LONG), parameter, public :: SQL_OV_ODBC3_80 = 380
     integer(C_SHORT), parameter, public :: SQL_ACCESS_MODE = 101
     integer(C_SHORT), parameter, public :: SQL_AUTOCOMMIT = 102
