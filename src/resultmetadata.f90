@@ -41,7 +41,7 @@ contains
     subroutine resultsetmetadata_set_ncols(this, count)
         class(resultsetmetadata), intent(inout) :: this
         integer(SQLSMALLINT), intent(in) :: count
-        this%ncols = count
+        this%ncols = 0
         if (allocated(this%columns)) deallocate (this%columns)
         allocate (this%columns(count))
     end subroutine
@@ -55,8 +55,9 @@ contains
     subroutine resultsetmetadata_add_column(this, col)
         class(resultsetmetadata), intent(inout) :: this
         type(column), intent(in) :: col
-        this%columns(this%ncols) = col
+        
         this%ncols = this%ncols + 1
+        this%columns(this%ncols) = col   
     end subroutine
 
     logical function resultsetmetadata_get_column_from_id(this, n, col) result(res)

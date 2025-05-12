@@ -5,6 +5,8 @@ module odbc_resultset
     use odbc_constants
 
     implicit none; private
+    
+    public :: resultsetmetadata
 
     type, public :: resultset
         private
@@ -52,12 +54,14 @@ contains
         type(resultsetmetadata) :: mtdt
         !private
         integer :: i
-        integer(SQLSMALLINT) :: name_length, column_count
+        integer(SQLSMALLINT) :: name_length
+        integer(SQLSMALLINT), allocatable :: column_count
         integer(SQLRETURN) :: ret
         type(column), target :: col
         character(len=256) :: cMsg
         integer :: nErr, nMsg, iRec, cState
 
+        allocate(column_count, source = 0_sqlsmallint)
         ret = SQLNumResultCols(this%stmt, column_count)
         if (ret == SQL_ERROR .or. ret == SQL_INVALID_HANDLE) then
             call this%handle_errors()
@@ -133,16 +137,17 @@ contains
         if (rc == SQL_ERROR) call this%handle_errors()
     end function
 
-    logical function resultset_bind(this, col_no, buff, n) result(res)
-        class(resultset), intent(inout)        :: this
-        integer(SQLUSMALLINT), intent(in)   :: col_no
-        character(kind=SQLCHAR, len=1), intent(inout), target :: buff(n)
-        integer(c_long), intent(in)                 :: n
+    logical function resultset_bind(this, col_no, buff) result(res)
+        class(resultset), intent(inout)         :: this
+        integer(SQLUSMALLINT), intent(in)       :: col_no
+        character(*, SQLCHAR), intent(inout), target :: buff
         !private
-        integer(SQLLEN) :: sz
+        integer(SQLLEN), allocatable :: sz
         integer(SQLRETURN) :: rc
-
-        rc = SQLBindCol(this%stmt, col_no, SQL_CHAR, c_loc(buff), n, sz)
+        
+        allocate(sz, source = 0)
+        buff = ''
+        rc = SQLBindCol(this%stmt, col_no, SQL_CHAR, c_loc(buff), len(buff, c_long), sz)
         if (rc == SQL_ERROR) call this%handle_errors()
         res = .true.
     end function
