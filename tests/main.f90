@@ -138,7 +138,7 @@ TESTPROGRAM(main)
 
         ! Bind columns
         text = ''; allocate(lens, source = 0)
-        err = SQLBindCol(stmt, col_no, SQLCHAR, c_loc(text), len(text, c_long), lens)
+        err = SQLBindCol(stmt, col_no, SQL_CHAR, c_loc(text), len(text, c_long), lens)
 
         ! Fetch and print results
         err = SQLFetch(stmt)
