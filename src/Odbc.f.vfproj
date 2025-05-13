@@ -56,12 +56,12 @@
 	</Configurations>
 	<Files>
 		<File RelativePath=".\connection.f90"/>
-		<File RelativePath=".\constants.f90">
+		<File RelativePath=".\constants.f90"/>
+		<File RelativePath=".\odbc.f90"/>
+		<File RelativePath=".\columnset.f90">
 		</File>
-		<File RelativePath=".\odbc.f90">
+		<File RelativePath=".\resultset.f90">
 		</File>
-		<File RelativePath=".\resultmetadata.f90"/>
-		<File RelativePath=".\resultset.f90"/>
 		<File RelativePath=".\sql.f90"/>
 		<File RelativePath=".\sqlext.f90"/>
 		<File RelativePath=".\sqltypes.f90"/>

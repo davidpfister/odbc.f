@@ -252,7 +252,7 @@ TESTPROGRAM(main)
         character(*), parameter :: xfile = dir//'test.xls'
 #endif
         conn = connection("DRIVER={Microsoft Excel Driver (*.xls, *.xlsx, *.xlsm, *.xlsb)};ReadOnly=False;DBQ="// xfile)
-        EXPECT_TRUE(conn%open())
+        call conn%open()
         EXPECT_TRUE(conn%execute('create table sin (x numeric, y numeric)') == 0)
 
         x = [((i*.1), i=1, 100)]
@@ -271,12 +271,11 @@ TESTPROGRAM(main)
     TEST(test_access_oop)
         use odbc_connection
    
-        type(connection) :: conn
-        character(256) :: text
-        type(resultset) :: rslt
-        type(resultsetmetadata) :: mtdt
-        character(50, SQLCHAR) :: strName
-        integer :: n
+        type(connection)        :: conn
+        character(256)          :: text
+        type(resultset)         :: rslt
+        character(:), allocatable  :: name
+        integer :: i, j, k
 #ifndef _FPM
         character(*), parameter :: dir = 'TestData/'
         character(*), parameter :: xfile = dir//'chinook.accdb'
@@ -287,16 +286,32 @@ TESTPROGRAM(main)
         write (text, & 
             '("Driver={Microsoft Access Driver (*.mdb, *.accdb)};Dbq=", A)') xfile
         conn = connection(text)
-        EXPECT_TRUE(conn%open())
+        call conn%open()
+        EXPECT_TRUE(conn%is_open())
         
-        rslt = conn%execute_query('SELECT TOP 3 * FROM albums ORDER BY AlbumId')
-        mtdt = rslt%get_metadata()
-        EXPECT_EQ(mtdt%count(), 3)
+        call conn%execute_query('SELECT TOP 3 * FROM albums ORDER BY AlbumId', rslt)
+        EXPECT_EQ(rslt%ncolumns(), 3)
         
-        EXPECT_TRUE(rslt%bind(2, strName))
-        do while(rslt%movenext())
-            print*, strName
-            strName = ''
+        k = 0
+        do while(rslt%next())
+            k = k + 1
+            i = rslt%get_integer(1)
+            j = rslt%get_integer(3)
+            name = rslt%get_string(2)
+            select case(k)
+            case(1)
+                EXPECT_EQ(i, 1)
+                EXPECT_STREQ(name, 'For Those About To Rock We Salute You')
+                EXPECT_EQ(j, 1)
+            case(2)
+                EXPECT_EQ(i, 2)
+                EXPECT_STREQ(name, 'Balls to the Wall')
+                EXPECT_EQ(j, 2)
+            case(3)
+                EXPECT_EQ(i, 3)
+                EXPECT_STREQ(name, 'Restless and Wild')
+                EXPECT_EQ(j, 2)
+            end select
         end do
         call conn%close()
     END_TEST

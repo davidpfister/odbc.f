@@ -1,22 +1,22 @@
 #include <c_interop.inc>
 module odbc_connection
     use, intrinsic :: iso_c_binding
+    use, intrinsic :: iso_fortran_env, only: stderr => error_unit
     use sql
     use sqlext
     use odbc_constants
-    use odbc_resultset, only: resultset, resultsetmetadata
+    use odbc_resultset, only: resultset, new
 
     implicit none; private
     
-    public :: resultset,    &
-              resultsetmetadata
+    public :: resultset
 
     type, public :: connection
         private
         type(SQLHENV)                   :: env
         type(SQLHDBC)                   :: dbc
         type(SQLHSTMT)                  :: stmt
-        logical                         :: is_opened
+        logical                         :: opened
         integer                         :: timeout
         integer(SQLSMALLINT)            :: rec
         character(kind=SQLTCHAR, len=6) :: state
@@ -26,19 +26,19 @@ module odbc_connection
         character(1024)                 :: connstring
     contains
         private
-        procedure, pass(this), public   :: set_timeout => connection_set_timeout
-        procedure, pass(this), public   :: get_timeout => connection_get_timeout
-        procedure, pass(this), public   :: isopened => connection_isopened
+        procedure, pass(this), public   :: set_timeout  => connection_set_timeout
+        procedure, pass(this), public   :: get_timeout  => connection_get_timeout
+        procedure, pass(this), public   :: is_open    => connection_isopened
         procedure, pass(this), private  :: connection_open
-        generic, public                 :: open => connection_open
-        procedure, pass(this), public   :: execute => connection_execute
+        generic, public                 :: open         => connection_open
+        procedure, pass(this), public   :: execute      => connection_execute
         procedure, pass(this), private  :: connection_execute_query
         procedure, pass(this), private  :: connection_execute_query_with_cursor
         generic, public                 :: execute_query => connection_execute_query, &
                                                             connection_execute_query_with_cursor
-        procedure, pass(this), public   :: commit => connection_commit
-        procedure, pass(this), public   :: rollback => connection_rollback
-        procedure, pass(this), public   :: close => connection_close
+        procedure, pass(this), public   :: commit       => connection_commit
+        procedure, pass(this), public   :: rollback     => connection_rollback
+        procedure, pass(this), public   :: close        => connection_close
         final :: connection_finalize
     end type
 
@@ -46,9 +46,9 @@ module odbc_connection
         module procedure :: connection_new
     end interface
 
-    interface throw_exception
-            module procedure :: throw_exception_i2
-            module procedure :: throw_exception_i4
+    interface throw
+            module procedure :: throw_i2
+            module procedure :: throw_i4
     end interface
 
 contains
@@ -60,41 +60,37 @@ contains
         that%env = NULL
         that%dbc = NULL
         that%stmt = NULL
-        that%is_opened = .false.
+        that%opened = .false.
         that%timeout = 10
         that%rec = _SHORT(1)
         that%connstring = _STRING(connstring)
     end function
 
-    function connection_open(this) result(success)
+    subroutine connection_open(this)
         class(connection), intent(inout)    :: this
-        logical :: success
-        !private
-        integer(SQLRETURN) :: ret 
 
-        ret = SQLAllocHandle(SQL_HANDLE_ENV, SQL_NULL_HANDLE, this%env)
-        if (ret /= 0) call handle_error(this, 'ENV')
+        this%ierr = SQLAllocHandle(SQL_HANDLE_ENV, SQL_NULL_HANDLE, this%env)
+        if (this%ierr /= 0) call handle_error(this, 'ENV')
 
-        ret = SQLSetEnvAttr(this%env, SQL_ATTR_ODBC_VERSION, _PTR(SQL_OV_ODBC3), 0)
-        if (ret /= 0) call handle_error(this, 'ENV')
+        this%ierr = SQLSetEnvAttr(this%env, SQL_ATTR_ODBC_VERSION, _PTR(SQL_OV_ODBC3), 0)
+        if (this%ierr /= 0) call handle_error(this, 'ENV')
 
-        ret = SQLAllocHandle(SQL_HANDLE_DBC, this%env, this%dbc)
-        if (ret == SQL_ERROR) then
+        this%ierr = SQLAllocHandle(SQL_HANDLE_DBC, this%env, this%dbc)
+        if (this%ierr == SQL_ERROR) then
             call handle_error(this, 'ENV')
-        else if (ret == SQL_INVALID_HANDLE .or. ret < SQL_SUCCESS) then
+        else if (this%ierr == SQL_INVALID_HANDLE .or. this%ierr < SQL_SUCCESS) then
             call handle_error(this, 'ENV')
         end if
 
-        ret = SQLDriverConnect(this%dbc, NULL, this%connstring &
+        this%ierr = SQLDriverConnect(this%dbc, NULL, this%connstring &
                 , int(len_trim(this%connstring), c_short), STR_NULL_PTR, _SHORT(0), SHORT_NULL_PTR, SQL_DRIVER_COMPLETE)
-        if (ret /= SQL_SUCCESS) call handle_error(this, 'DBC')
+        if (this%ierr /= SQL_SUCCESS) call handle_error(this, 'DBC')
 
-        ret = SQLAllocStmt(this%dbc, this%stmt)
-        if (ret /= SQL_SUCCESS) call handle_error(this, 'DBC')
+        this%ierr = SQLAllocStmt(this%dbc, this%stmt)
+        if (this%ierr /= SQL_SUCCESS) call handle_error(this, 'DBC')
 
-        this%is_opened = .true.
-        success = .true.
-    end function
+        this%opened = .true.
+    end subroutine
 
     function connection_get_timeout(this) result(res)
         class(connection), intent(in)       :: this
@@ -114,7 +110,7 @@ contains
         class(connection), intent(in)       :: this
         logical :: res
 
-        res = this%is_opened
+        res = this%opened
     end function
 
     function connection_execute(this, sql) result(count)
@@ -122,99 +118,99 @@ contains
         character(*), intent(in)            :: sql
         integer(c_int) :: count
         !private
-        integer(SQLRETURN) :: ret
         integer(SQLLEN), allocatable :: countInt
         character(len(sql)) :: tmp
 
-        if (.not. this%is_opened) call handle_error(this, 'Call Open() before execute()')
+        if (.not. this%opened) call handle_error(this, 'Call Open() before execute()')
 
-        ret = SQLPrepare(this%stmt, _STRING(sql), SQL_NTS)
-        if (ret == SQL_ERROR) call handle_error(this, 'STMT')
+        this%ierr = SQLPrepare(this%stmt, _STRING(sql), SQL_NTS)
+        if (this%ierr == SQL_ERROR) call handle_error(this, 'STMT')
 
-        ret = SQLExecute(this%stmt)
-        if (ret == SQL_ERROR .or. ret < SQL_SUCCESS) call handle_error(this, 'STMT')
+        this%ierr = SQLExecute(this%stmt)
+        if (this%ierr == SQL_ERROR .or. this%ierr < SQL_SUCCESS) call handle_error(this, 'STMT')
 
         allocate(countInt, source = _LONG(0))
         tmp = to_lower(sql)
         if (index(tmp, 'update') > 0 .or. &
             index(tmp, 'insert') > 0 .or. &
-            index(tmp, 'deleta') > 0) then
-            ret = SQLRowCount(this%stmt, countInt)
+            index(tmp, 'delete') > 0) then
+            this%ierr = SQLRowCount(this%stmt, countInt)
         end if
-        count = merge(int(ret, c_int), int(countInt, c_int), ret /= SQL_SUCCESS)
+        count = merge(int(this%ierr, c_int), int(countInt, c_int), this%ierr /= SQL_SUCCESS)
     end function   
 
-    function connection_execute_query(this, sql) result(rslt)
+    subroutine connection_execute_query(this, sql, rslt)
         class(connection), intent(inout)    :: this
         character(*), intent(in)            :: sql
-        type(resultset) :: rslt
+        type(resultset), intent(inout)      :: rslt
         !private
-        integer(SQLRETURN) :: ret
         integer(c_int), target :: cursor
 
         cursor = SQL_CURSOR_DYNAMIC
 
-        if (.not. this%is_opened) call throw_exception('Connection not opened', SQL_ERROR)
+        if (.not. this%opened) call throw('Connection not opened', SQL_ERROR)
 
-        ret = SQLFreeStmt(this%stmt, SQL_CLOSE)
-        ret = SQLAllocStmt(this%dbc, this%stmt)
-        if (ret == SQL_ERROR .or. ret == SQL_INVALID_HANDLE .or. ret < SQL_SUCCESS) call handle_error(this, 'DBC')
+        this%ierr = SQLFreeStmt(this%stmt, SQL_CLOSE)
+        this%ierr = SQLAllocStmt(this%dbc, this%stmt)
+        if (this%ierr == SQL_ERROR .or. &
+            this%ierr == SQL_INVALID_HANDLE .or. &
+            this%ierr < SQL_SUCCESS) call handle_error(this, 'DBC')
 
-        ret = SQLSetStmtAttr(this%stmt, SQL_ATTR_CURSOR_TYPE, c_loc(cursor), SQL_IS_INTEGER)
-        if (ret < SQL_SUCCESS) call handle_error(this, 'STMT')
+        this%ierr = SQLSetStmtAttr(this%stmt, SQL_ATTR_CURSOR_TYPE, c_loc(cursor), SQL_IS_INTEGER)
+        if (this%ierr < SQL_SUCCESS) call handle_error(this, 'STMT')
 
-        ret = SQLExecDirect(this%stmt, _STRING(sql), SQL_NTS)
-        if (ret == -1) call handle_error(this, 'STMT')
+        this%ierr = SQLExecDirect(this%stmt, _STRING(sql), SQL_NTS)
+        if (this%ierr == -1) call handle_error(this, 'STMT')
 
-        rslt = resultset(this%stmt)
-    end function
+        call new(rslt, this%stmt)
+    end subroutine
 
-    function connection_execute_query_with_cursor(this, sql, cursor_type, scrollable) result(rslt)
+    subroutine connection_execute_query_with_cursor(this, sql, cursor_type, scrollable, rslt)
         class(connection), intent(inout)        :: this
         character(*), intent(in)                :: sql
         integer(c_short), intent(in), target    :: cursor_type
         logical, intent(in)                     :: scrollable
-        type(resultset) :: rslt
+        type(resultset), intent(inout)          :: rslt
         !private
-        integer(c_short) :: ret
         integer(c_short), target :: dummy
 
         dummy = SQL_SCROLLABLE
 
-        if (.not. this%is_opened) call throw_exception('Connection not opened', SQL_ERROR)
+        if (.not. this%opened) call throw('Connection not opened', SQL_ERROR)
 
         if (cursor_type /= SQL_CURSOR_DYNAMIC .and. cursor_type /= SQL_CURSOR_FORWARD_ONLY &
             .and. cursor_type /= SQL_CURSOR_KEYSET_DRIVEN &
             .and. cursor_type /= SQL_CURSOR_STATIC) then
-            call throw_exception('Invalid cursor type', SQL_ERROR)
+            call throw('Invalid cursor type', SQL_ERROR)
         end if
 
-        ret = SQLFreeStmt(this%stmt, SQL_CLOSE)
-        ret = SQLAllocStmt(this%dbc, this%stmt)
-        if (ret == SQL_ERROR .or. ret == SQL_INVALID_HANDLE .or. ret < SQL_SUCCESS) call handle_error(this, 'DBC')
+        this%ierr = SQLFreeStmt(this%stmt, SQL_CLOSE)
+        this%ierr = SQLAllocStmt(this%dbc, this%stmt)
+        if (this%ierr == SQL_ERROR .or. &
+            this%ierr == SQL_INVALID_HANDLE .or. &
+            this%ierr < SQL_SUCCESS) call handle_error(this, 'DBC')
 
-        ret = SQLSetStmtAttr(this%stmt, SQL_ATTR_CURSOR_TYPE, c_loc(cursor_type), SQL_IS_INTEGER)
-        if (ret < SQL_SUCCESS) call handle_error(this, 'STMT')
+        this%ierr = SQLSetStmtAttr(this%stmt, SQL_ATTR_CURSOR_TYPE, c_loc(cursor_type), SQL_IS_INTEGER)
+        if (this%ierr < SQL_SUCCESS) call handle_error(this, 'STMT')
 
         if (scrollable) then
-            ret = SQLSetStmtAttr(this%stmt, SQL_ATTR_CURSOR_SCROLLABLE, c_loc(dummy), SQL_IS_INTEGER)
-            if (ret < SQL_SUCCESS) call handle_error(this, 'STMT')
+            this%ierr = SQLSetStmtAttr(this%stmt, SQL_ATTR_CURSOR_SCROLLABLE, c_loc(dummy), SQL_IS_INTEGER)
+            if (this%ierr < SQL_SUCCESS) call handle_error(this, 'STMT')
         end if
 
-        ret = SQLExecDirect(this%stmt, sql, len_trim(sql))
-        if (ret == SQL_ERROR) call handle_error(this, 'STMT')
+        this%ierr = SQLExecDirect(this%stmt, sql, len_trim(sql))
+        if (this%ierr == SQL_ERROR) call handle_error(this, 'STMT')
 
-        rslt = resultset(this%stmt)
-    end function
+        call new(rslt, this%stmt)
+    end subroutine
 
     function connection_commit(this) result(success)
         class(connection), intent(inout)    :: this
         logical :: success
-        !private
-        integer(SQLRETURN) :: ret
 
-        ret = SQLEndTran(SQL_HANDLE_DBC, this%dbc, SQL_COMMIT)
-        if (ret == SQL_ERROR .or. ret == SQL_INVALID_HANDLE) call throw_exception('Commit failed', ret)
+        this%ierr = SQLEndTran(SQL_HANDLE_DBC, this%dbc, SQL_COMMIT)
+        if (this%ierr == SQL_ERROR .or. &
+            this%ierr == SQL_INVALID_HANDLE) call throw('Commit failed', this%ierr)
 
         success = .true.
     end function
@@ -222,25 +218,23 @@ contains
     function connection_rollback(this) result(success)
         class(connection), intent(inout)    :: this
         logical :: success
-        !private
-        integer(c_short) :: ret
 
-        ret = SQLEndTran(SQL_HANDLE_DBC, this%dbc, SQL_ROLLBACK)
-        if (ret == SQL_ERROR .or. ret == SQL_INVALID_HANDLE) call throw_exception('Rollback failed', ret)
+        this%ierr = SQLEndTran(SQL_HANDLE_DBC, this%dbc, SQL_ROLLBACK)
+        if (this%ierr == SQL_ERROR .or.&
+            this%ierr == SQL_INVALID_HANDLE) call throw('Rollback failed', this%ierr)
 
         success = .true.
     end function
 
     subroutine connection_close(this)
         class(connection), intent(inout)    :: this
-        !private
-        integer(SQLRETURN) :: ret
-        if (this%is_opened) then
-            ret = SQLFreeStmt(this%stmt, SQL_CLOSE)
-            ret = SQLDisconnect(this%dbc)
-            ret = SQLFreeConnect(this%dbc)
-            ret = SQLFreeEnv(this%env)
-            this%is_opened = .false.
+
+        if (this%opened) then
+            this%ierr = SQLFreeStmt(this%stmt, SQL_CLOSE)
+            this%ierr = SQLDisconnect(this%dbc)
+            this%ierr = SQLFreeConnect(this%dbc)
+            this%ierr = SQLFreeEnv(this%env)
+            this%opened = .false.
         end if
     end subroutine
 
@@ -270,33 +264,34 @@ contains
                                    this%state, this%ierr, this%msg, &
                                    len(this%msg, SQLSMALLINT), this%imsg)
         else
-            call throw_exception(trim(this%msg), this%ierr)
+            call throw(trim(this%msg), this%ierr)
         end if
 
         if (status /= SQL_SUCCESS) then
-            call throw_exception(trim(this%msg), this%ierr)
+            call throw(trim(this%msg), this%ierr)
         end if
     end subroutine
 
-    subroutine throw_exception_i2(msg, errCode)
-        character(*), intent(in)        :: msg
-        integer(SQLSMALLINT), intent(in) :: errCode
+    subroutine throw_i2(msg, ierr)
+        character(*), intent(in)         :: msg
+        integer(SQLSMALLINT), intent(in) :: ierr
 
-        print *, 'connection error: ', msg, ' Error code: ', errCode
-        stop
+        write(stderr, '("connection error: ", A, "Error code: ", i0)') msg, ierr
+        error stop ierr
     end subroutine
 
-    subroutine throw_exception_i4(msg, errCode)
+    subroutine throw_i4(msg, ierr)
         character(*), intent(in)        :: msg
-        integer(SQLINTEGER), intent(in) :: errCode
+        integer(SQLINTEGER), intent(in) :: ierr
 
-        print *, 'connection error: ', msg, ' Error code: ', errCode
-        stop
+        write(stderr, '("connection error: ", A, "Error code: ", i0)') msg, ierr
+        error stop ierr
     end subroutine
     
     pure function to_lower(str) result(res)
-        character(*), intent(in) :: str
-        character(len(str)) :: res
+        character(*), intent(in)    :: str
+        character(len(str))         :: res
+        !private
         integer :: i,j
         integer, parameter :: A = iachar('A'), Z = iachar('Z') 
         
@@ -308,6 +303,5 @@ contains
                 res(i:i) = str(i:i)
             end if
         end do
-
     end function
 end module
