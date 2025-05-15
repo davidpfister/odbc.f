@@ -14,7 +14,7 @@
   <p align="center">
     ODBC (Open Database Connectivity) bindings for Fortran.
     <br />
-    <a href="https://github.com/davidpfister/odbc.f"><strong>Explore the project »</strong></a>
+    <a href="https://github.com/davidpfister/odbc.f"><strong>Explore the project</strong></a>
     <br />
   </p>
 </div>
@@ -26,14 +26,32 @@
 
 # Introduction
 <!-- ABOUT THE PROJECT -->
+The Fortran ODBC Library (_odbc.f_) is a modern, lightweight, and robust interface designed to enable seamless interaction between Fortran applications and relational databases through the Open Database Connectivity (ODBC) standard. This library provides a set of Fortran modules and procedures that allow developers to connect to ODBC-compliant databases, execute SQL queries, and manage data directly from Fortran programs, leveraging the power and simplicity of modern Fortran standards.
+
 ## About the Project
 <p align="center">
-  <img src="https://github.com/davidpfister/odbc.f/blob/master/.dox/images/screenshot.png?raw=true">
+  <img src="https://github.com/davidpfister/odbc.f/blob/master/.dox/images/icon.jpg?raw=true">
 </p>
-Fortran is the fastest language on earth, so they say. But can we prove it? <br><br>
-Despite its legendary speed when crunching numbers, Fortran is no exception when it comes to writing code: it's also very possible to write terribly slow pieces of code. This is where benchmarking different implementations of the same function can help developing better and faster algorithms.  
+ 
+ ### Purpose and scope
 
-This project aims at providing an easy interface to benchmark functions and subroutines while taking care of warming up the machine, collecting system information, computing statistics and reporting results. 
+ The primary goal of _odbc.f_ is to bridge the gap between high-performance Fortran applications and database systems, enabling scientific, engineering, and data-intensive applications to integrate with databases such as PostgreSQL, MySQL, SQL Server, and others that support ODBC drivers. The library is designed with modern Fortran practices in mind, emphasizing type safety, modularity, and ease of use while maintaining compatibility with the ODBC API. The binding is nearly complete meaning that it implements all functions present in the ODBC v3.8 standard but the ones related to `intervals`. The underlying C-structure contains a `union` that is not (yet) compatible with the `iso_c_binding` introduced in modern Fortran. 
+
+_odbc.f_ supports essential database operations, including:
+- Establishing and managing database connections
+- Executing SQL statements (queries, updates, and stored procedures)
+- Fetching and processing result sets
+- Handling errors and diagnostics
+
+This documentation provides comprehensive guidance on installing, configuring, and using the _odbc.f_ library, along with examples and best practices for integrating database functionality into Fortran applications.
+
+### Key Features
+
+- Modern Fortran Interface: Built using Fortran 2003/2008 features, including object-oriented programming, derived types, and robust error handling.
+- Cross-Platform Compatibility: Works with ODBC drivers on Windows, Linux, and macOS, ensuring portability across major operating systems.
+- Simplified API: Provides a high-level, Fortran-centric interface that abstracts low-level ODBC complexities while maintaining flexibility on top of the raw API.
+- Extensive Error Handling: Includes detailed diagnostic tools to help developers troubleshoot database issues.
+- Open Source: Distributed under a permissive license, encouraging community contributions and adoption.
 
 * [![fpm][fpm]][fpm-url]
 * [![ifort][ifort]][ifort-url]
@@ -46,7 +64,7 @@ This project aims at providing an easy interface to benchmark functions and subr
 
 To build that library you need
 
-- a Fortran 2008 compliant compiler, or better, a Fortran 2018 compliant compiler (Intel Fortran compiler is known to work well for _odbc.f_. gfortran has some limitations when using implicit procedures and unlimited polymorphic arguments. Please refer to the [documentation](https://davidpfister.github.io/odbc.f/compiler_differences.html) to see the difference between compilers).
+- a Fortran 2008 compliant compiler, or better, a Fortran 2018 compliant compiler.
 
 The following compilers are tested on the default branch of _odbc.f_:
 
@@ -59,9 +77,7 @@ The following compilers are tested on the default branch of _odbc.f_:
 
 </center>
 
-- a preprocessor. _odbc.f_ uses quite some preprocessor macros. It is known to work both with intel `fpp` and `cpp`.  
-
-Unit test rely on the the header file [`assertion.inc`](https://github.com/davidpfister/fortiche/tree/master/src/assertion). Since the whole framework fits in a single file, it has been added directly to the repo. 
+- a preprocessor. Unit test rely on the the header file [`assertion.inc`](https://github.com/davidpfister/fortiche/tree/master/src/assertion). It uses quite some preprocessor macros. It is known to work both with intel `fpp` and `cpp`. Since the whole framework fits in a single file, it has been added directly to the repo. 
 
 Linting, indentation, and styling is done with [fprettify](https://github.com/fortran-lang/fprettify) with the following settings
 ```bash
@@ -71,44 +87,56 @@ fprettify .\src\ -r --case 1 1 1 1 -i 4 --strict-indent --enable-replacements --
 <!-- USAGE EXAMPLES -->
 ## Usage
 
-Running the benchmark could not be simpler. 
-
-1. Start by including the file `benchmark.inc` into your code
-2. Instantiate a benchmark runner 
-3. Run the benchmark
-
-The first step is to create a test function. It can be a function or a subroutine (gfortran only handles subroutine. For more issues related to gfortran, see [this article](https://davidpfister.github.io/odbc.f/compiler_differences.html) ) with any number of arguments between 0 and 7. 
+To open a connection to an ODBC data source, you have to create an object of type `connection` and call its `open()` member function:
 ```fortran
-!the funcion to be benchmarked
-subroutine test_function()
-...
-end subroutine
+type(connection) :: conn
+
+conn = connection('connection_string')
+call conn%open()
 ```
-And then simply call the `benchmark` macro.
+For retrieving data from the database, you have to use the `resultset` type:
 ```fortran
-#include <benchmark.inc>
-program test
-use benchmark_library
-
-type(runner) :: br
-
-benchmark(br, run(test_function))
+type(resulset) :: rslt
+rslt = conn%execute_query("SELECT * FROM emp")
 ```
-This will generate this kind of table: 
+Information about the `resultset`, like the number of columns in it, can be obtained by calling the `get_metadata()` function, which returns an object of `resultsetmetadata`.
+```fortran
+type(resultsetmetadata) :: mtdt
+integer :: column_count
 
-     |         Method Name      |          Mean          |    Standard Deviation  |
-     |__________________________|________________________|________________________|
-     |test_function()           |           217350.000 us|          +/- 161306.626|
+mtdt = rslt%get_metadata()
+column_count = mtdt%count()
+print *, "Columns returned", column_count
+```
+For getting information about a particular column, call the `get_column` member function of `resultsetmetadata`:
+```fortran
+type(column) :: col
+call mtdt%get_column(1, col)
+```
 
-_For more examples, please refer to the [Documentation](https://davidpfister.github.io/odbc.f/examples_toc.html)_
+Data stored in a `resultset` has to be bound to memory buffers for retrieval. This is done using the `bind()` function of `resultset`:
+```fortran
+character(kind=c_char, len=1) :: strName(26)
+call rslt%bind(1,strName,25) // arguments: column number, buffer, maximum length of buffer
+```
 
-The library takes care of everything else for you
-- Collection of system information
-- Collection of compiler information
-- Collection of compilation options
-- Reporting
+The above code binds the first column in the table with the buffer strName. Now, whenever data is returned by the `resultset`, the first column's data will be stored in the variable strName. Data can be pulled out of the `resultset` object by calling either the `first()`, `next()`, `previous()` or `last()` member functions. For e.g., the following code prints out the value of the first column in the `resultset`:
+```fortran
+do while(rslt%next())
+   i = rslt%get_integer(1)
+   j = rslt%get_integer(3)
+   name = rslt%get_string(2)
+end do
+```
 
-### Installation
+For executing any other SQL statements, you have to call the `execute()` member function of `connection`:
+```fortran
+integer :: nrows
+nrows = db%Execute("DELETE FROM emp")
+```
+The `exceute()` function will return the number of rows affected by the statement. After database operations are over, you must release the resources occupied by ODBC by calling the `close()` function of the class `connection`.
+
+## Installation
 
 #### Get the code
 ```bash
@@ -116,11 +144,20 @@ git clone https://github.com/davidpfister/odbc.f
 cd odbc.f
 ```
 
+### Generate the interface with swig
+
+```cmd
+swig -fortran -outdir src/ swig/sqltypes.i
+swig -fortran -outdir src/ swig/sql.i
+swig -fortran -outdir src/ swig/sqlext.i
+sed -i "s/, intent(in), value :: fresult/:: fresult/g" src/sqlext.f90 
+```
+
 #### Build with fpm
 
 The repo can be build using _fpm_
 ```bash
-fpm build --flag '-ffree-line-length-none'
+fpm build
 ```
 For convenience, the  repo also contains a response file that can be invoked as follows: 
 ```
@@ -141,9 +178,9 @@ set FPM_FC=ifort
 Besides the build command, several commands are also available:
 ```bash
 @pretiffy
-system fprettify .\examples\ -r --case 1 1 1 1 -i 4 --strict-indent --enable-replacements --strip-comments --c-relations
 system fprettify .\src\ -r --case 1 1 1 1 -i 4 --strict-indent --enable-replacements --strip-comments --c-relations
 system fprettify .\tests\ -r --case 1 1 1 1 -i 4 --strict-indent --enable-replacements --strip-comments --c-relations
+option clean --all
 
 @clean
 option clean --all
@@ -156,33 +193,16 @@ option build --flag '-ffree-line-length-none'
 option build --flag '-ffree-line-length-none'
 
 @test
-options test --flag '-ffree-line-length-none'
+options test --flag '-ffree-line-length-none' '-D_QUIET' 
 
 @doc
 option clean --all
 system cd ./.dox & doxygen ./Doxyfile.in & cd ..
 ```
 
-The toml files contains two items that are worth commenting: 
-1. The settings to the cpp preprocessor are specified in the file. 
-
-```toml
-[preprocess]
-cpp.suffixes = ["F90", "f90"]
-cpp.macros = ["_FPM"]
-```
-The `_FPM` macro is used to differentiate the build when compiling with _fpm_ or _Visual Studio_. This is mostly present to adapt the hard coded paths that differs in both cases.
-
-2. The code must also be compiled allowing implicit procedures. This is reflected in the following option. 
-```toml
-[fortran]
-implicit-external = true
-```
-In order to be able to benchmark functions AND subroutines with any number of dummy arguments (0 to 7 at the moment) of any types (intrinsic or derived types), implicit procedures are a must. While this may be considered as bad practice and a remainder from F77 and the good old external, there would be no other way to provide a generic library without this option. 
-
 #### Build with Visual Studio 2019
 
-The project was originally developed on Windows with Visual Studio 2019. The repo contains the solution file (_odbc.f.sln_) to get you started with Visual Studio 2019. 
+The project was originally developed on Windows with Visual Studio 2019. The repo contains the solution file (_Odbc.f.sln_) to get you started with Visual Studio 2019. 
 
 <!-- CONTRIBUTING -->
 ### Contributing
@@ -273,98 +293,3 @@ Distributed under the MIT License.
 [fpm]: https://img.shields.io/badge/fpm-000000?style=for-the-badge&logo=Fortran&logoColor=734F96
 [fpm-url]: https://fpm.fortran-lang.org/
 
- 
-```cmd
-swig -fortran -outdir src/ swig/sqltypes.i
-swig -fortran -outdir src/ swig/sql.i
-swig -fortran -outdir src/ swig/sqlext.i
-sed -i "s/, intent(in), value :: fresult/:: fresult/g" src/sqlext.f90 
-```
-
-## Redefine constant
-
-### Change type
-%apply short {int SQL_HANDLE_ENV};
-%apply short {int SQL_HANDLE_DBC};
-%apply short {int SQL_HANDLE_STMT};
-%apply short {int SQL_HANDLE_DESC};
-
-### Make is constant parameter
-%fortranconst SQL_HANDLE_ENV;
-%constant short SQL_HANDLE_ENV = 1;
-%fortranconst SQL_HANDLE_DBC;
-%constant short SQL_HANDLE_DBC = 2;
-%fortranconst SQL_HANDLE_STMT;
-%constant short SQL_HANDLE_STMT = 3;
-%fortranconst SQL_HANDLE_DESC;
-%constant short SQL_HANDLE_DESC = 4;
-
-## Connection string
-
-see [ConnectionString.com](https://www.connectionstrings.com/)
-
-### Access
-Driver={Microsoft Access Driver (*.mdb)};Dbq=C:\mydatabase.mdb;Uid=Admin;Pwd=;
-### Excel
-Driver={Microsoft Excel Driver (*.xls, *.xlsx, *.xlsm, *.xlsb)};DBQ=C:\MyExcel.xls;
-### PostgreSQL
-Driver={PostgreSQL};Server=IP address;Port=5432;Database=myDataBase;Uid=myUsername;Pwd=myPassword;
-### MySQL
-- local
-Driver={mySQL};Server=localhost;Option=16834;Database=myDataBase;
-- remote
-Driver={mySQL};Server=myServerAddress;Port=3306;Option=131072;Stmt=;Database=myDataBase;User=myUsername;Password=myPassword;
-### SQLite
-DRIVER=SQLite3 ODBC Driver;Database=c:\mydb.db;LongNames=0;Timeout=1000;NoTXN=0;SyncPragma=NORMAL;StepAPI=0;
-### SQLServer
-Driver={SQL Server};Server=myServerAddress;Database=myDataBase;Uid=myUsername;Pwd=myPassword;
-### HDF5
-DRIVER={HDF5 ODBC Connector BASIC};DBF=/home/user/HDF5_ODBC_Basic/HDF5/tickdata.h5
-### CSV
-Driver={Microsoft Access Text Driver (*.txt, *.csv)};Dbq="";Extensions=csv;
-
-## Using the code
-To open a connection to an ODBC data source, you have to create an object of type `connection` and call its `open()` member function:
-```fortran
-type(connection) :: db
-call db%open("MY_ODBC","username","password")
-```
-For retrieving data from the database, you have to use the `resultset` type:
-```fortran
-type(resulset) :: rslt
-rslt = db%execute_query("SELECT * FROM emp")
-```
-Information about the `resultset`, like the number of columns in it, can be obtained by calling the `get_metadata()` function, which returns an object of `resultsetmetadata`.
-```fortran
-type(resultsetmetadata) :: mtdt
-integer :: column_count
-
-mtdt = rslt%get_metadata()
-column_count = mtdt%count()
-print *, "Columns returned", column_count
-```
-For getting information about a particular column, call the `get_column` member function of `resultsetmetadata`:
-```fortran
-type(column) :: col
-call mtdt%get_column(1, col)
-```
-
-Data stored in a `resultset` has to be bound to memory buffers for retrieval. This is done using the `bind()` function of `resultset`:
-```fortran
-character(kind=c_char, len=1) :: strName(26)
-call rslt%bind(1,strName,25) // arguments: column number, buffer, maximum length of buffer
-```
-
-The above code binds the first column in the table with the buffer strName. Now, whenever data is returned by the `resultset`, the first column's data will be stored in the variable strName. Data can be pulled out of the `resultset` object by calling either the `movefirst()`, `movenext()`, `moveprevious()` or `movelast()` member functions. For e.g., the following code prints out the value of the first column in the `resultset`:
-```fortran
-do while(rslt%movenext())
-    print*,strName
-end do
-```
-
-For executing any other SQL statements, you have to call the `execute()` member function of `connection`:
-```fortran
-integer :: nrows
-nrows = db%Execute("DELETE FROM emp")
-```
-The `exceute()` function will return the number of rows affected by the statement. After database operations are over, you must release the resources occupied by ODBC by calling the `close()` function of the class `connection`.
