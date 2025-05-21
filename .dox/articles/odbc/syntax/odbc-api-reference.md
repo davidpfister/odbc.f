@@ -36,7 +36,7 @@ This section contains articles for the following functions:
 - [SQLColAttributes Function](https://learn.microsoft.com/en-us/sql/odbc/reference/syntax/sqlcolattributes-function?view=sql-server-ver16)
 - [SQLColumnPrivileges Function](https://learn.microsoft.com/en-us/sql/odbc/reference/syntax/sqlcolumnprivileges-function?view=sql-server-ver16)
 - [SQLColumns Function](https://learn.microsoft.com/en-us/sql/odbc/reference/syntax/sqlcolumns-function?view=sql-server-ver16)
-- [SQLCompleteAsync Function](sqlcompleteasync-function.md)
+- [SQLCompleteAsync Function](https://learn.microsoft.com/en-us/sql/odbc/reference/syntax/sqlcompleteasync-function?view=sql-server-ver16)
 - [SQLConnect Function](https://learn.microsoft.com/en-us/sql/odbc/reference/syntax/sqlconnect-function?view=sql-server-ver16)
 - [SQLCopyDesc Function](https://learn.microsoft.com/en-us/sql/odbc/reference/syntax/sqlcompleteasync-function?view=sql-server-ver16)
 - [SQLDataSources Function](https://learn.microsoft.com/en-us/sql/odbc/reference/syntax/sqldatasources-function?view=sql-server-ver16)

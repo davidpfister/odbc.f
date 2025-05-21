@@ -1,0 +1,28 @@
+var searchData=
+[
+  ['the_20code_0',['Get the code',['../index.html#autotoc_md67',1,'']]],
+  ['the_20connection_1',['Closing the Connection',['../group__group__odbc__connection.html#autotoc_md26',1,'']]],
+  ['the_20interface_20with_20swig_2',['Generate the interface with swig',['../index.html#autotoc_md68',1,'']]],
+  ['the_20project_3',['About the Project',['../index.html#autotoc_md60',1,'']]],
+  ['time_5fstruct_4',['time_struct',['../structsqltypes_1_1time__struct.html',1,'sqltypes']]],
+  ['timeout_5',['Setting Timeout',['../group__group__odbc__connection.html#autotoc_md22',1,'']]],
+  ['timestamp_5fstruct_6',['timestamp_struct',['../structsqltypes_1_1timestamp__struct.html',1,'sqltypes']]],
+  ['tracecloselogfile_7',['tracecloselogfile',['../interfacesqlext_1_1tracecloselogfile.html',1,'sqlext']]],
+  ['traceopenlogfile_8',['traceopenlogfile',['../interfacesqlext_1_1traceopenlogfile.html',1,'sqlext']]],
+  ['tracereturn_9',['tracereturn',['../interfacesqlext_1_1tracereturn.html',1,'sqlext']]],
+  ['traceversion_10',['traceversion',['../interfacesqlext_1_1traceversion.html',1,'sqlext']]],
+  ['tracevscontrol_11',['tracevscontrol',['../interfacesqlext_1_1tracevscontrol.html',1,'sqlext']]],
+  ['transactions_12',['Managing Transactions',['../group__group__odbc__connection.html#autotoc_md25',1,'']]],
+  ['trim_13',['trim',['../interfaceodbc__constants_1_1trim.html',1,'odbc_constants']]],
+  ['tt_14',['tt',['../group__group__odbc__columnset.html#autotoc_md5',1,'Public Methods of &lt;tt&gt;columnset&lt;/tt&gt;'],['../group__group__odbc__columnset.html#autotoc_md3',1,'Type: &lt;tt&gt;column&lt;/tt&gt;'],['../group__group__odbc__columnset.html#autotoc_md4',1,'Type: &lt;tt&gt;columnset&lt;/tt&gt;'],['../group__group__odbc__connection.html#autotoc_md16',1,'Type: &lt;tt&gt;connection&lt;/tt&gt;'],['../group__group__odbc__resultset.html#autotoc_md32',1,'Type: &lt;tt&gt;resultset&lt;/tt&gt;']]],
+  ['tt_20column_20tt_15',['Type: &lt;tt&gt;column&lt;/tt&gt;',['../group__group__odbc__columnset.html#autotoc_md3',1,'']]],
+  ['tt_20columnset_20tt_16',['tt columnset tt',['../group__group__odbc__columnset.html#autotoc_md5',1,'Public Methods of &lt;tt&gt;columnset&lt;/tt&gt;'],['../group__group__odbc__columnset.html#autotoc_md4',1,'Type: &lt;tt&gt;columnset&lt;/tt&gt;']]],
+  ['tt_20connection_20tt_17',['Type: &lt;tt&gt;connection&lt;/tt&gt;',['../group__group__odbc__connection.html#autotoc_md16',1,'']]],
+  ['tt_20resultset_20tt_18',['Type: &lt;tt&gt;resultset&lt;/tt&gt;',['../group__group__odbc__resultset.html#autotoc_md32',1,'']]],
+  ['type_3a_20tt_20column_20tt_19',['Type: &lt;tt&gt;column&lt;/tt&gt;',['../group__group__odbc__columnset.html#autotoc_md3',1,'']]],
+  ['type_3a_20tt_20columnset_20tt_20',['Type: &lt;tt&gt;columnset&lt;/tt&gt;',['../group__group__odbc__columnset.html#autotoc_md4',1,'']]],
+  ['type_3a_20tt_20connection_20tt_21',['Type: &lt;tt&gt;connection&lt;/tt&gt;',['../group__group__odbc__connection.html#autotoc_md16',1,'']]],
+  ['type_3a_20tt_20resultset_20tt_22',['Type: &lt;tt&gt;resultset&lt;/tt&gt;',['../group__group__odbc__resultset.html#autotoc_md32',1,'']]],
+  ['typemaps_23',['Struct and explicit Typemaps',['../swig.html#autotoc_md57',1,'']]],
+  ['types_24',['Changing types',['../swig.html#autotoc_md56',1,'']]]
+];

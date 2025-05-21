@@ -12,7 +12,7 @@
   <h3 align="center">odbc.f</h3>
 
   <p align="center">
-    ODBC (Open Database Connectivity) bindings for Fortran.
+    ODBC (Open Database Connectivity) bindings for modern Fortran.
     <br />
     <a href="https://github.com/davidpfister/odbc.f"><strong>Explore the project</strong></a>
     <br />
@@ -26,7 +26,7 @@
 
 # Introduction
 <!-- ABOUT THE PROJECT -->
-The Fortran ODBC Library (_odbc.f_) is a modern, lightweight, and robust interface designed to enable seamless interaction between Fortran applications and relational databases through the Open Database Connectivity (ODBC) standard. This library provides a set of Fortran modules and procedures that allow developers to connect to ODBC-compliant databases, execute SQL queries, and manage data directly from Fortran programs, leveraging the power and simplicity of modern Fortran standards.
+The Fortran ODBC Library (_odbc.f_) is a modern, lightweight, and robust interface designed to enable seamless interaction between Fortran applications and relational databases through the Open Database Connectivity (ODBC) standard. This library provides a set of Fortran modules and procedures that allow developers to connect to ODBC-compliant databases, execute SQL queries, and manage data directly from Fortran programs.
 
 ## About the Project
 <p align="center">
@@ -35,7 +35,7 @@ The Fortran ODBC Library (_odbc.f_) is a modern, lightweight, and robust interfa
  
  ### Purpose and scope
 
- The primary goal of _odbc.f_ is to bridge the gap between high-performance Fortran applications and database systems, enabling scientific, engineering, and data-intensive applications to integrate with databases such as PostgreSQL, MySQL, SQL Server, and others that support ODBC drivers. The library is designed with modern Fortran practices in mind, emphasizing type safety, modularity, and ease of use while maintaining compatibility with the ODBC API. The binding is nearly complete meaning that it implements all functions present in the ODBC v3.8 standard but the ones related to `intervals`. The underlying C-structure contains a `union` that is not (yet) compatible with the `iso_c_binding` introduced in modern Fortran. 
+ The primary goal of _odbc.f_ is to bridge the gap between Fortran applications and database systems, enabling scientific, engineering, and data-intensive applications to integrate with databases such as PostgreSQL, MySQL, SQL Server, and others that support ODBC drivers. The library is designed with modern Fortran practices in mind, emphasizing type safety, modularity, and ease of use while maintaining compatibility with the ODBC API. The binding is nearly complete meaning that it implements all functions present in the ODBC v3.8 standard but the ones related to `intervals`. The underlying C-structure contains a `union` that is not (yet) compatible with the `iso_c_binding` introduced in modern Fortran. 
 
 _odbc.f_ supports essential database operations, including:
 - Establishing and managing database connections
@@ -53,19 +53,17 @@ This documentation provides comprehensive guidance on installing, configuring, a
 - Extensive Error Handling: Includes detailed diagnostic tools to help developers troubleshoot database issues.
 - Open Source: Distributed under a permissive license, encouraging community contributions and adoption.
 
-* [![fpm][fpm]][fpm-url]
-* [![ifort][ifort]][ifort-url]
-* [![gfortran][gfortran]][gfortran-url]
-
 <!-- GETTING STARTED -->
 ## Getting Started
 
 ### Requirements
+* [![fpm][fpm]][fpm-url]
+* [![ifort][ifort]][ifort-url]
+* [![gfortran][gfortran]][gfortran-url]
 
-To build that library you need
+To build the library you need
 
 - a Fortran 2008 compliant compiler, or better, a Fortran 2018 compliant compiler.
-
 The following compilers are tested on the default branch of _odbc.f_:
 
 <center>
@@ -77,9 +75,9 @@ The following compilers are tested on the default branch of _odbc.f_:
 
 </center>
 
-- a preprocessor. Unit test rely on the the header file [`assertion.inc`](https://github.com/davidpfister/fortiche/tree/master/src/assertion). It uses quite some preprocessor macros. It is known to work both with intel `fpp` and `cpp`. Since the whole framework fits in a single file, it has been added directly to the repo. 
+- a preprocessor. Unit tests rely on the the header file [`assertion.inc`](https://github.com/davidpfister/fortiche/tree/master/src/assertion). It uses quite some preprocessor macros. It is known to work both with intel `fpp` and gnu `cpp`. Since the whole framework fits in a single file, it has been added directly to the repo. 
 
-Linting, indentation, and styling is done with [fprettify](https://github.com/fortran-lang/fprettify) with the following settings
+Linting, indentation, and styling are done with [fprettify](https://github.com/fortran-lang/fprettify) with the following settings
 ```bash
 fprettify .\src\ -r --case 1 1 1 1 -i 4 --strict-indent --enable-replacements --strip-comments --c-relations
 ```
@@ -97,30 +95,9 @@ call conn%open()
 For retrieving data from the database, you have to use the `resultset` type:
 ```fortran
 type(resulset) :: rslt
-rslt = conn%execute_query("SELECT * FROM emp")
+rslt = conn%execute_query("SELECT * FROM test")
 ```
-Information about the `resultset`, like the number of columns in it, can be obtained by calling the `get_metadata()` function, which returns an object of `resultsetmetadata`.
-```fortran
-type(resultsetmetadata) :: mtdt
-integer :: column_count
-
-mtdt = rslt%get_metadata()
-column_count = mtdt%count()
-print *, "Columns returned", column_count
-```
-For getting information about a particular column, call the `get_column` member function of `resultsetmetadata`:
-```fortran
-type(column) :: col
-call mtdt%get_column(1, col)
-```
-
-Data stored in a `resultset` has to be bound to memory buffers for retrieval. This is done using the `bind()` function of `resultset`:
-```fortran
-character(kind=c_char, len=1) :: strName(26)
-call rslt%bind(1,strName,25) // arguments: column number, buffer, maximum length of buffer
-```
-
-The above code binds the first column in the table with the buffer strName. Now, whenever data is returned by the `resultset`, the first column's data will be stored in the variable strName. Data can be pulled out of the `resultset` object by calling either the `first()`, `next()`, `previous()` or `last()` member functions. For e.g., the following code prints out the value of the first column in the `resultset`:
+The `resultset` contains information about the columns like their types, names and number. Each column is bound by default to a string variable when executing the query. Now, whenever data is returned by the `resultset`, the first column's data will be stored in the variable strName. Data can be pulled out of the `resultset` object by calling either the `first()`, `next()`, `previous()` or `last()` member functions. For e.g., the following code prints out the value of the first column in the `resultset`:
 ```fortran
 do while(rslt%next())
    i = rslt%get_integer(1)
@@ -132,9 +109,9 @@ end do
 For executing any other SQL statements, you have to call the `execute()` member function of `connection`:
 ```fortran
 integer :: nrows
-nrows = db%Execute("DELETE FROM emp")
+nrows = conn%execute("DELETE FROM emp")
 ```
-The `exceute()` function will return the number of rows affected by the statement. After database operations are over, you must release the resources occupied by ODBC by calling the `close()` function of the class `connection`.
+The `execute()` function will return the number of rows affected by the statement. After database operations are over, the resources occupied by ODBC are automatically released by the connection `finalizer`.
 
 ## Installation
 
@@ -145,6 +122,9 @@ cd odbc.f
 ```
 
 ### Generate the interface with swig
+One of the particularity of _odbc.f_ is that the interface for the c-binding is automatically generated with [swig-fortran](https://github.com/swig-fortran/swig.git) using the ODBC header files. In the present case, the unixODBC headers have been used. 
+
+The following code will generate the file `sql.f90`, `sqlext.f90` and `sqltypes.f90`.
 
 ```cmd
 swig -fortran -outdir src/ swig/sqltypes.i
@@ -152,6 +132,9 @@ swig -fortran -outdir src/ swig/sql.i
 swig -fortran -outdir src/ swig/sqlext.i
 sed -i "s/, intent(in), value :: fresult/:: fresult/g" src/sqlext.f90 
 ```
+
+[!Note]
+swig does not differentiate return value and will add as spurious `intent(in)` on the return argument. The `sed` line corrects that and generate the proper code.
 
 #### Build with fpm
 

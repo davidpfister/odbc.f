@@ -115,12 +115,6 @@ that translates the member data to Fortran type members
 Finally, the `%fortranbindc` feature allows natively interoperable types to be directly accessed in the
 Fortran code.
 
-### Best Practices
-- Use `%module` to organize bindings.
-- Leverage typemaps for custom data handling.
-- Test bindings with small examples before scaling.
-- Contribute issues/features to [github.com/swig-fortran/swig](https://github.com/swig-fortran/swig).
-
 ### Resources
 - **User Manual**: [osti.gov/servlets/purl/1833959](https://www.osti.gov/servlets/purl/1833959)
 - **SWIG Docs**: [swig.org/doc.html](https://www.swig.org/doc.html)

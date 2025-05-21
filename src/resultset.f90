@@ -1,3 +1,6 @@
+!> @defgroup group_odbc_resultset Resultset
+!> @include{doc, raise=1} snippets/resultset.md
+!! @{
 module odbc_resultset
     use, intrinsic :: iso_c_binding
     use, intrinsic :: iso_fortran_env
@@ -10,6 +13,10 @@ module odbc_resultset
     public :: columnset,    &
               new
 
+    !> @brief Represents a set of query results from an ODBC query, 
+    !! providing methods to navigate rows and retrieve @ref odbc_columnset::column data 
+    !! in various formats (integer, real, double, string), using a 
+    !! @ref odbc_columnset::columnset for column metadata.
     type, public :: resultset
         private
         type(SQLHSTMT)                  :: stmt
@@ -20,7 +27,7 @@ module odbc_resultset
         character(kind=SQLTCHAR, len=SQL_MAX_MESSAGE_LENGTH) :: msg
         integer(SQLINTEGER)             :: ierr
         integer(SQLSMALLINT)            :: imsg
-        type(columnset)                 :: columns
+        type(columnset), public         :: columns
     contains
         private
         procedure, pass(this)           :: get_metadata => resultset_get_metadata
@@ -49,12 +56,21 @@ module odbc_resultset
         procedure, pass(this)           :: handle_errors
     end type
 
+    !> @brief Constructor interface for initializing a 
+    !! @ref resultset object with an ODBC statement handle.
+    !! @param[out] that The @ref resultset object to initialize.
+    !! @param[in] stmt The ODBC statement handle from a query.
     interface new
         module procedure :: resultset_new
     end interface
 
 contains
 
+    !> @brief Initializes a @ref resultset object with an ODBC 
+    !! statement handle, setting up row status and @ref odbc_columnset::columnset 
+    !! metadata.
+    !! @param[out] that The @ref resultset object to initialize.
+    !! @param[in] stmt The ODBC statement handle.
     subroutine resultset_new(that, stmt)
         type(SQLHSTMT), intent(in) :: stmt
         type(resultset), target :: that
@@ -110,6 +126,9 @@ contains
         end do
     end subroutine
 
+    !> @brief Moves the cursor to the next row in the @ref resultset.
+    !! @param[inout] this The @ref resultset object.
+    !! @return .true. if a row is available, .false. if no more rows exist.
     logical function resultset_movenext(this) result(res)
         class(resultset), intent(inout)    :: this
         integer(SQLRETURN) :: rc
@@ -123,6 +142,11 @@ contains
         if (rc == SQL_ERROR) call this%handle_errors()
     end function
 
+    !> @brief Moves the cursor to the previous row in the @ref resultset, 
+    !! if the cursor is scrollable.
+    !! @param[inout] this The @ref resultset object.
+    !! @return .true. if a row is available, .false. if no previous 
+    !! rows exist or the cursor is not scrollable.
     logical function resultset_moveprevious(this) result(res)
         class(resultset), intent(inout)    :: this
         integer(SQLRETURN) :: rc
@@ -136,6 +160,11 @@ contains
         if (rc == SQL_ERROR) call this%handle_errors()
     end function
 
+    !> @brief Moves the cursor to the first row in the @ref resultset, 
+    !! if the cursor is scrollable.
+    !! @param[inout] this The @ref resultset object.
+    !! @return .true. if a row is available, .false. if the result set 
+    !! is empty or not scrollable.
     logical function resultset_movefirst(this) result(res)
         class(resultset), intent(inout)    :: this
         integer(SQLRETURN) :: rc
@@ -150,6 +179,11 @@ contains
         if (rc == SQL_ERROR) call this%handle_errors()
     end function
 
+    !> @brief Moves the cursor to the last row in the @ref resultset, 
+    !! if the cursor is scrollable.
+    !! @param[inout] this The @ref resultset object.
+    !! @return .true. if a row is available, .false. if the result set 
+    !! is empty or not scrollable.
     logical function resultset_movelast(this) result(res)
         class(resultset), intent(inout)    :: this
         integer(SQLRETURN) :: rc
@@ -163,6 +197,10 @@ contains
         if (rc == SQL_ERROR) call this%handle_errors()
     end function
 
+    !> @brief Gets the number of rows fetched in the current fetch 
+    !! operation of the @ref resultset.
+    !! @param[in] this The @ref resultset object.
+    !! @return The number of rows fetched.
     function resultset_get_nrows(this) result(res)
         class(resultset), intent(in)        :: this
         integer :: res
@@ -170,6 +208,10 @@ contains
         res = this%rows
     end function
     
+    !> @brief Gets the number of @ref odbc_columnset::column objects in the 
+    !! @ref resultset.
+    !! @param[in] this The @ref resultset object.
+    !! @return The number of columns.
     function resultset_get_ncolumns(this) result(res)
         class(resultset), intent(in)        :: this
         integer :: res
@@ -177,6 +219,12 @@ contains
         res = this%columns%count()
     end function
     
+    !> @brief Retrieves a @ref odbc_columnset::column value as an integer by column 
+    !! index (1-based) from the @ref resultset.
+    !! @param[inout] this The @ref resultset object.
+    !! @param[in] col The column index (1-based).
+    !! @return The @ref odbc_columnset::column value as an integer, or 0 if the column 
+    !! is invalid.
     function resultset_get_integer_from_index(this, col) result(res)
         class(resultset), intent(inout) :: this
         integer, intent(in)             :: col
@@ -200,6 +248,12 @@ contains
         nullify(c)
     end function
     
+    !> @brief Retrieves a @ref odbc_columnset::column value as an integer by column 
+    !! name from the @ref resultset.
+    !! @param[inout] this The @ref resultset object.
+    !! @param[in] name The column name.
+    !! @return The @ref odbc_columnset::column value as an integer, or 0 if the 
+    !! column is not found.
     function resultset_get_integer_from_name(this, name) result(res)
         class(resultset), intent(inout) :: this
         character(*), intent(in)        :: name
@@ -218,6 +272,12 @@ contains
         nullify(c)
     end function
     
+    !> @brief Retrieves a @ref odbc_columnset::column value as a 32-bit real by column 
+    !! index (1-based) from the @ref resultset.
+    !! @param[inout] this The @ref resultset object.
+    !! @param[in] col The column index (1-based).
+    !! @return The @ref odbc_columnset::column value as a real, or 0.0 if the column 
+    !! is invalid.
     function resultset_get_real_from_index(this, col) result(res)
         class(resultset), intent(inout) :: this
         integer, intent(in)             :: col
@@ -240,6 +300,12 @@ contains
         nullify(c)
     end function
     
+    !> @brief Retrieves a @ref odbc_columnset::column value as a 32-bit real by column 
+    !! name from the @ref resultset.
+    !! @param[inout] this The @ref resultset object.
+    !! @param[in] name The column name.
+    !! @return The @ref odbc_columnset::column value as a real, or 0.0 if the column is 
+    !! not found.
     function resultset_get_real_from_name(this, name) result(res)
         class(resultset), intent(inout) :: this
         character(*), intent(in)        :: name
@@ -257,6 +323,12 @@ contains
         nullify(c)
     end function
     
+    !> @brief Retrieves a @ref odbc_columnset::column value as a 64-bit real by column index 
+    !! (1-based) from the @ref resultset.
+    !! @param[inout] this The @ref resultset object.
+    !! @param[in] col The column index (1-based).
+    !! @return The @ref odbc_columnset::column value as a double, or 0.0 if the column 
+    !! is invalid.
     function resultset_get_double_from_index(this, col) result(res)
         class(resultset), intent(inout) :: this
         integer, intent(in)             :: col
@@ -280,6 +352,12 @@ contains
         nullify(c)
     end function
     
+    !> @brief Retrieves a @ref odbc_columnset::column value as a 64-bit real by column 
+    !! name from the @ref resultset.
+    !! @param[inout] this The @ref resultset object.
+    !! @param[in] name The column name.
+    !! @return The @ref odbc_columnset::column value as a double, or 0.0 if the column 
+    !! is not found.
     function resultset_get_double_from_name(this, name) result(res)
         class(resultset), intent(inout) :: this
         character(*), intent(in)        :: name
@@ -298,6 +376,12 @@ contains
         nullify(c)
     end function
     
+    !> @brief Retrieves a @ref odbc_columnset::column value as a string by column index 
+    !! (1-based) from the @ref resultset.
+    !! @param[inout] this The @ref resultset object.
+    !! @param[in] col The column index (1-based).
+    !! @return The @ref odbc_columnset::column value as a string, or empty string if the 
+    !! column is invalid.
     function resultset_get_string_from_index(this, col) result(res)
         class(resultset), intent(inout) :: this
         integer, intent(in)             :: col
@@ -319,6 +403,12 @@ contains
         nullify(c)
     end function
     
+    !> @brief Retrieves a @ref odbc_columnset::column value as a string by column name 
+    !! from the @ref resultset.
+    !! @param[inout] this The @ref resultset object.
+    !! @param[in] name The column name.
+    !! @return The @ref odbc_columnset::column value as a string, or empty string if 
+    !! the column is not found.
     function resultset_get_string_from_name(this, name) result(res)
         class(resultset), intent(inout) :: this
         character(*), intent(in)        :: name
@@ -349,8 +439,8 @@ contains
     end subroutine
     
     pure function clean_string(value) result(str)
-        character(*), intent(in)  :: value !< The string to clean
-        character(:), allocatable :: str !< Left adjusted and trimmed string
+        character(*), intent(in)  :: value
+        character(:), allocatable :: str
         !private
         integer i
         
@@ -362,3 +452,4 @@ contains
     end function
 
 end module
+!! @}

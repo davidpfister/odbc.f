@@ -1,4 +1,9 @@
+!> @defgroup group_odbc_connection Connection
+!> @include{doc, raise=1} snippets/connection.md
+!> @{
+!! @cond
 #include <c_interop.inc>
+!! @endcond
 module odbc_connection
     use, intrinsic :: iso_c_binding
     use, intrinsic :: iso_fortran_env, only: stderr => error_unit
@@ -11,6 +16,10 @@ module odbc_connection
     
     public :: resultset
 
+    !> @brief Represents a database connection with ODBC, managing 
+    !! environment, connection, and statement handles, and providing 
+    !! methods to open connections, execute SQL statements, and manage 
+    !! transactions, with support for @ref odbc_resultset::resultset objects.
     type, public :: connection
         private
         type(SQLHENV)                   :: env
@@ -42,6 +51,10 @@ module odbc_connection
         final :: connection_finalize
     end type
 
+    !> @brief Constructor interface for creating a new @ref connection 
+    !! object with a specified ODBC connection string.
+    !! @param[in] connstring The ODBC connection string.
+    !! @return A new @ref connection object.
     interface connection
         module procedure :: connection_new
     end interface
@@ -53,6 +66,12 @@ module odbc_connection
 
 contains
 
+    !> @brief Creates a new @ref connection object with the specified 
+    !! ODBC connection string.
+    !! @param[in] connstring The ODBC connection string (e.g., 
+    !! "DRIVER={SQL Server};SERVER=localhost;DATABASE=mydb;").
+    !! @return A new @ref connection object initialized with the 
+    !! connection string.
     function connection_new(connstring) result(that)
         type(connection)            :: that
         character(*), intent(in)    :: connstring
@@ -66,6 +85,9 @@ contains
         that%connstring = _STRING(connstring)
     end function
 
+    !> @brief Opens a database connection using the stored connection 
+    !! string in the @ref connection object.
+    !! @param[inout] this The @ref connection object.
     subroutine connection_open(this)
         class(connection), intent(inout)    :: this
 
@@ -92,6 +114,9 @@ contains
         this%opened = .true.
     end subroutine
 
+    !> @brief Opens a database connection using the stored connection 
+    !! string in the @ref connection object.    
+    !! @param[inout] this The @ref connection object.
     function connection_get_timeout(this) result(res)
         class(connection), intent(in)       :: this
         integer :: res
@@ -99,6 +124,10 @@ contains
         res = this%timeout
     end function
 
+    !> @brief Sets the connection timeout in seconds for the 
+    !! @ref connection object.
+    !! @param[inout] this The @ref connection object.
+    !! @param[in] n The timeout value in seconds.
     subroutine connection_set_timeout(this, n)
         class(connection), intent(inout)    :: this
         integer, intent(in)                 :: n
@@ -106,6 +135,9 @@ contains
         this%timeout = n
     end subroutine
 
+    !> @brief Checks if the @ref connection is open.
+    !! @param[in] this The @ref connection object.
+    !! @return .true. if the connection is open, .false. otherwise.
     function connection_isopened(this) result(res)
         class(connection), intent(in)       :: this
         logical :: res
@@ -113,6 +145,13 @@ contains
         res = this%opened
     end function
 
+    !> @brief Executes a non-query SQL statement (e.g., INSERT, 
+    !! UPDATE, DELETE) and returns the number of affected rows 
+    !! using the @ref connection object.
+    !! @param[inout] this The @ref connection object.
+    !! @param[in] sql The SQL statement to execute.
+    !! @return The number of affected rows, or an error code if 
+    !! the operation fails.
     function connection_execute(this, sql) result(count)
         class(connection), intent(inout)    :: this
         character(*), intent(in)            :: sql
@@ -139,6 +178,12 @@ contains
         count = merge(int(this%ierr, c_int), int(countInt, c_int), this%ierr /= SQL_SUCCESS)
     end function   
 
+    !> @brief Executes a query and stores results in a @ref odbc_resultset::resultset 
+    !! object.
+    !! @param[inout] this The @ref connection object.
+    !! @param[in] sql The SQL query to execute.
+    !! @param[inout] rslt The @ref odbc_resultset::resultset object to store the query 
+    !! results.
     subroutine connection_execute_query(this, sql, rslt)
         class(connection), intent(inout)    :: this
         character(*), intent(in)            :: sql
@@ -165,6 +210,16 @@ contains
         call new(rslt, this%stmt)
     end subroutine
 
+    !> @brief Executes a query with a specified cursor type and scrollable 
+    !! option, storing results in a @ref odbc_resultset::resultset object.
+    !! @param[inout] this The @ref connection object.
+    !! @param[in] sql The SQL query to execute.
+    !! @param[in] cursor_type The cursor type (e.g., SQL_CURSOR_STATIC, 
+    !! SQL_CURSOR_FORWARD_ONLY).
+    !! @param[in] scrollable Whether the cursor is scrollable (.true. or 
+    !! .false.).
+    !! @param[inout] rslt The @ref odbc_resultset::resultset object to store the query 
+    !! results.
     subroutine connection_execute_query_with_cursor(this, sql, cursor_type, scrollable, rslt)
         class(connection), intent(inout)        :: this
         character(*), intent(in)                :: sql
@@ -204,6 +259,10 @@ contains
         call new(rslt, this%stmt)
     end subroutine
 
+    !> @brief Commits the current transaction using the @ref connection 
+    !! object.
+    !! @param[inout] this The @ref connection object.
+    !! @return .true. if the commit succeeds, .false. otherwise.
     function connection_commit(this) result(success)
         class(connection), intent(inout)    :: this
         logical :: success
@@ -215,6 +274,10 @@ contains
         success = .true.
     end function
 
+    !> @brief Rolls back the current transaction using the 
+    !! @ref connection object.
+    !! @param[inout] this The @ref connection object.
+    !! @return .true. if the rollback succeeds, .false. otherwise.
     function connection_rollback(this) result(success)
         class(connection), intent(inout)    :: this
         logical :: success
@@ -226,6 +289,9 @@ contains
         success = .true.
     end function
 
+    !> @brief Closes the database connection and frees resources 
+    !! in the @ref connection object.
+    !! @param[inout] this The @ref connection object.
     subroutine connection_close(this)
         class(connection), intent(inout)    :: this
 
@@ -305,3 +371,4 @@ contains
         end do
     end function
 end module
+!! @}
