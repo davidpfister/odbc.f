@@ -23,8 +23,8 @@
  @licend  The above is the entire license notice for the JavaScript code in this file
 */
 var menudata={children:[
-{text:"Benchmark",url:"index.html"},
+{text:"odbc.f",url:"index.html"},
 {text:"Related Pages",url:"pages.html"},
 {text:"API",url:"topics.html"},
 {text:"Files",url:"files.html"},
-{text:"GitHub Repository",url:"^https://github.com/davidpfister/benchmark.f"}]}
+{text:"GitHub Repository",url:"^https://github.com/davidpfister/odbc.f"}]}

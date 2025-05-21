@@ -61,7 +61,7 @@ var NAVTREE =
     ] ],
     [ "API", "topics.html", "topics" ],
     [ "Files", "files.html", "files" ],
-    [ "GitHub Repository", "^https://github.com/davidpfister/benchmark.f", null ]
+    [ "GitHub Repository", "^https://github.com/davidpfister/odbc.f", null ]
   ] ]
 ];
 
