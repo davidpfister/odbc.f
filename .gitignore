@@ -402,3 +402,6 @@ tests/info.sys
 sys.info
 *.fdz
 *.u2d
+sql.h
+sqlext.h
+sqltypes.h

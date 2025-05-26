@@ -122,7 +122,7 @@ cd odbc.f
 ```
 
 ### Generate the interface with swig
-One of the particularity of _odbc.f_ is that the interface for the c-binding is automatically generated with [swig-fortran](https://github.com/swig-fortran/swig.git) using the ODBC header files. In the present case, the unixODBC headers have been used. 
+One of the particularity of _odbc.f_ is that the interface for the c-binding is automatically generated with [swig-fortran](https://github.com/swig-fortran/swig.git) using the ODBC header files. In the present case, the unixODBC headers have been used. The headers have been included in the `include/` folder. They can also be downloaded directly from the original [repo](https://github.com/lurcher/unixODBC/tree/master/include).
 
 The following code will generate the file `sql.f90`, `sqlext.f90` and `sqltypes.f90`.
 
