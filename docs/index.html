@@ -37,7 +37,7 @@ MathJax.Hub.Config({
   jax: ["input/TeX","output/HTML-CSS"],
 });
 </script>
-<script type="text/javascript" async="async" src="./mathjax/MathJax.js"></script>
+<script type="text/javascript" async="async" src="https://cdn.jsdelivr.net/npm/mathjax@2/MathJax.js"></script>
   <link href="doxygen.css" rel="stylesheet" type="text/css" />
   <link href="doxygen-awesome.css" rel="stylesheet" type="text/css"/>
   <link rel="stylesheet" href="devibeans.css">
@@ -213,8 +213,7 @@ Introduction</h1>
 <p>The Fortran ODBC Library (<em>odbc.f</em>) is a modern, lightweight, and robust interface designed to enable seamless interaction between Fortran applications and relational databases through the Open Database Connectivity (ODBC) standard. This library provides a set of Fortran modules and procedures that allow developers to connect to ODBC-compliant databases, execute SQL queries, and manage data directly from Fortran programs.</p>
 <h2><a class="anchor" id="autotoc_md60"></a>
 About the Project</h2>
-<p><img src="https://github.com/davidpfister/odbc.f/blob/master/.dox/images/icon.jpg?raw=true" alt="" class="inline"/> </p>
-<h3><a class="anchor" id="autotoc_md61"></a>
+<center> </center><center> <img src="https://github.com/davidpfister/odbc.f/blob/master/.dox/images/icon.jpg?raw=true" alt="" width="512" height="512" class="inline"/> </center><center> </center><h3><a class="anchor" id="autotoc_md61"></a>
 Purpose and scope</h3>
 <p>The primary goal of <em>odbc.f</em> is to bridge the gap between Fortran applications and database systems, enabling scientific, engineering, and data-intensive applications to integrate with databases such as PostgreSQL, MySQL, SQL Server, and others that support ODBC drivers. The library is designed with modern Fortran practices in mind, emphasizing type safety, modularity, and ease of use while maintaining compatibility with the ODBC API. The binding is nearly complete meaning that it implements all functions present in the ODBC v3.8 standard but the ones related to <code>intervals</code>. The underlying C-structure contains a <code>union</code> that is not (yet) compatible with the <code>iso_c_binding</code> introduced in modern Fortran.</p>
 <p><em>odbc.f</em> supports essential database operations, including:</p><ul>
@@ -282,7 +281,7 @@ Get the code</h4>
 <div class="line">cd odbc.f</div>
 </div><!-- fragment --><h3><a class="anchor" id="autotoc_md68"></a>
 Generate the interface with swig</h3>
-<p>One of the particularity of <em>odbc.f</em> is that the interface for the c-binding is automatically generated with <a href="https://github.com/swig-fortran/swig.git">swig-fortran</a> using the ODBC header files. In the present case, the unixODBC headers have been used.</p>
+<p>One of the particularity of <em>odbc.f</em> is that the interface for the c-binding is automatically generated with <a href="https://github.com/swig-fortran/swig.git">swig-fortran</a> using the ODBC header files. The headers have <b>not</b> been included in the <code>include/</code> folder. They can be downloaded directly from the original <a href="https://github.com/lurcher/unixODBC/tree/master/include">repo</a>. Make sure to place the files <a href="https://github.com/lurcher/unixODBC/blob/master/include/sql.h">sql.h</a>, <a href="https://github.com/lurcher/unixODBC/blob/master/include/sqlext.h">sqlext.h</a> and <a href="https://github.com/lurcher/unixODBC/blob/master/include/sqltypes.h">sqltypes.h</a> in the include folder before using <code>swig</code>.</p>
 <p>The following code will generate the file <code>sql.f90</code>, <code>sqlext.f90</code> and <code>sqltypes.f90</code>.</p>
 <div class="fragment"><div class="line">swig -fortran -outdir src/ swig/sqltypes.i</div>
 <div class="line">swig -fortran -outdir src/ swig/sql.i</div>

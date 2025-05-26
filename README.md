@@ -29,10 +29,12 @@
 The Fortran ODBC Library (_odbc.f_) is a modern, lightweight, and robust interface designed to enable seamless interaction between Fortran applications and relational databases through the Open Database Connectivity (ODBC) standard. This library provides a set of Fortran modules and procedures that allow developers to connect to ODBC-compliant databases, execute SQL queries, and manage data directly from Fortran programs.
 
 ## About the Project
+<center>
 <p align="center">
-  <img src="https://github.com/davidpfister/odbc.f/blob/master/.dox/images/icon.jpg?raw=true">
+  <img src="https://github.com/davidpfister/odbc.f/blob/master/.dox/images/icon.jpg?raw=true" width="512" height="512">
 </p>
- 
+ </center>
+
  ### Purpose and scope
 
  The primary goal of _odbc.f_ is to bridge the gap between Fortran applications and database systems, enabling scientific, engineering, and data-intensive applications to integrate with databases such as PostgreSQL, MySQL, SQL Server, and others that support ODBC drivers. The library is designed with modern Fortran practices in mind, emphasizing type safety, modularity, and ease of use while maintaining compatibility with the ODBC API. The binding is nearly complete meaning that it implements all functions present in the ODBC v3.8 standard but the ones related to `intervals`. The underlying C-structure contains a `union` that is not (yet) compatible with the `iso_c_binding` introduced in modern Fortran. 

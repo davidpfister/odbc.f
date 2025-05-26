@@ -37,7 +37,7 @@ MathJax.Hub.Config({
   jax: ["input/TeX","output/HTML-CSS"],
 });
 </script>
-<script type="text/javascript" async="async" src="./mathjax/MathJax.js"></script>
+<script type="text/javascript" async="async" src="https://cdn.jsdelivr.net/npm/mathjax@2/MathJax.js"></script>
   <link href="doxygen.css" rel="stylesheet" type="text/css" />
   <link href="doxygen-awesome.css" rel="stylesheet" type="text/css"/>
   <link rel="stylesheet" href="devibeans.css">
@@ -1576,28 +1576,28 @@ $(function(){initNavTree('constants_8f90_source.html',''); initResizable(true); 
 <div class="line"><a id="l01441" name="l01441"></a><span class="lineno"> 1441</span>    <span class="keywordtype">integer(C_SHORT)</span>, <span class="keywordtype">parameter</span>, <span class="keywordtype">public</span> :: SQL_PT_FUNCTION = 2</div>
 <div class="line"><a id="l01442" name="l01442"></a><span class="lineno"> 1442</span>    <span class="keywordtype">character(kind=C_CHAR, len=*)</span>, <span class="keywordtype">parameter</span>, <span class="keywordtype">public</span> :: SQL_ODBC_KEYWORDS = <span class="stringliteral">&quot;ABSOLUTE,ACTION,ADA,ADD,ALL,ALLOCATE,ALTER,AND,ANY,ARE,AS,ASC,ASSERTION,AT,AUTHORIZATION,AVG,BEGIN,BETWEEN,BIT,BIT_LENGTH,BOTH,BY,CASCADE,CASCADED,CASE,CAST,CATALOG,CHAR,CHAR_LENGTH,CHARACTER,CHARACTER_LENGTH,CHECK,CLOSE,COALESCE,COLLATE,COLLATION,COLUMN,COMMIT,CONNECT,CONNECTION,CONSTRAINT,CONSTRAINTS,CONTINUE,CONVERT,CORRESPONDING,COUNT,CREATE,CROSS,CURRENT,CURRENT_DATE,CURRENT_TIME,CURRENT_TIMESTAMP,CURRENT_USER,CURSOR,DATE,DAY,DEALLOCATE,DEC,DECIMAL,DECLARE,DEFAULT,DEFERRABLE,DEFERRED,DELETE,DESC,DESCRIBE,DESCRIPTOR,DIAGNOSTICS,DISCONNECT,DISTINCT,DOMAIN,DOUBLE,DROP,ELSE,END,END-EXEC,ESCAPE,EXCEPT,EXCEPTION,EXEC,EXECUTE,EXISTS,EXTERNAL,EXTRACT,FALSE,FETCH,FIRST,FLOAT,FOR,FOREIGN,FORTRAN,FOUND,FROM,FULL,GET,GLOBAL,GO,GOTO,GRANT,GROUP,HAVING,HOUR,IDENTITY,IMMEDIATE,IN,INCLUDE,INDEX,INDICATOR,INITIALLY,INNER,INPUT,INSENSITIVE,INSERT,INT,INTEGER,INTERSECT,INTERVAL,INTO,IS,ISOLATION,JOIN,KEY,LANGUAGE,LAST,LEADING,LEFT,LEVEL,LIKE,LOCAL,LOWER,MATCH,MAX,MIN,MINUTE,MODULE,MONTH,NAMES,NATIONAL,NATURAL,NCHAR,NEXT,NO,NONE,NOT,NULL,NULLIF,NUMERIC,OCTET_LENGTH,OF,ON,ONLY,OPEN,OPTION,OR,ORDER,OUTER,OUTPUT,OVERLAPS,PAD,PARTIAL,PASCAL,PLI,POSITION,PRECISION,PREPARE,PRESERVE,PRIMARY,PRIOR,PRIVILEGES,PROCEDURE,PUBLIC,READ,REAL,REFERENCES,RELATIVE,RESTRICT,REVOKE,RIGHT,ROLLBACK,ROWSSCHEMA,SCROLL,SECOND,SECTION,SELECT,SESSION,SESSION_USER,SET,SIZE,SMALLINT,SOME,SPACE,SQL,SQLCA,SQLCODE,SQLERROR,SQLSTATE,SQLWARNING,SUBSTRING,SUM,SYSTEM_USER,TABLE,TEMPORARY,THEN,TIME,TIMESTAMP,TIMEZONE_HOUR,TIMEZONE_MINUTE,TO,TRAILING,TRANSACTION,TRANSLATE,TRANSLATION,TRIM,TRUE,UNION,UNIQUE,UNKNOWN,UPDATE,UPPER,USAGE,USER,USING,VALUE,VALUES,VARCHAR,VARYING,VIEW,WHEN,WHENEVER,WHERE,WITH,WORK,WRITE,YEAR,ZONE&quot;</span></div>
 <div class="line"><a id="l01443" name="l01443"></a><span class="lineno"> 1443</span> </div>
-<div class="foldopen" id="foldopen01444" data-start="" data-end="">
-<div class="line"><a id="l01444" name="l01444"></a><span class="lineno"><a class="line" href="interfaceodbc__constants_1_1trim.html"> 1444</a></span>    <span class="keyword">interface</span> <a class="code hl_interface" href="interfaceodbc__constants_1_1trim.html">trim</a></div>
-<div class="line"><a id="l01445" name="l01445"></a><span class="lineno"> 1445</span>        <span class="keyword">module procedure</span> :: trim_c_char</div>
+<div class="foldopen" id="foldopen01445" data-start="" data-end="">
+<div class="line"><a id="l01445" name="l01445"></a><span class="lineno"><a class="line" href="interfaceodbc__constants_1_1trim.html"> 1445</a></span>    <span class="keyword">interface</span> <a class="code hl_interface" href="interfaceodbc__constants_1_1trim.html">trim</a></div>
+<div class="line"><a id="l01446" name="l01446"></a><span class="lineno"> 1446</span>        <span class="keyword">module procedure</span> :: trim_c_char</div>
 </div>
-<div class="line"><a id="l01446" name="l01446"></a><span class="lineno"> 1446</span>    <span class="keyword">end interface</span></div>
-<div class="line"><a id="l01447" name="l01447"></a><span class="lineno"> 1447</span> </div>
-<div class="line"><a id="l01448" name="l01448"></a><span class="lineno"> 1448</span><span class="keyword">contains</span></div>
-<div class="line"><a id="l01449" name="l01449"></a><span class="lineno"> 1449</span> </div>
-<div class="line"><a id="l01450" name="l01450"></a><span class="lineno"> 1450</span>    <span class="keyword">function </span>trim_c_char(cchar) <span class="keyword">result</span>(fchar)</div>
-<div class="line"><a id="l01451" name="l01451"></a><span class="lineno"> 1451</span>        <span class="keywordtype">character(kind=c_char, len=1)</span>, <span class="keywordtype">intent(in)</span> :: cchar(:)</div>
-<div class="line"><a id="l01452" name="l01452"></a><span class="lineno"> 1452</span>        <span class="keywordtype">character(:)</span>, <span class="keywordtype">allocatable</span> :: fchar</div>
-<div class="line"><a id="l01453" name="l01453"></a><span class="lineno"> 1453</span>        <span class="comment">!private</span></div>
-<div class="line"><a id="l01454" name="l01454"></a><span class="lineno"> 1454</span>        <span class="keywordtype">integer</span> :: i</div>
-<div class="line"><a id="l01455" name="l01455"></a><span class="lineno"> 1455</span> </div>
-<div class="line"><a id="l01456" name="l01456"></a><span class="lineno"> 1456</span>        <span class="keyword">allocate</span> (<span class="keywordtype">character(size(cchar))</span> :: fchar)</div>
-<div class="line"><a id="l01457" name="l01457"></a><span class="lineno"> 1457</span>        <span class="keywordflow">do</span> i = 1, <span class="keyword">size</span>(cchar)</div>
-<div class="line"><a id="l01458" name="l01458"></a><span class="lineno"> 1458</span>            fchar(i:i) = cchar(i)</div>
-<div class="line"><a id="l01459" name="l01459"></a><span class="lineno"> 1459</span><span class="keywordflow">        end do</span></div>
-<div class="line"><a id="l01460" name="l01460"></a><span class="lineno"> 1460</span>        fchar = <a class="code hl_interface" href="interfaceodbc__constants_1_1trim.html">trim</a>(fchar)</div>
-<div class="line"><a id="l01461" name="l01461"></a><span class="lineno"> 1461</span>    <span class="keyword">end function</span></div>
-<div class="line"><a id="l01462" name="l01462"></a><span class="lineno"> 1462</span><span class="keyword">end module</span></div>
-<div class="ttc" id="ainterfaceodbc__constants_1_1trim_html"><div class="ttname"><a href="interfaceodbc__constants_1_1trim.html">odbc_constants::trim</a></div><div class="ttdef"><b>Definition</b> <a href="#l01444">constants.f90:1444</a></div></div>
+<div class="line"><a id="l01447" name="l01447"></a><span class="lineno"> 1447</span>    <span class="keyword">end interface</span></div>
+<div class="line"><a id="l01448" name="l01448"></a><span class="lineno"> 1448</span> </div>
+<div class="line"><a id="l01449" name="l01449"></a><span class="lineno"> 1449</span><span class="keyword">contains</span></div>
+<div class="line"><a id="l01450" name="l01450"></a><span class="lineno"> 1450</span> </div>
+<div class="line"><a id="l01451" name="l01451"></a><span class="lineno"> 1451</span>    <span class="keyword">function </span>trim_c_char(cchar) <span class="keyword">result</span>(fchar)</div>
+<div class="line"><a id="l01452" name="l01452"></a><span class="lineno"> 1452</span>        <span class="keywordtype">character(kind=c_char, len=1)</span>, <span class="keywordtype">intent(in)</span> :: cchar(:)</div>
+<div class="line"><a id="l01453" name="l01453"></a><span class="lineno"> 1453</span>        <span class="keywordtype">character(:)</span>, <span class="keywordtype">allocatable</span> :: fchar</div>
+<div class="line"><a id="l01454" name="l01454"></a><span class="lineno"> 1454</span>        <span class="comment">!private</span></div>
+<div class="line"><a id="l01455" name="l01455"></a><span class="lineno"> 1455</span>        <span class="keywordtype">integer</span> :: i</div>
+<div class="line"><a id="l01456" name="l01456"></a><span class="lineno"> 1456</span> </div>
+<div class="line"><a id="l01457" name="l01457"></a><span class="lineno"> 1457</span>        <span class="keyword">allocate</span> (<span class="keywordtype">character(size(cchar))</span> :: fchar)</div>
+<div class="line"><a id="l01458" name="l01458"></a><span class="lineno"> 1458</span>        <span class="keywordflow">do</span> i = 1, <span class="keyword">size</span>(cchar)</div>
+<div class="line"><a id="l01459" name="l01459"></a><span class="lineno"> 1459</span>            fchar(i:i) = cchar(i)</div>
+<div class="line"><a id="l01460" name="l01460"></a><span class="lineno"> 1460</span><span class="keywordflow">        end do</span></div>
+<div class="line"><a id="l01461" name="l01461"></a><span class="lineno"> 1461</span>        fchar = <a class="code hl_interface" href="interfaceodbc__constants_1_1trim.html">trim</a>(fchar)</div>
+<div class="line"><a id="l01462" name="l01462"></a><span class="lineno"> 1462</span>    <span class="keyword">end function</span></div>
+<div class="line"><a id="l01463" name="l01463"></a><span class="lineno"> 1463</span><span class="keyword">end module</span></div>
+<div class="ttc" id="ainterfaceodbc__constants_1_1trim_html"><div class="ttname"><a href="interfaceodbc__constants_1_1trim.html">odbc_constants::trim</a></div><div class="ttdoc">Triming of c-string returning fortran allocatable characters.</div><div class="ttdef"><b>Definition</b> <a href="#l01445">constants.f90:1445</a></div></div>
 </div><!-- fragment --></div><!-- contents -->
 </div><!-- doc-content -->
 <!-- HTML footer for doxygen 1.9.1-->

@@ -97,6 +97,6 @@ var searchData=
   ['style_94',['Style',['../index.html#autotoc_md72',1,'']]],
   ['summary_95',['ODBC Function Summary',['../odbc-function-reference.html',1,'odbc-reference']]],
   ['swig_96',['Generate the interface with swig',['../index.html#autotoc_md68',1,'']]],
-  ['swig_20fortran_97',['SWIG-Fortran',['../swig.html',1,'']]],
+  ['swig_20fortran_97',['SWIG-Fortran',['../swig.html',1,'pages']]],
   ['syntax_98',['Interface File Syntax',['../swig.html#autotoc_md55',1,'']]]
 ];
