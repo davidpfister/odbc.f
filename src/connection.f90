@@ -1,6 +1,6 @@
-!> @defgroup group_odbc_connection Connection
-!> @include{doc, raise=1} snippets/connection.md
-!> @{
+!> @file
+!! @defgroup group_odbc_connection Connection
+!! @include{doc, raise=1} snippets/connection.md
 !! @cond
 #include <c_interop.inc>
 !! @endcond
@@ -16,10 +16,15 @@ module odbc_connection
     
     public :: resultset
 
-    !> @brief Represents a database connection with ODBC, managing 
+    !> Represents a database connection with ODBC, managing 
     !! environment, connection, and statement handles, and providing 
     !! methods to open connections, execute SQL statements, and manage 
     !! transactions, with support for @ref odbc_resultset::resultset objects.
+    !!
+    !! @return The constructed @ref connection object.
+    !!
+    !! <h2  class="groupheader">Remarks</h2>
+    !! @ingroup group_odbc_connection
     type, public :: connection
         private
         type(SQLHENV)                   :: env
@@ -51,10 +56,13 @@ module odbc_connection
         final :: connection_finalize
     end type
 
-    !> @brief Constructor interface for creating a new @ref connection 
+    !> Constructor interface for creating a new @ref connection 
     !! object with a specified ODBC connection string.
     !! @param[in] connstring The ODBC connection string.
     !! @return A new @ref connection object.
+    !!
+    !! @b Remarks
+    !! @ingroup group_odbc_connection
     interface connection
         module procedure :: connection_new
     end interface
@@ -66,12 +74,15 @@ module odbc_connection
 
 contains
 
-    !> @brief Creates a new @ref connection object with the specified 
+    !> Creates a new @ref connection object with the specified 
     !! ODBC connection string.
     !! @param[in] connstring The ODBC connection string (e.g., 
     !! "DRIVER={SQL Server};SERVER=localhost;DATABASE=mydb;").
     !! @return A new @ref connection object initialized with the 
     !! connection string.
+    !!
+    !! @b Remarks
+    !! @ingroup group_odbc_connection
     function connection_new(connstring) result(that)
         type(connection)            :: that
         character(*), intent(in)    :: connstring
@@ -85,9 +96,12 @@ contains
         that%connstring = _STRING(connstring)
     end function
 
-    !> @brief Opens a database connection using the stored connection 
+    !> Opens a database connection using the stored connection 
     !! string in the @ref connection object.
     !! @param[inout] this The @ref connection object.
+    !!
+    !! @b Remarks
+    !! @ingroup group_odbc_connection
     subroutine connection_open(this)
         class(connection), intent(inout)    :: this
 
@@ -114,9 +128,12 @@ contains
         this%opened = .true.
     end subroutine
 
-    !> @brief Opens a database connection using the stored connection 
+    !> Opens a database connection using the stored connection 
     !! string in the @ref connection object.    
     !! @param[inout] this The @ref connection object.
+    !!
+    !! @b Remarks
+    !! @ingroup group_odbc_connection
     function connection_get_timeout(this) result(res)
         class(connection), intent(in)       :: this
         integer :: res
@@ -124,10 +141,13 @@ contains
         res = this%timeout
     end function
 
-    !> @brief Sets the connection timeout in seconds for the 
+    !> Sets the connection timeout in seconds for the 
     !! @ref connection object.
     !! @param[inout] this The @ref connection object.
     !! @param[in] n The timeout value in seconds.
+    !!
+    !! @b Remarks
+    !! @ingroup group_odbc_connection
     subroutine connection_set_timeout(this, n)
         class(connection), intent(inout)    :: this
         integer, intent(in)                 :: n
@@ -135,7 +155,7 @@ contains
         this%timeout = n
     end subroutine
 
-    !> @brief Checks if the @ref connection is open.
+    !> Checks if the @ref connection is open.
     !! @param[in] this The @ref connection object.
     !! @return .true. if the connection is open, .false. otherwise.
     function connection_isopened(this) result(res)
@@ -145,13 +165,16 @@ contains
         res = this%opened
     end function
 
-    !> @brief Executes a non-query SQL statement (e.g., INSERT, 
+    !> Executes a non-query SQL statement (e.g., INSERT, 
     !! UPDATE, DELETE) and returns the number of affected rows 
     !! using the @ref connection object.
     !! @param[inout] this The @ref connection object.
     !! @param[in] sql The SQL statement to execute.
     !! @return The number of affected rows, or an error code if 
     !! the operation fails.
+    !!
+    !! @b Remarks
+    !! @ingroup group_odbc_connection
     function connection_execute(this, sql) result(count)
         class(connection), intent(inout)    :: this
         character(*), intent(in)            :: sql
@@ -178,12 +201,15 @@ contains
         count = merge(int(this%ierr, c_int), int(countInt, c_int), this%ierr /= SQL_SUCCESS)
     end function   
 
-    !> @brief Executes a query and stores results in a @ref odbc_resultset::resultset 
+    !> Executes a query and stores results in a @ref odbc_resultset::resultset 
     !! object.
     !! @param[inout] this The @ref connection object.
     !! @param[in] sql The SQL query to execute.
     !! @param[inout] rslt The @ref odbc_resultset::resultset object to store the query 
     !! results.
+    !!
+    !! @b Remarks
+    !! @ingroup group_odbc_connection
     subroutine connection_execute_query(this, sql, rslt)
         class(connection), intent(inout)    :: this
         character(*), intent(in)            :: sql
@@ -210,7 +236,7 @@ contains
         call new(rslt, this%stmt)
     end subroutine
 
-    !> @brief Executes a query with a specified cursor type and scrollable 
+    !> Executes a query with a specified cursor type and scrollable 
     !! option, storing results in a @ref odbc_resultset::resultset object.
     !! @param[inout] this The @ref connection object.
     !! @param[in] sql The SQL query to execute.
@@ -220,6 +246,9 @@ contains
     !! .false.).
     !! @param[inout] rslt The @ref odbc_resultset::resultset object to store the query 
     !! results.
+    !!
+    !! @b Remarks
+    !! @ingroup group_odbc_connection
     subroutine connection_execute_query_with_cursor(this, sql, cursor_type, scrollable, rslt)
         class(connection), intent(inout)        :: this
         character(*), intent(in)                :: sql
@@ -259,10 +288,13 @@ contains
         call new(rslt, this%stmt)
     end subroutine
 
-    !> @brief Commits the current transaction using the @ref connection 
+    !> Commits the current transaction using the @ref connection 
     !! object.
     !! @param[inout] this The @ref connection object.
     !! @return .true. if the commit succeeds, .false. otherwise.
+    !!
+    !! @b Remarks
+    !! @ingroup group_odbc_connection
     function connection_commit(this) result(success)
         class(connection), intent(inout)    :: this
         logical :: success
@@ -274,10 +306,13 @@ contains
         success = .true.
     end function
 
-    !> @brief Rolls back the current transaction using the 
+    !> Rolls back the current transaction using the 
     !! @ref connection object.
     !! @param[inout] this The @ref connection object.
     !! @return .true. if the rollback succeeds, .false. otherwise.
+    !!
+    !! @b Remarks
+    !! @ingroup group_odbc_connection
     function connection_rollback(this) result(success)
         class(connection), intent(inout)    :: this
         logical :: success
@@ -289,9 +324,12 @@ contains
         success = .true.
     end function
 
-    !> @brief Closes the database connection and frees resources 
+    !> Closes the database connection and frees resources 
     !! in the @ref connection object.
     !! @param[inout] this The @ref connection object.
+    !!
+    !! @b Remarks
+    !! @ingroup group_odbc_connection
     subroutine connection_close(this)
         class(connection), intent(inout)    :: this
 
@@ -371,4 +409,3 @@ contains
         end do
     end function
 end module
-!> @}

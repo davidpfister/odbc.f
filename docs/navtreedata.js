@@ -24,40 +24,38 @@
 */
 var NAVTREE =
 [
-  [ "odbc", "index.html", [
-    [ "Introduction", "index.html#autotoc_md59", [
-      [ "About the Project", "index.html#autotoc_md60", [
-        [ "Purpose and scope", "index.html#autotoc_md61", null ],
-        [ "Key Features", "index.html#autotoc_md62", null ]
+  [ "odbc.f", "index.html", [
+    [ "Introduction", "index.html#autotoc_md0", [
+      [ "About the Project", "index.html#autotoc_md1", [
+        [ "Purpose and scope", "index.html#autotoc_md2", null ],
+        [ "Key Features", "index.html#autotoc_md3", null ]
       ] ],
-      [ "Getting Started", "index.html#autotoc_md63", [
-        [ "Requirements", "index.html#autotoc_md64", null ]
-      ] ],
-      [ "Usage", "index.html#autotoc_md65", null ],
-      [ "Installation", "index.html#autotoc_md66", [
-        [ "Generate the interface with swig", "index.html#autotoc_md68", [
-          [ "Get the code", "index.html#autotoc_md67", null ],
-          [ "Build with fpm", "index.html#autotoc_md69", null ],
-          [ "Build with Visual Studio 2019", "index.html#autotoc_md70", null ]
+      [ "Installation", "index.html#autotoc_md4", [
+        [ "Requirements", "index.html#autotoc_md5", null ],
+        [ "Building", "index.html#autotoc_md6", [
+          [ "Get the code", "index.html#autotoc_md7", null ]
         ] ],
-        [ "Contributing", "index.html#autotoc_md71", null ],
-        [ "Style", "index.html#autotoc_md72", null ],
-        [ "Reporting a bug", "index.html#autotoc_md73", null ],
-        [ "Pull request", "index.html#autotoc_md74", null ]
+        [ "Generate the interface with swig", "index.html#autotoc_md8", [
+          [ "Build with fpm", "index.html#autotoc_md9", null ],
+          [ "Build with Visual Studio 2019", "index.html#autotoc_md10", null ]
+        ] ]
       ] ],
-      [ "License", "index.html#autotoc_md75", null ]
+      [ "Usage", "index.html#autotoc_md11", [
+        [ "Contributing", "index.html#autotoc_md12", null ]
+      ] ],
+      [ "License", "index.html#autotoc_md13", null ]
     ] ],
-    [ "Related Pages", "pages.html", "pages" ],
+    [ "Documentation", "pages.html", "pages" ],
     [ "API", "topics.html", "topics" ],
-    [ "Files", "files.html", "files" ],
-    [ "GitHub Repository", "^https://github.com/davidpfister/odbc.f", null ]
+    [ "Files", "files.html", "files" ]
   ] ]
 ];
 
 var NAVTREEINDEX =
 [
-"columnset_8f90_source.html"
+"columnset_8f90.html"
 ];
 
-var SYNCONMSG = 'click to disable panel synchronisation';
-var SYNCOFFMSG = 'click to enable panel synchronisation';
+var SYNCONMSG = 'click to disable panel synchronization';
+var SYNCOFFMSG = 'click to enable panel synchronization';
+var LISTOFALLMEMBERS = 'List of all members';

@@ -50,7 +50,7 @@ Errors are handled by the `handle_errors` subroutine, which retrieves diagnostic
 
 A `resultset` object is created by calling the `execute_query` method of a `connection` object (from the `odbc_connection` module). The `new` subroutine is then called internally to initialize the `resultset` with the ODBC statement handle.
 
-```fortran
+@code{.f90}
 use odbc_connection
 use odbc_resultset
 
@@ -62,21 +62,23 @@ connstr = 'DRIVER={SQL Server};SERVER=localhost;DATABASE=mydb;Trusted_Connection
 conn = connection_new(connstr)
 call conn%open()
 call conn%execute_query('SELECT name, age FROM users', rslt)
-```
+...
+@endcode
 
 ### Navigating Rows
 
 Use the navigation methods (`next`, `previous`, `first`, `last`) to move through the result set. The `next` method is typically used in a loop to process rows sequentially.
 
-```fortran
+@code{.f90}
 do while (rslt%next())
     ! Process row data (see below)
 end do
-```
+...
+@endcode
 
 For scrollable cursors (specified in `execute_query` with `scrollable=.true.`), you can use `previous`, `first`, or `last`:
 
-```fortran
+@code{.f90}
 use odbc_constants
 
 call conn%execute_query('SELECT name, age FROM users', SQL_CURSOR_STATIC, .true., rslt)
@@ -86,13 +88,14 @@ end if
 if (rslt%first()) then
     ! Process first row
 end if
-```
+...
+@endcode
 
 ### Accessing Column Data
 
 Retrieve column values using the `get_integer`, `get_real`, `get_double`, or `get_string` methods, either by column index (1-based) or column name. The module converts column data to the requested type by reading from a string representation.
 
-```fortran
+@code{.f90}
 character(:), allocatable :: name
 integer :: age
 
@@ -102,16 +105,18 @@ if (has_rows) then
     age = rslt%get_integer(2)       ! By column index (age is second column)
     print *, 'Name:', name, 'Age:', age
 end if
-```
+...
+@endcode
 
 ### Getting Metadata
 
 The `nrows` and `ncolumns` methods provide metadata about the result set:
 
-```fortran
+@code{.f90}
 print *, 'Number of rows fetched:', rslt%nrows()
 print *, 'Number of columns:', rslt%ncolumns()
-```
+...
+@endcode
 
 Note that `nrows` returns the number of rows fetched in the current fetch operation, which may depend on the ODBC driver's buffering.
 
@@ -119,7 +124,7 @@ Note that `nrows` returns the number of rows fetched in the current fetch operat
 
 Here is a complete example demonstrating the usage of the `odbc_resultset` module with the `odbc_connection` module:
 
-```fortran
+@code{.f90}
     type(connection) :: conn
     type(resultset) :: rslt
     character(len=1024) :: connstr
@@ -153,7 +158,8 @@ Here is a complete example demonstrating the usage of the `odbc_resultset` modul
 
     ! Close connection
     call conn%close()
-```
+...
+@endcode
 
 ## Error Handling
 

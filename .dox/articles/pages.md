@@ -1,4 +1,4 @@
-# Related Pages {#pages}
+# Documentation {#pages}
 
 * @subpage odbc
 * @subpage swig

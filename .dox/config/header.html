@@ -17,9 +17,9 @@
   <script type="text/javascript" src="$relpath^doxygen-awesome-paragraph-link.js"></script>
   <script type="text/javascript" src="$relpath^doxygen-awesome-interactive-toc.js"></script>
   <script type="text/javascript" src="$relpath^doxygen-awesome-tabs.js"></script>
+  <script type="text/javascript" src="$relpath^custom.js"></script>
   <script type="text/javascript">
       DoxygenAwesomeFragmentCopyButton.init()
-      DoxygenAwesomeDarkModeToggle.init()
       DoxygenAwesomeParagraphLink.init()
       DoxygenAwesomeInteractiveToc.init()
       DoxygenAwesomeTabs.init()
@@ -27,55 +27,24 @@
   $treeview
   $search
   $mathjax
+  <script type="text/javascript" src="$relpath^nav-buttons.js"></script>
+  <script>
+    window.DOXYGEN_CONFIG = {
+        github: "https://github.com/davidpfister/odbc.f",
+        projectName: "$projectname", 
+        projectNumber: $projectnumber, 
+        projectBrief: "$projectbrief"
+    };
+  </script>
+  <script type="text/javascript" src="$relpath^custom.js"></script>
+  <script id="remove-top">
+    document.addEventListener("DOMContentLoaded", () => {
+    const top = document.getElementById("top");
+    if (top) top.remove();
+    });
+    </script>
   <link href="$relpath^$stylesheet" rel="stylesheet" type="text/css" />
   $extrastylesheet
-  <link rel="stylesheet" href="$relpath^devibeans.css">
-  <script src="$relpath^highlight.js"></script>
-<script>
-$(function() {
-	hljs.configure({useBR: false});
-	$(".fragment").each(function(i,node) {
-		$(node).removeClass("fragment");
-		hljs.highlightBlock(node);
-	});
-});
-</script>
   </head>
   <body>
   <div id="top"><!-- do not remove this div, it is closed by doxygen! -->
-
-  <!--BEGIN TITLEAREA-->
-  <div id="titlearea">
-    <table cellspacing="0" cellpadding="0">
-      <tbody>
-        <tr style="height: 56px;">
-          <!--BEGIN PROJECT_LOGO-->
-          <td id="projectlogo"><img alt="Logo" src="$relpath^$projectlogo" /></td>
-          <!--END PROJECT_LOGO-->
-          <!--BEGIN PROJECT_NAME-->
-          <td id="projectalign" style="padding-left: 0.5em;">
-            <div id="projectname">
-              <a href="index.html">$projectname</a>
-              <!--BEGIN PROJECT_NUMBER-->&#160;<span id="projectnumber">v$projectnumber</span><!--END PROJECT_NUMBER-->
-            </div>
-            <!--BEGIN PROJECT_BRIEF--><div id="projectbrief">$projectbrief</div><!--END PROJECT_BRIEF-->
-          </td>
-          <!--END PROJECT_NAME-->
-          <!--BEGIN !PROJECT_NAME-->
-          <!--BEGIN PROJECT_BRIEF-->
-          <td style="padding-left: 0.5em;">
-            <div id="projectbrief">$projectbrief</div>
-          </td>
-          <!--END PROJECT_BRIEF-->
-          <!--END !PROJECT_NAME-->
-          <!--BEGIN DISABLE_INDEX-->
-          <!--BEGIN SEARCHENGINE-->
-          <td>$searchbox</td>
-          <!--END SEARCHENGINE-->
-          <!--END DISABLE_INDEX-->
-        </tr>
-      </tbody>
-    </table>
-  </div>
-  <!--END TITLEAREA-->
-  <!-- end header part -->

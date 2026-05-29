@@ -1,6 +1,6 @@
-!> @defgroup group_odbc_columnset Columnset
-!> @include{doc, raise=1} snippets/columnset.md
-!! @{
+!> @file
+!! @defgroup group_odbc_columnset Columnset
+!! @include{doc, raise=1} snippets/columnset.md
 module odbc_columnset
     use, intrinsic :: iso_c_binding
     use odbc_constants
@@ -8,9 +8,14 @@ module odbc_columnset
 
     implicit none; private
 
-    !> @brief Represents metadata and data for a single column in 
+    !> Represents metadata and data for a single column in 
     !! a query result, storing name, type, size, decimal digits, 
     !! nullability, and content for use in a @ref odbc_columnset::columnset.
+    !!
+    !! @return The constructed @ref column object.
+    !!
+    !! <h2  class="groupheader">Remarks</h2>
+    !! @ingroup group_odbc_columnset
     type, public :: column
         character(:, c_char), allocatable   :: name
         integer(SQLSMALLINT)                :: type
@@ -20,10 +25,15 @@ module odbc_columnset
         character(:), allocatable           :: content
     end type
 
-    !> @brief Manages a collection of @ref odbc_columnset::column objects in a query 
+    !> Manages a collection of @ref odbc_columnset::column objects in a query 
     !! result set, providing methods to add @ref odbc_columnset::column objects, bind 
     !! them to ODBC statements, and retrieve @ref odbc_columnset::column metadata for 
     !! use with @ref odbc_resultset::resultset.
+    !!
+    !! @return The constructed @ref columnset object.
+    !!
+    !! <h2  class="groupheader">Remarks</h2>
+    !! @ingroup group_odbc_columnset
     type, public :: columnset
         private
         integer                             :: ncols = 0
@@ -43,12 +53,15 @@ module odbc_columnset
 
 contains
     
-    !> @brief Binds a @ref odbc_columnset::column to an ODBC statement handle for data retrieval, 
+    !> Binds a @ref odbc_columnset::column to an ODBC statement handle for data retrieval, 
     !! using SQL_CHAR binding within the @ref odbc_columnset::columnset.
     !! @param[inout] this The @ref odbc_columnset::columnset object.
     !! @param[inout] stmt The ODBC statement handle.
     !! @param[in] col_no The column index (1-based).
     !! @return The ODBC return code (SQL_SUCCESS or error code)
+    !!
+    !! @b Remarks
+    !! @ingroup group_odbc_columnset
     function columnset_bind(this, stmt, col_no) result(res)
         class(columnset), intent(inout)                 :: this
         type(SQLHSTMT), intent(inout)                   :: stmt
@@ -73,18 +86,24 @@ contains
         end function
     end function
 
-    !> @brief Gets the number of @ref odbc_columnset::column objects in the @ref odbc_columnset::columnset.
+    !> Gets the number of @ref odbc_columnset::column objects in the @ref odbc_columnset::columnset.
     !! @param[in] this The @ref odbc_columnset::columnset object.
     !! @return The number of columns.
+    !!
+    !! @b Remarks
+    !! @ingroup group_odbc_columnset
     function columnset_get_columns_count(this) result(res)
         class(columnset), intent(in) :: this
         integer :: res
         res = this%ncols
     end function
 
-    !> @brief Adds a single @ref odbc_columnset::column to the @ref odbc_columnset::columnset.
+    !> Adds a single @ref odbc_columnset::column to the @ref odbc_columnset::columnset.
     !! @param[inout] this The @ref odbc_columnset::columnset object.
     !! @param[in] col The @ref odbc_columnset::column object to add.
+    !!
+    !! @b Remarks
+    !! @ingroup group_odbc_columnset
     subroutine columnset_add_column(this, col)
         class(columnset), intent(inout) :: this
         type(column), intent(in)        :: col
@@ -99,9 +118,12 @@ contains
         call move_alloc(tmp, this%items)   
     end subroutine
     
-    !> @brief Adds an array of @ref odbc_columnset::column objects to the @ref odbc_columnset::columnset.
+    !> Adds an array of @ref odbc_columnset::column objects to the @ref odbc_columnset::columnset.
     !! @param[inout] this The @ref odbc_columnset::columnset object.
     !! @param[in] cols The array of @ref odbc_columnset::column objects to add.
+    !!
+    !! @b Remarks
+    !! @ingroup group_odbc_columnset
     subroutine columnset_addrange_columns(this, cols)
         class(columnset), intent(inout) :: this
         type(column), intent(in)        :: cols(:)
@@ -116,11 +138,14 @@ contains
         call move_alloc(tmp, this%items) 
     end subroutine
 
-    !> @brief Retrieves a @ref odbc_columnset::column by its index (1-based) from the 
+    !> Retrieves a @ref odbc_columnset::column by its index (1-based) from the 
     !! @ref odbc_columnset::columnset.
     !! @param[inout] this The @ref odbc_columnset::columnset object.
     !! @param[in] n The column index (1-based).
     !! @return A pointer to the @ref odbc_columnset::column object, or null if invalid.
+    !!
+    !! @b Remarks
+    !! @ingroup group_odbc_columnset
     function columnset_get_column_from_id(this, n) result(res)
         class(columnset), intent(inout), target :: this
         integer, intent(in)                     :: n
@@ -134,10 +159,13 @@ contains
         res => this%items(n)
     end function
 
-    !> @brief Retrieves a @ref odbc_columnset::column by its name from the @ref odbc_columnset::columnset.
+    !> Retrieves a @ref odbc_columnset::column by its name from the @ref odbc_columnset::columnset.
     !! @param[inout] this The @ref odbc_columnset::columnset object.
     !! @param[in] name The column name.
     !! @return A pointer to the @ref odbc_columnset::column object, or null if not found.
+    !!
+    !! @b Remarks
+    !! @ingroup group_odbc_columnset
     function columnset_get_column_from_name(this, name) result(res)
         class(columnset), intent(inout), target :: this
         character(*), intent(in)                :: name
@@ -162,4 +190,3 @@ contains
     end subroutine
 
 end module
-!> @}

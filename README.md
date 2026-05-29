@@ -1,28 +1,26 @@
-<a id="readme-top"></a>
-
-[![Contributors][contributors-shield]][contributors-url]
-[![Forks][forks-shield]][forks-url]
-[![Stargazers][stars-shield]][stars-url]
-[![Issues][issues-shield]][issues-url]
-[![MIT License][license-shield]][license-url]
-
-<!-- PROJECT LOGO -->
-<br />
-<div align="center">
-  <h3 align="center">odbc.f</h3>
-
-  <p align="center">
+<!--! @mainpage -->
+<h1 class="title">
+    <span class="name">ODBC.f</span>
+    <br>
+    <span class="text">Fortran ODBC</span>
+    <br>
+    <span class="tagline">
     ODBC (Open Database Connectivity) bindings for modern Fortran.
-    <br />
-    <a href="https://github.com/davidpfister/odbc.f"><strong>Explore the project</strong></a>
-    <br />
-  </p>
+    </span>
+</h1>
+<br>
+
+<div class="actions">
+    <div class="action">
+        <a class="button medium brand" href="index.html#autotoc_md2">Get Started</a>
+    </div>
+    <div class="action">
+        <a class="button medium alt" href="topics.html">API</a>
+    </div>
+    <div class="action">
+        <a class="button medium alt" href="https://github.com/davidpfister/odbc.f" target="_blank" rel="noreferrer">View on GitHub</a>
+    </div>
 </div>
-
-
-
-<!-- TABLE OF CONTENTS -->
-[TOC]
 
 # Introduction
 <!-- ABOUT THE PROJECT -->
@@ -56,7 +54,7 @@ This documentation provides comprehensive guidance on installing, configuring, a
 - Open Source: Distributed under a permissive license, encouraging community contributions and adoption.
 
 <!-- GETTING STARTED -->
-## Getting Started
+## Installation
 
 ### Requirements
 * [![fpm][fpm]][fpm-url]
@@ -83,6 +81,80 @@ Linting, indentation, and styling are done with [fprettify](https://github.com/f
 ```bash
 fprettify .\src\ -r --case 1 1 1 1 -i 4 --strict-indent --enable-replacements --strip-comments --c-relations
 ```
+### Building
+
+#### Get the code
+```bash
+git clone https://github.com/davidpfister/odbc.f
+cd odbc.f
+```
+
+### Generate the interface with swig
+One of the particularity of _odbc.f_ is that the interface for the c-binding is automatically generated with [swig-fortran](https://github.com/swig-fortran/swig.git) using the ODBC header files. The headers have **not** been included in the `include/` folder. They can be downloaded directly from the original [repo](https://github.com/lurcher/unixODBC/tree/master/include). Make sure to place the files [sql.h](https://github.com/lurcher/unixODBC/blob/master/include/sql.h), [sqlext.h](https://github.com/lurcher/unixODBC/blob/master/include/sqlext.h) and [sqltypes.h](https://github.com/lurcher/unixODBC/blob/master/include/sqltypes.h) in the include folder before using `swig`.
+
+The following code will generate the file `sql.f90`, `sqlext.f90` and `sqltypes.f90`.
+
+```cmd
+swig -fortran -outdir src/ swig/sqltypes.i
+swig -fortran -outdir src/ swig/sql.i
+swig -fortran -outdir src/ swig/sqlext.i
+sed -i "s/, intent(in), value :: fresult/:: fresult/g" src/sqlext.f90 
+```
+
+[!Note]
+swig does not differentiate return value and will add as spurious `intent(in)` on the return argument. The `sed` line corrects that and generate the proper code.
+
+#### Build with fpm
+
+The repo can be build using _fpm_
+```bash
+fpm build
+```
+For convenience, the  repo also contains a response file that can be invoked as follows: 
+```bash
+fpm @build
+```
+(For the Windows users, that command does not work in Powershell since '@' is a reserved symbol. One should use the '--%' as follows: `fpm --% @build`.
+This is linked to the following [issue](https://github.com/urbanjost/M_CLI2/issues/19))
+
+Building with ifort requires to specify the compiler name (gfortran by default)
+```bash
+fpm @build --compiler ifort
+```
+Alternatively, the compiler can be set using fpm environment variables.
+```bash
+set FPM_FC=ifort
+```
+
+Besides the build command, several commands are also available:
+```bash
+@pretiffy
+system codee format ./src
+system fortitude check ./src --fix
+option run --list
+
+@clean
+option clean --all
+
+@rebuild
+system rmdir /s /q build
+option build
+
+@build
+option build
+
+@test
+options test 
+
+@doc
+system cd ./.dox & doxygen ./Doxyfile.in & cd ..
+system powershell ./tools/Fix-Doxygen.ps1 -Path "./docs"
+option run --list
+```
+
+#### Build with Visual Studio 2019
+
+The project was originally developed on Windows with Visual Studio 2019. The repo contains the solution file (_Odbc.f.sln_) to get you started with Visual Studio 2019. 
 
 <!-- USAGE EXAMPLES -->
 ## Usage
@@ -115,150 +187,24 @@ nrows = conn%execute("DELETE FROM emp")
 ```
 The `execute()` function will return the number of rows affected by the statement. After database operations are over, the resources occupied by ODBC are automatically released by the connection `finalizer`.
 
-## Installation
-
-#### Get the code
-```bash
-git clone https://github.com/davidpfister/odbc.f
-cd odbc.f
-```
-
-### Generate the interface with swig
-One of the particularity of _odbc.f_ is that the interface for the c-binding is automatically generated with [swig-fortran](https://github.com/swig-fortran/swig.git) using the ODBC header files. The headers have **not** been included in the `include/` folder. They can be downloaded directly from the original [repo](https://github.com/lurcher/unixODBC/tree/master/include). Make sure to place the files [sql.h](https://github.com/lurcher/unixODBC/blob/master/include/sql.h), [sqlext.h](https://github.com/lurcher/unixODBC/blob/master/include/sqlext.h) and [sqltypes.h](https://github.com/lurcher/unixODBC/blob/master/include/sqltypes.h) in the include folder before using `swig`.
-
-The following code will generate the file `sql.f90`, `sqlext.f90` and `sqltypes.f90`.
-
-```cmd
-swig -fortran -outdir src/ swig/sqltypes.i
-swig -fortran -outdir src/ swig/sql.i
-swig -fortran -outdir src/ swig/sqlext.i
-sed -i "s/, intent(in), value :: fresult/:: fresult/g" src/sqlext.f90 
-```
-
-[!Note]
-swig does not differentiate return value and will add as spurious `intent(in)` on the return argument. The `sed` line corrects that and generate the proper code.
-
-#### Build with fpm
-
-The repo can be build using _fpm_
-```bash
-fpm build
-```
-For convenience, the  repo also contains a response file that can be invoked as follows: 
-```
-fpm @build
-```
-(For the Windows users, that command does not work in Powershell since '@' is a reserved symbol. One should use the '--%' as follows: `fpm --% @build`.
-This is linked to the following [issue](https://github.com/urbanjost/M_CLI2/issues/19))
-
-Building with ifort requires to specify the compiler name (gfortran by default)
-```bash
-fpm @build --compiler ifort
-```
-Alternatively, the compiler can be set using fpm environment variables.
-```bash
-set FPM_FC=ifort
-```
-
-Besides the build command, several commands are also available:
-```bash
-@pretiffy
-system fprettify .\src\ -r --case 1 1 1 1 -i 4 --strict-indent --enable-replacements --strip-comments --c-relations
-system fprettify .\tests\ -r --case 1 1 1 1 -i 4 --strict-indent --enable-replacements --strip-comments --c-relations
-option clean --all
-
-@clean
-option clean --all
-
-@rebuild
-system rmdir /s /q build
-option build --flag '-ffree-line-length-none'
-
-@build
-option build --flag '-ffree-line-length-none'
-
-@test
-options test --flag '-ffree-line-length-none' '-D_QUIET' 
-
-@doc
-option clean --all
-system cd ./.dox & doxygen ./Doxyfile.in & cd ..
-```
-
-#### Build with Visual Studio 2019
-
-The project was originally developed on Windows with Visual Studio 2019. The repo contains the solution file (_Odbc.f.sln_) to get you started with Visual Studio 2019. 
-
 <!-- CONTRIBUTING -->
 ### Contributing
 
 Contributions are what make the open source community such an amazing place to learn, inspire, and create. Any contributions you make are **greatly appreciated**. So, thank you for considering contributing to _odbc.f_.
-Please review and follow these guidelines to make the contribution process simple and effective for all involved. In return, the developers will help address your problem, evaluate changes, and guide you through your pull requests.
+Please review and follow these [guidelines](https://github.com/davidpfister/odbc.f/tree/master?tab=contributing-ov-file) to make the contribution process simple and effective for all involved. In return, the developers will help address your problem, evaluate changes, and guide you through your pull requests.
 
 By contributing to _odbc.f_, you certify that you own or are allowed to share the content of your contribution under the same license.
-
-### Style
-
-Please follow the style used in this repository for any Fortran code that you contribute. This allows focusing on substance rather than style.
-
-### Reporting a bug
-
-A bug is a *demonstrable problem* caused by the code in this repository.
-Good bug reports are extremely valuable to us—thank you!
-
-Before opening a bug report:
-
-1. Check if the issue has already been reported
-   ([issues](https://github.com/davidpfister/odbc.f/issues)).
-2. Check if it is still an issue or it has been fixed?
-   Try to reproduce it with the latest version from the default branch.
-3. Isolate the problem and create a minimal test case.
-
-A good bug report should include all information needed to reproduce the bug.
-Please be as detailed as possible:
-
-1. Which version of _odbc.f_ are you using? Please be specific.
-2. What are the steps to reproduce the issue?
-3. What is the expected outcome?
-4. What happens instead?
-
-This information will help the developers diagnose the issue quickly and with
-minimal back-and-forth.
-
-### Pull request
-
-If you have a suggestion that would make this project better, please create a pull request. You can also simply open an issue with the tag "enhancement".
-Don't forget to give the project a star! Thanks again!
-1. Open a [new issue](https://github.com/davidpfister/odbc.f/issues/new) to
-   describe a bug or propose a new feature.
-   Refer to the earlier sections on how to write a good bug report or feature    request.
-2. Discuss with the developers and reach consensus about what should be done about the bug or feature request.
-   **When actively working on code towards a PR, please assign yourself to the
-   issue on GitHub.**
-   This is good collaborative practice to avoid duplicated effort and also inform others what you are currently working on.
-3. Create your Feature Branch (```git checkout -b feature/AmazingFeature```)
-4. Commit your Changes (```git commit -m 'Add some AmazingFeature'```)
-5. Push to the Branch (```git push origin feature/AmazingFeature```)
-6. Open a Pull Request with your contribution.
-   The body of the PR should at least include a bullet-point summary of the
-   changes, and a detailed description is encouraged.
-   If the PR completely addresses the issue you opened in step 1, include in
-   the PR description the following line: ```Fixes #<issue-number>```. If your PR implements a feature that adds or changes the behavior of _odbc.f_,
-   your PR must also include appropriate changes to the documentation and associated units tests.
-
-In brief, 
-* A PR should implement *only one* feature or bug fix.
-* Do not commit changes to files that are irrelevant to your feature or bug fix.
-* Smaller PRs are better than large PRs, and will lead to a shorter review and
-  merge cycle
-* Add tests for your feature or bug fix to be sure that it stays functional and useful
-* Be open to constructive criticism and requests for improving your code.
-
 
 <!-- LICENSE -->
 ## License
 
 Distributed under the MIT License.
+
+[![Contributors][contributors-shield]][contributors-url]
+[![Forks][forks-shield]][forks-url]
+[![Stargazers][stars-shield]][stars-url]
+[![Issues][issues-shield]][issues-url]
+[![MIT License][license-shield]][license-url]
 
 <!-- MARKDOWN LINKS & IMAGES -->
 [contributors-shield]: https://img.shields.io/github/contributors/davidpfister/odbc.f.svg?style=for-the-badge

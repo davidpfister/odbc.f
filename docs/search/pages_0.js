@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['api_20reference_0',['ODBC API Reference',['../odbc-api-reference.html',1,'odbc-reference']]]
+  ['2019_0',['Build with Visual Studio 2019',['../index.html#autotoc_md10',1,'']]]
 ];

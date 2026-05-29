@@ -49,7 +49,7 @@ The `columnset` type is typically used internally by the `odbc_resultset` module
 
 A `columnset` object is created and populated by the `resultset_get_metadata` subroutine in the `odbc_resultset` module, which calls `addrange` to add columns based on the query's metadata. Direct creation of a `columnset` is rare but can be done as follows:
 
-```fortran
+@code{.f90}
 use odbc_columnset
 
 type(columnset) :: cols
@@ -65,13 +65,14 @@ allocate(character(4096) :: col%content)
 
 call cols%add(col)
 print *, 'Number of columns:', cols%count()  ! Prints 1
-```
+...
+@endcode
 
 ### Adding Columns
 
 Add a single column with `add` or multiple columns with `addrange`:
 
-```fortran
+@code{.f90}
 type(column), allocatable :: col_array(:)
 
 allocate(col_array(2))
@@ -82,25 +83,27 @@ col_array(2)%name = 'name'
 col_array(2)%type = SQL_CHAR
 call cols%addrange(col_array)
 print *, 'Number of columns:', cols%count()  ! Prints 2 (or 3 if add was called earlier)
-```
+...
+@endcode
 
 ### Binding Columns
 
 The `bind` method binds a column's data buffer to an ODBC statement handle, enabling data retrieval. This is typically called by the `resultset` module:
 
-```fortran
+@code{.f90}
 use sql
 type(SQLHSTMT) :: stmt
 integer :: res
 
 res = cols%bind(stmt, 1)  ! Bind first column
-```
+...
+@endcode
 
 ### Accessing Columns
 
 Retrieve a column by index or name using the `get` method, which returns a pointer to a `column` object:
 
-```fortran
+@code{.f90}
 type(column), pointer :: col_ptr
 
 col_ptr => cols%get(1)  ! Get first column
@@ -108,13 +111,14 @@ if (associated(col_ptr)) print *, 'Column name:', col_ptr%name
 
 col_ptr => cols%get('name')  ! Get column by name
 if (associated(col_ptr)) print *, 'Column type:', col_ptr%type
-```
+...
+@endcode
 
 ## Example Program
 
 The `columnset` type is typically used within the context of the `odbc_resultset` and `odbc_connection` modules. Below is an example showing how it integrates with a query:
 
-```fortran
+@code{.f90}
     type(connection) :: conn
     type(resultset) :: rslt
     type(columnset) :: cols
@@ -154,4 +158,5 @@ The `columnset` type is typically used within the context of the `odbc_resultset
 
     ! Close connection
     call conn%close()
-```
+    ...
+@endcode

@@ -24,7 +24,6 @@
 */
 var menudata={children:[
 {text:"odbc.f",url:"index.html"},
-{text:"Related Pages",url:"pages.html"},
+{text:"Documentation",url:"pages.html"},
 {text:"API",url:"topics.html"},
-{text:"Files",url:"files.html"},
-{text:"GitHub Repository",url:"^https://github.com/davidpfister/odbc.f"}]}
+{text:"Files",url:"files.html"}]}
